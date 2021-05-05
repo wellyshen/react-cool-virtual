@@ -48,7 +48,7 @@
     "lint:code": "eslint --fix . --ext .js,.ts,.tsx",
     "lint:type": "tsc",
     "lint:format": "prettier -w . -u --loglevel silent",
-    "test": "jest --config scripts/jest/config.js",
+    "test": "jest --config scripts/jest/config.js --passWithNoTests",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn clean:cov && yarn test --coverage",
     "bundlesize": "yarn build && bundlesize",
