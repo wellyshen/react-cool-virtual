@@ -1,16 +1,41 @@
+/** @jsxImportSource @emotion/react */
+
 import { Global, css } from "@emotion/react";
+import useVirtual from "react-cool-virtual";
 import normalize from "normalize.css";
 
-import { root } from "./styles";
+import { root, app, container, item, itemDark } from "./styles";
 
-export default (): JSX.Element => (
-  <>
-    <Global
-      styles={css`
-        ${normalize}
-        ${root}
-      `}
-    />
-    <h1>Hello World!</h1>
-  </>
-);
+const getMockData = (count: number) =>
+  // eslint-disable-next-line no-plusplus, no-param-reassign
+  new Array(count).fill({}).map((_, idx) => ({ id: idx++, text: idx++ }));
+
+export default (): JSX.Element => {
+  const mockData = getMockData(1000);
+  // @ts-expect-error
+  const { containerRef, items } = useVirtual({
+    itemData: getMockData(10),
+    itemCount: 20,
+    itemSize: 100,
+  });
+
+  return (
+    <>
+      <Global
+        styles={css`
+          ${normalize}
+          ${root}
+        `}
+      />
+      <div css={app}>
+        <div css={container} ref={containerRef}>
+          {items.map(({ data, index, ref }: any) => (
+            <div key={index} css={[item, !(index % 2) && itemDark]} ref={ref}>
+              {data ? data.text : "Loading..."}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
