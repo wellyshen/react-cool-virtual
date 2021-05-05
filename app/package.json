@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "link-pkg": "yarn link 'react-cool-virtual'",
-    "start:auto": "react-scripts start",
     "start:dev": "REACT_APP_ENV=dev react-scripts start",
-    "start:prod": "yarn build && serve -s build",
+    "start:prod": "react-scripts start",
+    "start:local-prod": "yarn build && serve -s build",
     "build": "react-scripts build",
     "lint": "run-s lint:*",
     "lint:code": "eslint --fix . --ext .js,.ts,.tsx",
