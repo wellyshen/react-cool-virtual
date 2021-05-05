@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "loose": true,
+        "exclude": [
+          "@babel/plugin-transform-async-to-generator",
+          "@babel/plugin-transform-regenerator"
+        ]
+      }
+    ],
+    "@babel/typescript",
+    "@babel/react"
+  ]
+}

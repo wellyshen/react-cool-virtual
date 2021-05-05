@@ -1,0 +1,57 @@
+{
+  "name": "rcf-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "link-pkg": "yarn link 'react-cool-virtual'",
+    "start:auto": "react-scripts start",
+    "start:dev": "REACT_APP_ENV=dev react-scripts start",
+    "start:prod": "yarn build && serve -s build",
+    "build": "react-scripts build",
+    "lint": "run-s lint:*",
+    "lint:code": "eslint --fix . --ext .js,.ts,.tsx",
+    "lint:type": "tsc",
+    "lint:style": "stylelint --fix \"**/*.{css,ts,tsx}\"",
+    "lint:format": "prettier -w . -u --loglevel silent",
+    "clean": "run-p clean:*",
+    "clean:build": "rimraf build",
+    "clean:cov": "rimraf coverage",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.1.5",
+    "@types/node": "^15.0.1",
+    "@types/react": "^17.0.4",
+    "@types/react-dom": "^17.0.3",
+    "normalize.css": "^8.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "typescript": "~4.2.4"
+  },
+  "devDependencies": {
+    "eslint-config-welly": "^1.9.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "serve": "^11.3.2",
+    "stylelint": "^13.13.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^22.0.0"
+  },
+  "resolutions": {
+    "postcss-safe-parser": "4"
+  }
+}

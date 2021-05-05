@@ -1,0 +1,33 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@changesets/changelog-github"
+    versions:
+    - 0.3.0
+    - 0.4.0
+  - dependency-name: "@rollup/plugin-commonjs"
+    versions:
+    - 18.0.0
+  - dependency-name: husky
+    versions:
+    - 5.0.9
+    - 5.1.1
+    - 6.0.0
+  - dependency-name: rollup
+    versions:
+    - 2.40.0
+    - 2.42.4
+  - dependency-name: "@testing-library/user-event"
+    versions:
+    - 13.0.0
+    - 13.0.1
+    - 13.0.2
+    - 13.0.3
+    - 13.0.6
+    - 13.0.7

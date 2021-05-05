@@ -1,0 +1,13 @@
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# production
+dist
+
+# misc
+.size-snapshot.json
+.DS_Store
+*.log
