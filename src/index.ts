@@ -1,57 +1,88 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { MutableRefObject, useLayoutEffect, useRef, useState } from "react";
 
-const getStyleValue = (el, attrs) => {
-  const style = getComputedStyle(el);
-  
-  return attrs.reduce((acc, attr) => {
-    acc += +style[attr].replace("px", "");
-    return acc;
-  }, 0);
-};
+type Data = Record<string, any>;
 
-const useVirtual = ({ itemData, itemSize }) => {
-  const containerRef = useRef();
-  const itemDataRef = useRef(itemData);
-  const [items, setItems] = useState([]);
+interface Item<I> {
+  data?: Data;
+  readonly index: number;
+  ref: (element: I) => void;
+}
+
+interface Options<D> {
+  itemData?: D;
+  itemCount?: number;
+  itemSize: number;
+  extendCount?: number;
+}
+
+interface Return<C, I> {
+  containerRef: MutableRefObject<C | undefined>;
+  items: Item<I>[];
+}
+
+const useVirtual = <
+  C extends HTMLElement = HTMLElement,
+  I extends HTMLElement = HTMLElement,
+  D extends Data[] = Data[]
+>({
+  itemData,
+  itemCount,
+  itemSize,
+  extendCount = 2,
+}: Options<D>): Return<C, I> => {
+  const containerRef = useRef<C>();
+  const itemNumRef = useRef(
+    new Array(itemCount !== undefined ? itemCount : itemData?.length).fill({})
+  );
+  const itemDataRef = useRef<D | undefined>(itemData);
+  const [items, setItems] = useState<Item<I>[]>([]);
 
   useLayoutEffect(() => {
-    if (!containerRef.current || !itemSize) return () => null;
+    const { current: container } = containerRef;
+    const { current: itemNum } = itemNumRef;
 
-    const { current: parent } = containerRef;
-    const { current: data } = itemDataRef;
-    const extendCount = 2;
-    const paddingH = getStyleValue(parent, ["paddingTop", "paddingBottom"]);
-    const displayCount = (parent.clientHeight - paddingH) / itemSize;
+    if (!container || !itemNum.length || !itemSize) return () => null;
 
-    const updateItems = (idx) => {
-      const start = Math.max(idx - extendCount, 0);
-      const end = Math.min(idx + displayCount + extendCount, data.length);
-      const marginT = start * itemSize;
-      const marginB = (data.length - end) * itemSize;
+    const { paddingTop, paddingBottom } = getComputedStyle(container);
+    const pT = +paddingTop.replace("px", "");
+    const pB = +paddingBottom.replace("px", "");
+    const displayCount = (container.clientHeight - pT + pB) / itemSize;
+
+    const updateItems = (index: number) => {
+      const start = Math.max(index - extendCount, 0);
+      const end = Math.min(index + displayCount + extendCount, itemNum.length);
+      const mT = start * itemSize;
+      const mB = (itemNum.length - end) * itemSize;
 
       setItems(
-        data.slice(start, end).map((data, idx, arr) => ({
-          data,
-          index: idx + start,
-          ref: (el) => {
-            if (!el) return;
+        itemNum.slice(start, end).map((_, idx, arr) => {
+          const { current: data } = itemDataRef;
+          const nextIdx = idx + start;
 
-            el.style.marginTop = "";
-            el.style.marginBottom = "";
-            el.style.height = `${itemSize}px`;
+          return {
+            data: data ? data[nextIdx] : undefined,
+            index: nextIdx,
+            ref: (el: I) => {
+              if (!el) return;
 
-            if (!idx) el.style.marginTop = `${marginT}px`;
-            if (idx === arr.length - 1) el.style.marginBottom = `${marginB}px`;
-          },
-        }))
+              el.style.marginTop = "";
+              el.style.marginBottom = "";
+              el.style.height = `${itemSize}px`;
+
+              if (!idx) el.style.marginTop = `${mT}px`;
+              if (idx === arr.length - 1) el.style.marginBottom = `${mB}px`;
+            },
+          };
+        })
       );
     };
 
     updateItems(0);
 
-    let prevStartIdx;
+    let prevStartIdx: number;
 
-    const scrollHandler = ({ target: { scrollTop } }) => {
+    const scrollHandler = ({ target }: Event) => {
+      const { scrollTop } = target as C;
       const idx = Math.floor(scrollTop / itemSize);
 
       if (idx !== prevStartIdx) {
@@ -60,12 +91,12 @@ const useVirtual = ({ itemData, itemSize }) => {
       }
     };
 
-    parent.addEventListener("scroll", scrollHandler);
+    container.addEventListener("scroll", scrollHandler);
 
     return () => {
-      parent.removeEventListener("scroll", scrollHandler);
+      container.removeEventListener("scroll", scrollHandler);
     };
-  }, [itemSize]);
+  }, [extendCount, itemCount, itemSize]);
 
   return { containerRef, items };
 };
