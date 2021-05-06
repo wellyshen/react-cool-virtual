@@ -2,10 +2,10 @@ import { RefObject } from "react";
 
 export type Data = Record<string, any>;
 
-export interface Item<I> {
+export interface Item {
   data?: Data;
   readonly index: number;
-  ref: (element: I) => void;
+  readonly size: number;
 }
 
 export interface Config<D> {
@@ -16,7 +16,8 @@ export interface Config<D> {
   extendCount?: number;
 }
 
-export interface Return<C, I> {
-  containerRef: RefObject<C>;
-  items: Item<I>[];
+export interface Return<O, I> {
+  outerRef: RefObject<O>;
+  innerRef: RefObject<I>;
+  items: Item[];
 }

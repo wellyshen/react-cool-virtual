@@ -3,10 +3,10 @@ declare module "react-cool-virtual" {
 
   type Data = Record<string, any>;
 
-  interface Item<I> {
+  interface Item {
     data?: Data;
     readonly index: number;
-    ref: (element: I) => void;
+    readonly size: number;
   }
 
   export interface Config<D extends Data[] = Data[]> {
@@ -18,16 +18,17 @@ declare module "react-cool-virtual" {
   }
 
   export interface Return<
-    C extends HTMLElement = HTMLElement,
+    O extends HTMLElement = HTMLElement,
     I extends HTMLElement = HTMLElement
   > {
-    containerRef: RefObject<C>;
-    items: Item<I>[];
+    outerRef: RefObject<O>;
+    innerRef: RefObject<I>;
+    items: Item[];
   }
 
   export default function useVirtual<
-    C extends HTMLElement = HTMLElement,
+    O extends HTMLElement = HTMLElement,
     I extends HTMLElement = HTMLElement,
     D extends Data[] = Data[]
-  >(config: Config<D>): Return<C, I>;
+  >(config: Config<D>): Return<O, I>;
 }
