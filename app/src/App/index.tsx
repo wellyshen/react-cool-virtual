@@ -7,13 +7,12 @@ import normalize from "normalize.css";
 import { root, app, container, item, itemDark } from "./styles";
 
 const getMockData = (count: number) =>
-  // eslint-disable-next-line no-plusplus, no-param-reassign
+  // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({ id: idx++, text: idx++ }));
 
 export default (): JSX.Element => {
   const mockData = getMockData(1000);
-  // @ts-expect-error
-  const { containerRef, items } = useVirtual({
+  const { containerRef, items } = useVirtual<HTMLDivElement>({
     itemData: getMockData(10),
     itemCount: 20,
     itemSize: 100,
