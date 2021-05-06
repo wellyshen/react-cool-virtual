@@ -1,24 +1,6 @@
-import { MutableRefObject, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
-type Data = Record<string, any>;
-
-interface Item<I> {
-  data?: Data;
-  readonly index: number;
-  ref: (element: I) => void;
-}
-
-interface Options<D> {
-  itemData?: D;
-  itemCount?: number;
-  itemSize: number;
-  extendCount?: number;
-}
-
-interface Return<C, I> {
-  containerRef: MutableRefObject<C | undefined>;
-  items: Item<I>[];
-}
+import { Data, Item, Config, Return } from "./types";
 
 const useVirtual = <
   C extends HTMLElement = HTMLElement,
@@ -29,8 +11,8 @@ const useVirtual = <
   itemCount,
   itemSize,
   extendCount = 2,
-}: Options<D>): Return<C, I> => {
-  const containerRef = useRef<C>();
+}: Config<D>): Return<C, I> => {
+  const containerRef = useRef<C>(null);
   const itemNumRef = useRef(
     new Array(itemCount !== undefined ? itemCount : itemData?.length).fill({})
   );
