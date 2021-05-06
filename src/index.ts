@@ -10,6 +10,7 @@ const useVirtual = <
   itemData,
   itemCount,
   itemSize,
+  isHorizontal,
   extendCount = 2,
 }: Config<D>): Return<C, I> => {
   const containerRef = useRef<C>(null);
