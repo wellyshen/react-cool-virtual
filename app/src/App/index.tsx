@@ -8,14 +8,15 @@ import { root, app, container, item, itemDark } from "./styles";
 
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
-  new Array(count).fill({}).map((_, idx) => ({ id: idx++, text: idx++ }));
+  new Array(count).fill({}).map((_, idx) => ({ text: idx }));
 
 export default (): JSX.Element => {
-  const mockData = getMockData(1000);
+  // const mockData = getMockData(1000);
   const { containerRef, items } = useVirtual<HTMLDivElement>({
-    itemData: getMockData(10),
-    itemCount: 20,
+    itemData: getMockData(1),
+    // itemCount: 20,
     itemSize: 100,
+    isHorizontal: true,
   });
 
   return (
@@ -30,7 +31,7 @@ export default (): JSX.Element => {
         <div css={container} ref={containerRef}>
           {items.map(({ data, index, ref }: any) => (
             <div key={index} css={[item, !(index % 2) && itemDark]} ref={ref}>
-              {data ? data.text : "Loading..."}
+              {data.text}
             </div>
           ))}
         </div>

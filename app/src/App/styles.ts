@@ -15,7 +15,7 @@ export const container = css`
   width: 300px;
   height: 300px;
   border: 1px solid #000;
-  overflow-y: auto;
+  overflow: auto;
   background: greenyellow;
 `;
 
@@ -23,7 +23,6 @@ export const item = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   background: #fff;
 `;
 
