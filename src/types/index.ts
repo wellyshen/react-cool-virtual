@@ -12,6 +12,7 @@ export interface Config<D> {
   itemData?: D;
   itemCount?: number;
   itemSize: number;
+  isHorizontal?: boolean;
   extendCount?: number;
 }
 

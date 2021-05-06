@@ -13,6 +13,7 @@ declare module "react-cool-virtual" {
     itemData?: D;
     itemCount?: number;
     itemSize: number;
+    isHorizontal?: boolean;
     extendCount?: number;
   }
 
