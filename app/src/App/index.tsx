@@ -12,11 +12,14 @@ const getMockData = (count: number) =>
 
 export default (): JSX.Element => {
   // const mockData = getMockData(1000);
-  const { containerRef, items } = useVirtual<HTMLDivElement>({
-    itemData: getMockData(1),
+  const { outerRef, innerRef, items } = useVirtual<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    itemData: getMockData(8),
     // itemCount: 20,
     itemSize: 100,
-    isHorizontal: true,
+    // isHorizontal: true,
   });
 
   return (
@@ -28,12 +31,18 @@ export default (): JSX.Element => {
         `}
       />
       <div css={app}>
-        <div css={container} ref={containerRef}>
-          {items.map(({ data, index, ref }: any) => (
-            <div key={index} css={[item, !(index % 2) && itemDark]} ref={ref}>
-              {data.text}
-            </div>
-          ))}
+        <div css={container} ref={outerRef}>
+          <div ref={innerRef}>
+            {items.map(({ data, index, size }: any) => (
+              <div
+                key={index}
+                css={[item, !(index % 2) && itemDark]}
+                style={{ height: size }}
+              >
+                {data.text}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
