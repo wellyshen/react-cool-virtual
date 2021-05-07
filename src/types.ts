@@ -23,9 +23,8 @@ export interface Config<D> {
   overscanCount?: number;
 }
 
-export interface Return<O, I, T> {
+export interface Return<O, I> {
   outerRef: RefObject<O>;
   innerRef: RefObject<I>;
-  itemRef: RefObject<T>;
   items: Item[];
 }

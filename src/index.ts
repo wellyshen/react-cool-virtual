@@ -10,7 +10,7 @@ export default function useVirtual<
 >({
   itemData,
   itemCount,
-  itemSize,
+  itemSize = 50,
   isHorizontal,
   overscanCount = 2,
 }: Config<D>): Return<O, I> {
@@ -22,20 +22,17 @@ export default function useVirtual<
   const scrollKey = !isHorizontal ? "scrollTop" : "scrollLeft";
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const itemCountRef = useRef(
-    new Array(itemCount !== undefined ? itemCount : itemData?.length).fill(true)
-  );
   const itemDataRef = useRef<D | undefined>(itemData);
   const cacheRef = useRef<Cache[]>([]);
   const [items, setItems] = useState<Item[]>([]);
+  itemCount = itemCount !== undefined ? itemCount : itemData?.length;
 
   const getCalcData = useCallback(
     (idx: number) => {
       const { current: outer } = outerRef;
-      const { current: iCount } = itemCountRef;
 
       if (!outer) throw Error("Outer error");
-      if (!iCount) throw Error("Item count errors");
+      if (itemCount === undefined) throw Error("Item count errors");
 
       const style = getComputedStyle(outer);
       const padding =
@@ -47,14 +44,21 @@ export default function useVirtual<
       if (!cacheRef.current[idx])
         cacheRef.current[idx] = {
           start,
-          end: Math.min(idx + displayCount + overscanCount, iCount.length),
+          end: Math.min(idx + displayCount + overscanCount, itemCount),
           margin: start * itemSize,
-          totalSize: (iCount.length - start) * itemSize,
+          totalSize: (itemCount - start) * itemSize,
         };
 
       return cacheRef.current[idx];
     },
-    [clientSizeKey, itemSize, overscanCount, paddingBRKey, paddingTLKey]
+    [
+      clientSizeKey,
+      itemCount,
+      itemSize,
+      overscanCount,
+      paddingBRKey,
+      paddingTLKey,
+    ]
   );
 
   const updateItems = useCallback(
@@ -68,18 +72,16 @@ export default function useVirtual<
       inner.style[marginKey] = `${margin}px`;
       inner.style[sizeKey] = `${totalSize}px`;
 
-      setItems(
-        itemCountRef.current.slice(start, end).map((_, i) => {
-          const { current: data } = itemDataRef;
-          const nextIdx = i + start;
+      const nextItems = [];
 
-          return {
-            data: data ? data[nextIdx] : undefined,
-            index: nextIdx,
-            size: itemSize,
-          };
-        })
-      );
+      for (let i = start; i < end; i += 1)
+        nextItems.push({
+          data: itemDataRef.current ? itemDataRef.current[i] : undefined,
+          index: i,
+          size: itemSize,
+        });
+
+      setItems(nextItems);
     },
     [getCalcData, itemSize, marginKey, sizeKey]
   );
