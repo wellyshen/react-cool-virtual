@@ -10,7 +10,7 @@ export const app = css`
   margin-top: 3rem;
 `;
 
-export const container = css`
+export const outer = css`
   margin: 0 auto;
   width: 300px;
   height: 300px;
@@ -19,10 +19,15 @@ export const container = css`
   background: greenyellow;
 `;
 
+export const inner = css`
+  display: block;
+`;
+
 export const item = css`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 300px;
   background: #fff;
 `;
 

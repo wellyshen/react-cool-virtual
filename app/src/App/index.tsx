@@ -4,7 +4,7 @@ import { Global, css } from "@emotion/react";
 import useVirtual from "react-cool-virtual";
 import normalize from "normalize.css";
 
-import { root, app, container, item, itemDark } from "./styles";
+import { root, app, outer, inner, item, itemDark } from "./styles";
 
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
@@ -16,7 +16,7 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(8),
+    itemData: getMockData(1000),
     // itemCount: 20,
     itemSize: 100,
     // isHorizontal: true,
@@ -31,8 +31,8 @@ export default (): JSX.Element => {
         `}
       />
       <div css={app}>
-        <div css={container} ref={outerRef}>
-          <div ref={innerRef}>
+        <div css={outer} ref={outerRef}>
+          <div css={inner} ref={innerRef}>
             {items.map(({ data, index, size }: any) => (
               <div
                 key={index}
