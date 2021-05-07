@@ -1,5 +1,12 @@
 import { RefObject } from "react";
 
+export interface Cache {
+  start: number;
+  end: number;
+  totalSize: number;
+  margin: number;
+}
+
 export type Data = Record<string, any>;
 
 export interface Item {
