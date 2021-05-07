@@ -35,7 +35,7 @@ export default function useVirtual<
       const { current: iCount } = itemCountRef;
 
       if (!outer) throw Error("Outer error");
-      if (!iCount) throw Error("Item data/count errors");
+      if (!iCount) throw Error("Item count errors");
 
       const style = getComputedStyle(outer);
       const padding =
