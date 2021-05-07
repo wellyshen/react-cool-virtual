@@ -16,7 +16,7 @@ const useVirtual = <
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const itemNumRef = useRef(
-    new Array(itemCount !== undefined ? itemCount : itemData?.length).fill({})
+    new Array(itemCount !== undefined ? itemCount : itemData?.length).fill(true)
   );
   const itemDataRef = useRef<D | undefined>(itemData);
   const [items, setItems] = useState<Item[]>([]);
