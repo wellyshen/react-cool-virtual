@@ -1,8 +1,9 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
-import { Data, Item, Config, Return } from "./types";
+import { Cache, Data, Item, Config, Return } from "./types";
+import useIsoLayoutEffect from "./useIsoLayoutEffect";
 
-const useVirtual = <
+export default function useVirtual<
   O extends HTMLElement = HTMLElement,
   I extends HTMLElement = HTMLElement,
   D extends Data[] = Data[]
@@ -12,53 +13,65 @@ const useVirtual = <
   itemSize,
   isHorizontal,
   overscanCount = 2,
-}: Config<D>): Return<O, I> => {
+}: Config<D>): Return<O, I> {
+  const sizeKey = !isHorizontal ? "height" : "width";
+  const clientSizeKey = !isHorizontal ? "clientHeight" : "clientWidth";
+  const marginKey = !isHorizontal ? "marginTop" : "marginLeft";
+  const paddingTLKey = !isHorizontal ? "paddingTop" : "paddingLeft";
+  const paddingBRKey = !isHorizontal ? "paddingBottom" : "paddingRight";
+  const scrollKey = !isHorizontal ? "scrollTop" : "scrollLeft";
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const itemNumRef = useRef(
+  const itemCountRef = useRef(
     new Array(itemCount !== undefined ? itemCount : itemData?.length).fill(true)
   );
   const itemDataRef = useRef<D | undefined>(itemData);
+  const cacheRef = useRef<Cache[]>([]);
   const [items, setItems] = useState<Item[]>([]);
 
-  useLayoutEffect(() => {
-    const { current: outer } = outerRef;
-    const { current: inner } = innerRef;
-    const { current: itemNum } = itemNumRef;
+  const getCalcData = useCallback(
+    (idx: number) => {
+      const { current: outer } = outerRef;
+      const { current: iCount } = itemCountRef;
 
-    if (!outer || !inner || !itemNum.length || !itemSize) return () => null;
+      if (!outer) throw Error("Outer error");
+      if (!iCount) throw Error("Item data/count errors");
 
-    const {
-      paddingTop,
-      paddingBottom,
-      paddingLeft,
-      paddingRight,
-    } = getComputedStyle(outer);
-    const padding = !isHorizontal
-      ? +paddingTop.replace("px", "") + +paddingBottom.replace("px", "")
-      : +paddingLeft.replace("px", "") + +paddingRight.replace("px", "");
-    const displayCount =
-      (outer[!isHorizontal ? "clientHeight" : "clientWidth"] - padding) /
-      itemSize;
+      const style = getComputedStyle(outer);
+      const padding =
+        +style[paddingTLKey].replace("px", "") +
+        +style[paddingBRKey].replace("px", "");
+      const displayCount = (outer[clientSizeKey] - padding) / itemSize;
+      const start = Math.max(idx - overscanCount, 0);
 
-    const updateItems = (index: number) => {
-      const start = Math.max(index - overscanCount, 0);
-      const end = Math.min(
-        index + displayCount + overscanCount,
-        itemNum.length
-      );
+      if (!cacheRef.current[idx])
+        cacheRef.current[idx] = {
+          start,
+          end: Math.min(idx + displayCount + overscanCount, iCount.length),
+          margin: start * itemSize,
+          totalSize: (iCount.length - start) * itemSize,
+        };
 
-      inner.style[!isHorizontal ? "marginTop" : "marginLeft"] = `${
-        start * itemSize
-      }px`;
-      inner.style[!isHorizontal ? "height" : "width"] = `${
-        (itemNum.length - start) * itemSize
-      }px`;
+      return cacheRef.current[idx];
+    },
+    [clientSizeKey, itemSize, overscanCount, paddingBRKey, paddingTLKey]
+  );
+
+  const updateItems = useCallback(
+    (idx: number) => {
+      const { current: inner } = innerRef;
+
+      if (!inner) throw Error("Inner error");
+
+      const { start, end, margin, totalSize } = getCalcData(idx);
+
+      inner.style[marginKey] = `${margin}px`;
+      inner.style[sizeKey] = `${totalSize}px`;
 
       setItems(
-        itemNum.slice(start, end).map((_, idx) => {
+        itemCountRef.current.slice(start, end).map((_, i) => {
           const { current: data } = itemDataRef;
-          const nextIdx = idx + start;
+          const nextIdx = i + start;
 
           return {
             data: data ? data[nextIdx] : undefined,
@@ -67,17 +80,17 @@ const useVirtual = <
           };
         })
       );
-    };
+    },
+    [getCalcData, itemSize, marginKey, sizeKey]
+  );
 
+  useIsoLayoutEffect(() => {
     updateItems(0);
 
     let prevStartIdx: number;
 
     const scrollHandler = ({ target }: Event) => {
-      const { scrollTop, scrollLeft } = target as O;
-      const idx = Math.floor(
-        (!isHorizontal ? scrollTop : scrollLeft) / itemSize
-      );
+      const idx = Math.floor((target as O)[scrollKey] / itemSize);
 
       if (idx !== prevStartIdx) {
         updateItems(idx);
@@ -85,14 +98,14 @@ const useVirtual = <
       }
     };
 
-    outer.addEventListener("scroll", scrollHandler);
+    const { current: outer } = outerRef;
+
+    outer?.addEventListener("scroll", scrollHandler);
 
     return () => {
-      outer.removeEventListener("scroll", scrollHandler);
+      outer?.removeEventListener("scroll", scrollHandler);
     };
-  }, [overscanCount, isHorizontal, itemSize]);
+  }, []);
 
   return { outerRef, innerRef, items };
-};
-
-export default useVirtual;
+}
