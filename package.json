@@ -60,7 +60,7 @@
     "clean:cov": "rimraf coverage",
     "copy": "run-p copy:*",
     "copy:cjs": "cpy scripts/rollup/cjsEntryFile.js dist --rename=index.js",
-    "copy:type": "cpy src/types/react-cool-virtual.d.ts dist --rename=index.d.ts",
+    "copy:type": "cpy src/react-cool-virtual.d.ts dist --rename=index.d.ts",
     "release": "yarn build && changeset publish",
     "prepare": "husky install"
   },
