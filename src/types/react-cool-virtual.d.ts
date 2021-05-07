@@ -14,7 +14,7 @@ declare module "react-cool-virtual" {
     itemCount?: number;
     itemSize: number;
     isHorizontal?: boolean;
-    extendCount?: number;
+    overscanCount?: number;
   }
 
   export interface Return<

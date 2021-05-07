@@ -13,7 +13,7 @@ export interface Config<D> {
   itemCount?: number;
   itemSize: number;
   isHorizontal?: boolean;
-  extendCount?: number;
+  overscanCount?: number;
 }
 
 export interface Return<O, I> {
