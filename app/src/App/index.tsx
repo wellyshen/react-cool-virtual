@@ -16,7 +16,7 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(1000),
+    itemData: getMockData(100),
     // itemCount: 20,
     itemSize: 100,
     // isHorizontal: true,
