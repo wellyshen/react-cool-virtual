@@ -11,7 +11,7 @@ const useVirtual = <
   itemCount,
   itemSize,
   isHorizontal,
-  extendCount = 2,
+  overscanCount = 2,
 }: Config<D>): Return<O, I> => {
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
@@ -22,24 +22,38 @@ const useVirtual = <
   const [items, setItems] = useState<Item[]>([]);
 
   useLayoutEffect(() => {
-    const { current: container } = outerRef;
-    const { current: wrapper } = innerRef;
+    const { current: outer } = outerRef;
+    const { current: inner } = innerRef;
     const { current: itemNum } = itemNumRef;
 
-    if (!container || !wrapper || !itemNum.length || !itemSize)
-      return () => null;
+    if (!outer || !inner || !itemNum.length || !itemSize) return () => null;
 
-    const { paddingTop, paddingBottom } = getComputedStyle(container);
-    const pT = +paddingTop.replace("px", "");
-    const pB = +paddingBottom.replace("px", "");
-    const displayCount = (container.clientHeight - pT + pB) / itemSize;
+    const {
+      paddingTop,
+      paddingBottom,
+      paddingLeft,
+      paddingRight,
+    } = getComputedStyle(outer);
+    const padding = !isHorizontal
+      ? +paddingTop.replace("px", "") + +paddingBottom.replace("px", "")
+      : +paddingLeft.replace("px", "") + +paddingRight.replace("px", "");
+    const displayCount =
+      (outer[!isHorizontal ? "clientHeight" : "clientWidth"] - padding) /
+      itemSize;
 
     const updateItems = (index: number) => {
-      const start = Math.max(index - extendCount, 0);
-      const end = Math.min(index + displayCount + extendCount, itemNum.length);
+      const start = Math.max(index - overscanCount, 0);
+      const end = Math.min(
+        index + displayCount + overscanCount,
+        itemNum.length
+      );
 
-      wrapper.style.paddingTop = `${start * itemSize}px`;
-      wrapper.style.paddingBottom = `${(itemNum.length - end) * itemSize}px`;
+      inner.style[!isHorizontal ? "marginTop" : "marginLeft"] = `${
+        start * itemSize
+      }px`;
+      inner.style[!isHorizontal ? "height" : "width"] = `${
+        (itemNum.length - start) * itemSize
+      }px`;
 
       setItems(
         itemNum.slice(start, end).map((_, idx) => {
@@ -60,8 +74,10 @@ const useVirtual = <
     let prevStartIdx: number;
 
     const scrollHandler = ({ target }: Event) => {
-      const { scrollTop } = target as O;
-      const idx = Math.floor(scrollTop / itemSize);
+      const { scrollTop, scrollLeft } = target as O;
+      const idx = Math.floor(
+        (!isHorizontal ? scrollTop : scrollLeft) / itemSize
+      );
 
       if (idx !== prevStartIdx) {
         updateItems(idx);
@@ -69,12 +85,12 @@ const useVirtual = <
       }
     };
 
-    container.addEventListener("scroll", scrollHandler);
+    outer.addEventListener("scroll", scrollHandler);
 
     return () => {
-      container.removeEventListener("scroll", scrollHandler);
+      outer.removeEventListener("scroll", scrollHandler);
     };
-  }, [extendCount, itemCount, itemSize]);
+  }, [overscanCount, isHorizontal, itemSize]);
 
   return { outerRef, innerRef, items };
 };
