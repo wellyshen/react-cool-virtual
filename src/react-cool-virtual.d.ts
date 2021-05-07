@@ -19,16 +19,19 @@ declare module "react-cool-virtual" {
 
   export interface Return<
     O extends HTMLElement = HTMLElement,
-    I extends HTMLElement = HTMLElement
+    I extends HTMLElement = HTMLElement,
+    T extends HTMLElement = HTMLElement
   > {
     outerRef: RefObject<O>;
     innerRef: RefObject<I>;
+    itemRef: RefObject<T>;
     items: Item[];
   }
 
   export default function useVirtual<
     O extends HTMLElement = HTMLElement,
     I extends HTMLElement = HTMLElement,
+    T extends HTMLElement = HTMLElement,
     D extends Data[] = Data[]
-  >(config: Config<D>): Return<O, I>;
+  >(config: Config<D>): Return<O, I, T>;
 }
