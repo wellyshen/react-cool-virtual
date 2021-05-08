@@ -20,7 +20,7 @@ export default (): JSX.Element => {
     // itemCount: 20,
     itemSize: (idx: number) => [70, 100, 50, 100, 70, 100, 50, 100][idx],
     // isHorizontal: true,
-    overscanCount: 1,
+    overscanCount: 0,
   });
 
   return (
