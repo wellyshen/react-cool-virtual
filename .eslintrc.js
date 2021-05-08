@@ -7,6 +7,7 @@ module.exports = {
         allow: ["warn", "error"],
       },
     ],
+    "no-bitwise": "off",
     "no-param-reassign": "off",
     "react/react-in-jsx-scope": "off",
   },
