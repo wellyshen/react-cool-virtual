@@ -18,6 +18,7 @@ export default function useVirtual<
   overscanCount = 2,
 }: Config<D>): Return<O, I> {
   const [items, setItems] = useState<Item[]>([]);
+  const hasWarn = useRef(false);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const itemDataRef = useRef<D | undefined>(itemData);
@@ -32,7 +33,15 @@ export default function useVirtual<
   const paddingBRKey = !isHorizontal ? "paddingBottom" : "paddingRight";
   const scrollKey = !isHorizontal ? "scrollTop" : "scrollLeft";
   itemCount = itemCount !== undefined ? itemCount : itemData?.length;
-  overscanCount = overscanCount < 1 ? 1 : overscanCount;
+
+  if (overscanCount < 1) {
+    overscanCount = 1;
+
+    if (!hasWarn.current) {
+      console.warn("overscanCount warning");
+      hasWarn.current = true;
+    }
+  }
 
   const getOuterSize = useCallback(() => {
     const { current: outer } = outerRef;
@@ -82,8 +91,6 @@ export default function useVirtual<
         idx += 1;
       }
 
-      console.log("LOG ===> getDisplayCount: ", count);
-
       return count;
     },
     [getItemSize, itemSizeRef]
@@ -96,16 +103,14 @@ export default function useVirtual<
 
     for (let i = 0; i < itemCount; i += 1) {
       const start = Math.max(i - overscanCount, 0);
-      const offset = start
-        ? (data[i - 1]?.offset || 0) + getItemSize(start)
-        : 0;
+      const offset = start ? data[i - 1].offset + getItemSize(start - 1) : 0;
 
       data.push({
         start,
         end: Math.min(i + getDisplayCount(i) + overscanCount, itemCount),
         offset,
         innerSize: totalSizeRef.current - offset,
-        idxRange: data[i - 1]?.idxRange + getItemSize(i) || 0,
+        idxRange: i ? data[i - 1].idxRange + getItemSize(i - 1) : 0,
       });
     }
 
@@ -161,10 +166,6 @@ export default function useVirtual<
     outerSizeRef.current = getOuterSize();
     totalSizeRef.current = getTotalSize();
     calcDataRef.current = getCalcData();
-
-    console.log("LOG ===> outerSizeRef: ", outerSizeRef.current);
-    console.log("LOG ===> totalSizeRef: ", totalSizeRef.current);
-    console.log("LOG ===> calcDataRef: ", calcDataRef.current);
 
     updateItems(0);
 
