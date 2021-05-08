@@ -3,6 +3,8 @@ import { useCallback, useRef, useState, useLayoutEffect } from "react";
 import { CalcData, Config, Data, Item, ItemSize, Return } from "./types";
 // import useIsoLayoutEffect from "./useIsoLayoutEffect";
 import useLatest from "./useLatest";
+import invariant from "./invariant";
+import warn from "./warn";
 
 const DEFAULT_ITEM_SIZE = 50;
 
@@ -38,7 +40,7 @@ export default function useVirtual<
     overscanCount = 1;
 
     if (!hasWarn.current) {
-      console.warn("overscanCount warning");
+      warn("overscanCount warning");
       hasWarn.current = true;
     }
   }
@@ -159,9 +161,9 @@ export default function useVirtual<
     const { current: outer } = outerRef;
     const { current: inner } = innerRef;
 
-    if (!outer) throw new Error("Outer error");
-    if (!inner) throw new Error("Inner error");
-    if (itemCount === undefined) throw new Error("Item count error");
+    invariant(!outer, "Outer error");
+    invariant(!inner, "Inner error");
+    invariant(itemCount === undefined, "Item count error");
 
     outerSizeRef.current = getOuterSize();
     totalSizeRef.current = getTotalSize();
