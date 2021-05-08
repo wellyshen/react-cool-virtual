@@ -182,10 +182,10 @@ export default function useVirtual<
       }
     };
 
-    outer.addEventListener("scroll", scrollHandler);
+    outer!.addEventListener("scroll", scrollHandler);
 
     return () => {
-      outer.removeEventListener("scroll", scrollHandler);
+      outer!.removeEventListener("scroll", scrollHandler);
     };
   }, [
     getCalcData,
