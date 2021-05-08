@@ -1,10 +1,11 @@
 import { RefObject } from "react";
 
-export interface Cache {
+export interface CalcData {
   start: number;
   end: number;
-  totalSize: number;
-  margin: number;
+  offset: number;
+  innerSize: number;
+  idxRange: number;
 }
 
 export type Data = Record<string, any>;
@@ -15,10 +16,12 @@ export interface Item {
   readonly size: number;
 }
 
+export type ItemSize = number | ((index: number) => number);
+
 export interface Config<D> {
   itemData?: D;
   itemCount?: number;
-  itemSize: number;
+  itemSize: ItemSize;
   isHorizontal?: boolean;
   overscanCount?: number;
 }

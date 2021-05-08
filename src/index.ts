@@ -1,7 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useLayoutEffect } from "react";
 
-import { Cache, Data, Item, Config, Return } from "./types";
-import useIsoLayoutEffect from "./useIsoLayoutEffect";
+import { CalcData, Config, Data, Item, ItemSize, Return } from "./types";
+// import useIsoLayoutEffect from "./useIsoLayoutEffect";
+import useLatest from "./useLatest";
+
+const DEFAULT_ITEM_SIZE = 50;
 
 export default function useVirtual<
   O extends HTMLElement = HTMLElement,
@@ -10,67 +13,116 @@ export default function useVirtual<
 >({
   itemData,
   itemCount,
-  itemSize = 50,
+  itemSize = DEFAULT_ITEM_SIZE,
   isHorizontal,
   overscanCount = 2,
 }: Config<D>): Return<O, I> {
+  const [items, setItems] = useState<Item[]>([]);
+  const outerRef = useRef<O>(null);
+  const innerRef = useRef<I>(null);
+  const itemDataRef = useRef<D | undefined>(itemData);
+  const outerSizeRef = useRef(0);
+  const totalSizeRef = useRef(0);
+  const calcDataRef = useRef<CalcData[]>([]);
+  const itemSizeRef = useLatest<ItemSize>(itemSize);
   const sizeKey = !isHorizontal ? "height" : "width";
   const clientSizeKey = !isHorizontal ? "clientHeight" : "clientWidth";
   const marginKey = !isHorizontal ? "marginTop" : "marginLeft";
   const paddingTLKey = !isHorizontal ? "paddingTop" : "paddingLeft";
   const paddingBRKey = !isHorizontal ? "paddingBottom" : "paddingRight";
   const scrollKey = !isHorizontal ? "scrollTop" : "scrollLeft";
-  const outerRef = useRef<O>(null);
-  const innerRef = useRef<I>(null);
-  const itemDataRef = useRef<D | undefined>(itemData);
-  const cacheRef = useRef<Cache[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
   itemCount = itemCount !== undefined ? itemCount : itemData?.length;
+  overscanCount = overscanCount < 1 ? 1 : overscanCount;
 
-  const getCalcData = useCallback(
+  const getOuterSize = useCallback(() => {
+    const { current: outer } = outerRef;
+
+    if (!outer) return 0;
+
+    const style = getComputedStyle(outer);
+
+    return (
+      outer[clientSizeKey] -
+      +style[paddingTLKey].replace("px", "") +
+      +style[paddingBRKey].replace("px", "")
+    );
+  }, [clientSizeKey, paddingBRKey, paddingTLKey]);
+
+  const getItemSize = useCallback(
     (idx: number) => {
-      const { current: outer } = outerRef;
-
-      if (!outer) throw Error("Outer error");
-      if (itemCount === undefined) throw Error("Item count errors");
-
-      const style = getComputedStyle(outer);
-      const padding =
-        +style[paddingTLKey].replace("px", "") +
-        +style[paddingBRKey].replace("px", "");
-      const displayCount = (outer[clientSizeKey] - padding) / itemSize;
-      const start = Math.max(idx - overscanCount, 0);
-
-      if (!cacheRef.current[idx])
-        cacheRef.current[idx] = {
-          start,
-          end: Math.min(idx + displayCount + overscanCount, itemCount),
-          margin: start * itemSize,
-          totalSize: (itemCount - start) * itemSize,
-        };
-
-      return cacheRef.current[idx];
+      const { current: size } = itemSizeRef;
+      if (typeof size === "number") return size;
+      return size(idx) ?? DEFAULT_ITEM_SIZE;
     },
-    [
-      clientSizeKey,
-      itemCount,
-      itemSize,
-      overscanCount,
-      paddingBRKey,
-      paddingTLKey,
-    ]
+    [itemSizeRef]
   );
+
+  const getTotalSize = useCallback(() => {
+    if (!itemCount) return 0;
+
+    let size = 0;
+
+    for (let i = 0; i < itemCount; i += 1) size += getItemSize(i);
+
+    return size;
+  }, [getItemSize, itemCount]);
+
+  const getDisplayCount = useCallback(
+    (idx: number) => {
+      let { current: outerSize } = outerSizeRef;
+
+      if (typeof itemSizeRef.current === "number")
+        return outerSize / itemSizeRef.current;
+
+      let count = 0;
+
+      while (outerSize > 0) {
+        outerSize -= getItemSize(idx);
+        count += 1;
+        idx += 1;
+      }
+
+      console.log("LOG ===> getDisplayCount: ", count);
+
+      return count;
+    },
+    [getItemSize, itemSizeRef]
+  );
+
+  const getCalcData = useCallback(() => {
+    if (!itemCount) return [];
+
+    const data: CalcData[] = [];
+
+    for (let i = 0; i < itemCount; i += 1) {
+      const start = Math.max(i - overscanCount, 0);
+      const offset = start
+        ? (data[i - 1]?.offset || 0) + getItemSize(start)
+        : 0;
+
+      data.push({
+        start,
+        end: Math.min(i + getDisplayCount(i) + overscanCount, itemCount),
+        offset,
+        innerSize: totalSizeRef.current - offset,
+        idxRange: data[i - 1]?.idxRange + getItemSize(i) || 0,
+      });
+    }
+
+    return data;
+  }, [getDisplayCount, getItemSize, itemCount, overscanCount]);
 
   const updateItems = useCallback(
     (idx: number) => {
+      const calcData = calcDataRef.current[idx];
       const { current: inner } = innerRef;
 
-      if (!inner) throw Error("Inner error");
+      if (!inner || !calcData) return;
 
-      const { start, end, margin, totalSize } = getCalcData(idx);
+      const { start, end, offset, innerSize } = calcData;
 
-      inner.style[marginKey] = `${margin}px`;
-      inner.style[sizeKey] = `${totalSize}px`;
+      inner.style[marginKey] = `${offset}px`;
+      inner.style[sizeKey] = `${innerSize}px`;
 
       const nextItems = [];
 
@@ -78,36 +130,90 @@ export default function useVirtual<
         nextItems.push({
           data: itemDataRef.current ? itemDataRef.current[i] : undefined,
           index: i,
-          size: itemSize,
+          size: getItemSize(i),
         });
 
       setItems(nextItems);
     },
-    [getCalcData, itemSize, marginKey, sizeKey]
+    [getItemSize, marginKey, sizeKey]
   );
 
-  useIsoLayoutEffect(() => {
+  const getScrollIdx = useCallback(
+    (scrollVal: number) => {
+      if (!itemCount) return 0;
+
+      const ranges = calcDataRef.current.map(({ idxRange }) => idxRange);
+
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      return findNearestBinarySearch(0, itemCount, scrollVal, ranges);
+    },
+    [itemCount]
+  );
+
+  useLayoutEffect(() => {
+    const { current: outer } = outerRef;
+    const { current: inner } = innerRef;
+
+    if (!outer) throw new Error("Outer error");
+    if (!inner) throw new Error("Inner error");
+    if (itemCount === undefined) throw new Error("Item count error");
+
+    outerSizeRef.current = getOuterSize();
+    totalSizeRef.current = getTotalSize();
+    calcDataRef.current = getCalcData();
+
+    console.log("LOG ===> outerSizeRef: ", outerSizeRef.current);
+    console.log("LOG ===> totalSizeRef: ", totalSizeRef.current);
+    console.log("LOG ===> calcDataRef: ", calcDataRef.current);
+
     updateItems(0);
 
-    let prevStartIdx: number;
+    let prevIdx: number;
 
     const scrollHandler = ({ target }: Event) => {
-      const idx = Math.floor((target as O)[scrollKey] / itemSize);
+      const idx = getScrollIdx((target as O)[scrollKey]);
 
-      if (idx !== prevStartIdx) {
+      if (idx !== prevIdx) {
         updateItems(idx);
-        prevStartIdx = idx;
+        prevIdx = idx;
       }
     };
 
-    const { current: outer } = outerRef;
-
-    outer?.addEventListener("scroll", scrollHandler);
+    outer.addEventListener("scroll", scrollHandler);
 
     return () => {
-      outer?.removeEventListener("scroll", scrollHandler);
+      outer.removeEventListener("scroll", scrollHandler);
     };
-  }, []);
+  }, [
+    getCalcData,
+    getOuterSize,
+    getScrollIdx,
+    getTotalSize,
+    itemCount,
+    scrollKey,
+    updateItems,
+  ]);
 
   return { outerRef, innerRef, items };
 }
+
+const findNearestBinarySearch = (
+  low: number,
+  high: number,
+  offset: number,
+  ranges: number[]
+) => {
+  while (low <= high) {
+    const middle = ((low + high) / 2) | 0;
+
+    if (offset === ranges[middle]) return middle;
+
+    if (offset < ranges[middle]) {
+      high = middle - 1;
+    } else {
+      low = middle + 1;
+    }
+  }
+
+  return low > 0 ? low - 1 : 0;
+};

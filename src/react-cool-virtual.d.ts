@@ -9,10 +9,12 @@ declare module "react-cool-virtual" {
     readonly size: number;
   }
 
+  export type ItemSize = number | ((index: number) => number);
+
   export interface Config<D extends Data[] = Data[]> {
     itemData?: D;
     itemCount?: number;
-    itemSize: number;
+    itemSize: ItemSize;
     isHorizontal?: boolean;
     overscanCount?: number;
   }
