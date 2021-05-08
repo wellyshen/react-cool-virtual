@@ -9,6 +9,7 @@ module.exports = {
     ],
     "no-bitwise": "off",
     "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
     "react/react-in-jsx-scope": "off",
   },
 };
