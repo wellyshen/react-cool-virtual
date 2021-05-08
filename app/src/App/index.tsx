@@ -16,10 +16,11 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(100),
+    itemData: getMockData(8),
     // itemCount: 20,
-    itemSize: 100,
+    itemSize: (idx: number) => [70, 100, 50, 100, 70, 100, 50, 100][idx],
     // isHorizontal: true,
+    overscanCount: 1,
   });
 
   return (
