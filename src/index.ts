@@ -1,14 +1,16 @@
 import { useCallback, useRef, useState, useLayoutEffect } from "react";
 
 import { CalcData, Config, Data, Item, ItemSize, Return } from "./types";
-// import useIsoLayoutEffect from "./useIsoLayoutEffect";
-import useLatest from "./useLatest";
-import invariant from "./invariant";
-import warn from "./warn";
+import {
+  findNearestBinarySearch,
+  invariant,
+  // useIsoLayoutEffect,
+  useLatest,
+} from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
 
-export default function useVirtual<
+const useVirtual = <
   O extends HTMLElement = HTMLElement,
   I extends HTMLElement = HTMLElement,
   D extends Data[] = Data[]
@@ -18,7 +20,7 @@ export default function useVirtual<
   itemSize = DEFAULT_ITEM_SIZE,
   isHorizontal,
   overscanCount = 2,
-}: Config<D>): Return<O, I> {
+}: Config<D>): Return<O, I> => {
   const [items, setItems] = useState<Item[]>([]);
   const hasWarn = useRef(false);
   const outerRef = useRef<O>(null);
@@ -145,18 +147,6 @@ export default function useVirtual<
     [getItemSize, marginKey, sizeKey]
   );
 
-  const getScrollIdx = useCallback(
-    (scrollVal: number) => {
-      if (!itemCount) return 0;
-
-      const ranges = calcDataRef.current.map(({ idxRange }) => idxRange);
-
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      return findNearestBinarySearch(0, itemCount, scrollVal, ranges);
-    },
-    [itemCount]
-  );
-
   useLayoutEffect(() => {
     const { current: outer } = outerRef;
     const { current: inner } = innerRef;
@@ -174,7 +164,12 @@ export default function useVirtual<
     let prevIdx: number;
 
     const scrollHandler = ({ target }: Event) => {
-      const idx = getScrollIdx((target as O)[scrollKey]);
+      const idx = findNearestBinarySearch(
+        0,
+        calcDataRef.current.length,
+        (target as O)[scrollKey],
+        calcDataRef.current.map(({ idxRange }) => idxRange)
+      );
 
       if (idx !== prevIdx) {
         updateItems(idx);
@@ -190,7 +185,6 @@ export default function useVirtual<
   }, [
     getCalcData,
     getOuterSize,
-    getScrollIdx,
     getTotalSize,
     itemCount,
     scrollKey,
@@ -198,25 +192,6 @@ export default function useVirtual<
   ]);
 
   return { outerRef, innerRef, items };
-}
-
-const findNearestBinarySearch = (
-  low: number,
-  high: number,
-  offset: number,
-  ranges: number[]
-) => {
-  while (low <= high) {
-    const middle = ((low + high) / 2) | 0;
-
-    if (offset === ranges[middle]) return middle;
-
-    if (offset < ranges[middle]) {
-      high = middle - 1;
-    } else {
-      low = middle + 1;
-    }
-  }
-
-  return low > 0 ? low - 1 : 0;
 };
+
+export default useVirtual;
