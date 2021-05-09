@@ -1,5 +1,7 @@
 import { RefObject } from "react";
 
+export type Data = Record<string, any>;
+
 export interface CalcData {
   start: number;
   end: number;
@@ -8,10 +10,8 @@ export interface CalcData {
   idxRange: number;
 }
 
-export type Data = Record<string, any>;
-
-export interface Item {
-  data?: Data;
+export interface Item<D> {
+  data?: D;
   readonly index: number;
   readonly size: number;
   measureRef: (el: HTMLElement | null) => void;
@@ -20,7 +20,7 @@ export interface Item {
 export type ItemSize = number | ((index: number) => number) | undefined;
 
 export type Config<D> = Partial<{
-  itemData: D;
+  itemData: D[];
   itemCount: number;
   itemSize: ItemSize;
   defaultItemSize: number;
@@ -28,8 +28,8 @@ export type Config<D> = Partial<{
   overscanCount: number;
 }>;
 
-export interface Return<O, I> {
+export interface Return<O, I, D> {
   outerRef: RefObject<O>;
   innerRef: RefObject<I>;
-  items: Item[];
+  items: Item<D>[];
 }

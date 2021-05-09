@@ -13,7 +13,7 @@ import {
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
   I extends HTMLElement = HTMLElement,
-  D extends Data[] = Data[]
+  D extends Data = Data
 >({
   itemData,
   itemCount,
@@ -21,13 +21,13 @@ const useVirtual = <
   defaultItemSize = 50,
   isHorizontal,
   overscanCount = 2,
-}: Config<D>): Return<O, I> => {
-  const [items, setItems] = useState<Item[]>([]);
+}: Config<D>): Return<O, I, D> => {
+  const [items, setItems] = useState<Item<D>[]>([]);
   const [outerSize, setOuterSize] = useState(0);
   const hasWarn = useRef(false);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const itemDataRef = useRef<D | undefined>(itemData);
+  const itemDataRef = useRef<D[] | undefined>(itemData);
   const totalSizeRef = useRef(0);
   const calcDataRef = useRef<CalcData[]>([]);
   const measureSizesRef = useRef<number[]>([]);
