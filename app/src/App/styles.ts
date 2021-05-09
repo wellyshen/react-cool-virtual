@@ -27,7 +27,8 @@ export const item = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
+  padding: 10px;
+  border: 10px solid blue;
   background: #fff;
 `;
 
