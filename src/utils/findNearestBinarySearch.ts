@@ -7,12 +7,12 @@ export default (
   while (low <= high) {
     const middle = ((low + high) / 2) | 0;
 
-    if (offset === ranges[middle]) return middle;
-
     if (offset < ranges[middle]) {
       high = middle - 1;
-    } else {
+    } else if (offset > ranges[middle]) {
       low = middle + 1;
+    } else {
+      return middle;
     }
   }
 
