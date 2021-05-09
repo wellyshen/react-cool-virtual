@@ -95,7 +95,7 @@
     "bundlesize2": "^0.0.27",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.2.0",
-    "eslint-config-welly": "^1.10.0",
+    "eslint-config-welly": "^1.10.1",
     "husky": "^6.0.0",
     "jest": "^26.6.3",
     "lint-staged": "^11.0.0",

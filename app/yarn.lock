@@ -1972,7 +1972,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^4.22.0":
+"@typescript-eslint/eslint-plugin@^4.22.1":
   version "4.22.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.22.1.tgz#6bcdbaa4548553ab861b4e5f34936ead1349a543"
   integrity sha512-kVTAghWDDhsvQ602tHBc6WmQkdaYbkcTwZu+7l24jtJiYvm9l+/y/b2BZANEezxPDiX5MK2ZecE+9BFi/YJryw==
@@ -2035,7 +2035,7 @@
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
-"@typescript-eslint/parser@^4.22.0":
+"@typescript-eslint/parser@^4.22.1":
   version "4.22.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.22.1.tgz#a95bda0fd01d994a15fc3e99dc984294f25c19cc"
   integrity sha512-l+sUJFInWhuMxA6rtirzjooh8cM/AATAe3amvIkqKFeMzkn85V+eLzb1RyuXkHak4dLfYzOmF6DXPyflJvjQnw==
@@ -4803,14 +4803,14 @@ eslint-config-react-app@^6.0.0:
   dependencies:
     confusing-browser-globals "^1.0.10"
 
-eslint-config-welly@^1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-welly/-/eslint-config-welly-1.10.0.tgz#4a132a62bcaf51397e56b0102f7539ff50ccc617"
-  integrity sha512-unAY0q5q7kehzxjstL9YvodC+fXowCUlAruTxJrnsl1VRxbnX3AIrTZdzehhUcCZa9aIHr7o5F01GPRgLSFmSA==
+eslint-config-welly@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-welly/-/eslint-config-welly-1.10.1.tgz#09edd15b23930c6ddd2024d0056c9c27da9d7ce6"
+  integrity sha512-xOaf6Zk021Jsig/o2keOTJifcasxKvQZc1Vm2dzDDLGy10dJyHC6z4GlrhzpLHveiJXAaPB9tcxzlNcYRB6VqA==
   dependencies:
     "@emotion/eslint-plugin" "^11.2.0"
-    "@typescript-eslint/eslint-plugin" "^4.22.0"
-    "@typescript-eslint/parser" "^4.22.0"
+    "@typescript-eslint/eslint-plugin" "^4.22.1"
+    "@typescript-eslint/parser" "^4.22.1"
     eslint-config-airbnb "^18.2.1"
     eslint-config-prettier "^8.3.0"
     eslint-import-resolver-typescript "^2.4.0"
@@ -4821,7 +4821,7 @@ eslint-config-welly@^1.10.0:
     eslint-plugin-jsx-a11y "^6.4.1"
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4"
-    eslint-plugin-testing-library "^4.1.2"
+    eslint-plugin-testing-library "^4.2.0"
     read-pkg-up "^7.0.1"
 
 eslint-import-resolver-node@^0.3.4:
@@ -4961,10 +4961,10 @@ eslint-plugin-testing-library@^3.9.2:
   dependencies:
     "@typescript-eslint/experimental-utils" "^3.10.1"
 
-eslint-plugin-testing-library@^4.1.2:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-4.2.0.tgz#80a95b86538901ce256aafef9090320bfbc42a1c"
-  integrity sha512-do+F2gQPLHjzXRl8E4/5WwXZSAOvSvuewxCO/Km6aLk4g0UVFDy5CtlpmDT83q3Hx2urR9Cvb02ai9cPQbbXHQ==
+eslint-plugin-testing-library@^4.2.0:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-4.2.1.tgz#0ec98db5bab0199ad01fb42361d510a0bb8caf9d"
+  integrity sha512-wejetD2Vlx2QDDMDmonsDi2aqlGRlDkbeEhM8vZmfOaHZBemEHSmgCXjAigItGnTxyFUsdSsXIeRayU3Mv/nxg==
   dependencies:
     "@typescript-eslint/experimental-utils" "^4.21.0"
 
