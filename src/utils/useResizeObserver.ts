@@ -3,10 +3,11 @@ import { RefObject } from "react";
 import useIsoLayoutEffect from "./useIsoLayoutEffect";
 import useLatest from "./useLatest";
 
-export default <T extends HTMLElement>(
-  ref: RefObject<T>,
-  cb: (rect: { height: number; width: number }) => void
-): void => {
+interface CB {
+  (rect: { height: number; width: number }): void;
+}
+
+export default <T extends HTMLElement>(ref: RefObject<T>, cb: CB): void => {
   const cbRef = useLatest(cb);
 
   useIsoLayoutEffect(() => {
