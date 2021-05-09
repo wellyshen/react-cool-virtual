@@ -65,7 +65,9 @@ const useVirtual = <
   const getItemSize = useCallback(
     (idx: number) => {
       const { current: size } = itemSizeRef;
+
       if (typeof size === "number") return size;
+
       return size(idx) ?? DEFAULT_ITEM_SIZE;
     },
     [itemSizeRef]
