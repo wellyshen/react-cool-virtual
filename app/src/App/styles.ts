@@ -17,7 +17,6 @@ export const outer = css`
   border: 1px solid #000;
   overflow: auto;
   background: greenyellow;
-  padding: 10px 0;
 `;
 
 export const inner = css`
