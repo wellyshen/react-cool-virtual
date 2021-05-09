@@ -25,6 +25,8 @@
     "infinite-scrolling",
     "scroll",
     "scrolling",
+    "recycle",
+    "dom-recycle",
     "row",
     "column",
     "grid",
