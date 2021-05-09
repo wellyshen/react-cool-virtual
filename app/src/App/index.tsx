@@ -18,7 +18,7 @@ export default (): JSX.Element => {
   >({
     itemData: getMockData(8),
     // itemCount: 20,
-    itemSize: (idx: number) => [70, 100, 50, 100, 70, 100, 50, 100][idx],
+    itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // isHorizontal: true,
     overscanCount: 0,
   });
