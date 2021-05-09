@@ -6,6 +6,7 @@ import {
   invariant,
   // useIsoLayoutEffect,
   useLatest,
+  useResizeObserver,
   warn,
 } from "./utils";
 
@@ -23,19 +24,16 @@ const useVirtual = <
   overscanCount = 2,
 }: Config<D>): Return<O, I> => {
   const [items, setItems] = useState<Item[]>([]);
+  const [outerSize, setOuterSize] = useState(0);
   const hasWarn = useRef(false);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const itemDataRef = useRef<D | undefined>(itemData);
-  const outerSizeRef = useRef(0);
   const totalSizeRef = useRef(0);
   const calcDataRef = useRef<CalcData[]>([]);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const sizeKey = !isHorizontal ? "height" : "width";
-  const clientSizeKey = !isHorizontal ? "clientHeight" : "clientWidth";
   const marginKey = !isHorizontal ? "marginTop" : "marginLeft";
-  const paddingTLKey = !isHorizontal ? "paddingTop" : "paddingLeft";
-  const paddingBRKey = !isHorizontal ? "paddingBottom" : "paddingRight";
   const scrollKey = !isHorizontal ? "scrollTop" : "scrollLeft";
   itemCount = itemCount !== undefined ? itemCount : itemData?.length;
 
@@ -47,20 +45,6 @@ const useVirtual = <
       hasWarn.current = true;
     }
   }
-
-  const getOuterSize = useCallback(() => {
-    const { current: outer } = outerRef;
-
-    if (!outer) return 0;
-
-    const style = getComputedStyle(outer);
-
-    return (
-      outer[clientSizeKey] -
-      +style[paddingTLKey].replace("px", "") +
-      +style[paddingBRKey].replace("px", "")
-    );
-  }, [clientSizeKey, paddingBRKey, paddingTLKey]);
 
   const getItemSize = useCallback(
     (idx: number) => {
@@ -85,22 +69,21 @@ const useVirtual = <
 
   const getDisplayCount = useCallback(
     (idx: number) => {
-      let { current: outerSize } = outerSizeRef;
-
       if (typeof itemSizeRef.current === "number")
         return outerSize / itemSizeRef.current;
 
+      let size = outerSize;
       let count = 0;
 
-      while (outerSize > 0) {
-        outerSize -= getItemSize(idx);
+      while (size > 0) {
+        size -= getItemSize(idx);
         count += 1;
         idx += 1;
       }
 
       return count;
     },
-    [getItemSize, itemSizeRef]
+    [getItemSize, itemSizeRef, outerSize]
   );
 
   const getCalcData = useCallback(() => {
@@ -150,6 +133,8 @@ const useVirtual = <
     [getItemSize, marginKey, sizeKey]
   );
 
+  useResizeObserver<O>(outerRef, (rect) => setOuterSize(rect[sizeKey]));
+
   useLayoutEffect(() => {
     const { current: outer } = outerRef;
     const { current: inner } = innerRef;
@@ -158,7 +143,6 @@ const useVirtual = <
     invariant(!inner, "Inner error");
     invariant(itemCount === undefined, "Item count error");
 
-    outerSizeRef.current = getOuterSize();
     totalSizeRef.current = getTotalSize();
     calcDataRef.current = getCalcData();
 
@@ -182,17 +166,8 @@ const useVirtual = <
 
     outer!.addEventListener("scroll", scrollHandler);
 
-    return () => {
-      outer!.removeEventListener("scroll", scrollHandler);
-    };
-  }, [
-    getCalcData,
-    getOuterSize,
-    getTotalSize,
-    itemCount,
-    scrollKey,
-    updateItems,
-  ]);
+    return () => outer!.removeEventListener("scroll", scrollHandler);
+  }, [getCalcData, getTotalSize, itemCount, scrollKey, updateItems]);
 
   return { outerRef, innerRef, items };
 };
