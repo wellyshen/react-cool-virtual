@@ -7,17 +7,19 @@ declare module "react-cool-virtual" {
     data?: Data;
     readonly index: number;
     readonly size: number;
+    measureRef: (el: HTMLElement | null) => void;
   }
 
-  export type ItemSize = number | ((index: number) => number);
+  export type ItemSize = number | ((index: number) => number) | undefined;
 
-  export interface Config<D extends Data[] = Data[]> {
-    itemData?: D;
-    itemCount?: number;
+  export type Config<D extends Data[] = Data[]> = Partial<{
+    itemData: D;
+    itemCount: number;
     itemSize: ItemSize;
-    isHorizontal?: boolean;
-    overscanCount?: number;
-  }
+    defaultItemSize: number;
+    isHorizontal: boolean;
+    overscanCount: number;
+  }>;
 
   export interface Return<
     O extends HTMLElement = HTMLElement,
