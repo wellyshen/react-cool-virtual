@@ -1,4 +1,4 @@
-import invariant from "../invariant";
+import invariant from "./invariant";
 
 describe("invariant", () => {
   it("should work correctly", () => {

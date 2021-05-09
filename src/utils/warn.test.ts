@@ -1,4 +1,4 @@
-import warn from "../warn";
+import warn from "./warn";
 
 describe("warn", () => {
   it("should work correctly", () => {

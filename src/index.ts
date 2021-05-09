@@ -6,6 +6,7 @@ import {
   invariant,
   // useIsoLayoutEffect,
   useLatest,
+  warn,
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;

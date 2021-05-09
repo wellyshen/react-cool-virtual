@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react-hooks";
 
-import useLatest from "../useLatest";
+import useLatest from "./useLatest";
 
 describe("useLatest", () => {
   it("should return correctly", () => {
