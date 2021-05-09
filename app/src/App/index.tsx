@@ -16,12 +16,12 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(10000),
+    itemData: getMockData(20),
     // itemCount: 20,
-    itemSize: 100,
+    // itemSize: 60,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // isHorizontal: true,
-    overscanCount: 0,
+    // overscanCount: 1,
   });
 
   return (
@@ -35,11 +35,12 @@ export default (): JSX.Element => {
       <div css={app}>
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
-            {items.map(({ data, index, size }: any) => (
+            {items.map(({ data, index, size, itemSizeRef }: any) => (
               <div
                 key={index}
                 css={[item, !(index % 2) && itemDark]}
-                style={{ height: size }}
+                // style={{ height: size }}
+                ref={itemSizeRef}
               >
                 {data.text}
               </div>
