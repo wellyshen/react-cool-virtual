@@ -10,8 +10,6 @@ import {
   warn,
 } from "./utils";
 
-const DEFAULT_ITEM_SIZE = 50;
-
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
   I extends HTMLElement = HTMLElement,
@@ -19,7 +17,8 @@ const useVirtual = <
 >({
   itemData,
   itemCount,
-  itemSize = DEFAULT_ITEM_SIZE,
+  itemSize,
+  defaultItemSize = 50,
   isHorizontal,
   overscanCount = 2,
 }: Config<D>): Return<O, I> => {
@@ -31,6 +30,7 @@ const useVirtual = <
   const itemDataRef = useRef<D | undefined>(itemData);
   const totalSizeRef = useRef(0);
   const calcDataRef = useRef<CalcData[]>([]);
+  const measureSizesRef = useRef<number[]>([]);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const sizeKey = !isHorizontal ? "height" : "width";
   const marginKey = !isHorizontal ? "marginTop" : "marginLeft";
@@ -48,13 +48,15 @@ const useVirtual = <
 
   const getItemSize = useCallback(
     (idx: number) => {
-      const { current: size } = itemSizeRef;
+      if (measureSizesRef.current[idx] !== undefined)
+        return measureSizesRef.current[idx];
 
-      if (typeof size === "number") return size;
+      let { current: itemSz } = itemSizeRef;
+      itemSz = typeof itemSz === "function" ? itemSz(idx) : itemSz;
 
-      return size(idx) ?? DEFAULT_ITEM_SIZE;
+      return itemSz ?? defaultItemSize;
     },
-    [itemSizeRef]
+    [defaultItemSize, itemSizeRef]
   );
 
   const getTotalSize = useCallback(() => {
@@ -69,13 +71,15 @@ const useVirtual = <
 
   const getDisplayCount = useCallback(
     (idx: number) => {
+      if (!itemCount) return 0;
+
       if (typeof itemSizeRef.current === "number")
         return outerSize / itemSizeRef.current;
 
       let size = outerSize;
       let count = 0;
 
-      while (size > 0) {
+      while (size > 0 && idx < itemCount) {
         size -= getItemSize(idx);
         count += 1;
         idx += 1;
@@ -83,7 +87,7 @@ const useVirtual = <
 
       return count;
     },
-    [getItemSize, itemSizeRef, outerSize]
+    [getItemSize, itemCount, itemSizeRef, outerSize]
   );
 
   const getCalcData = useCallback(() => {
@@ -119,18 +123,35 @@ const useVirtual = <
       inner.style[marginKey] = `${offset}px`;
       inner.style[sizeKey] = `${innerSize}px`;
 
-      const nextItems = [];
+      const nextItems: Item[] = [];
+      let shouldRecalc = false;
 
       for (let i = start; i < end; i += 1)
         nextItems.push({
           data: itemDataRef.current ? itemDataRef.current[i] : undefined,
           index: i,
           size: getItemSize(i),
+          // eslint-disable-next-line no-loop-func
+          measureRef: (el) => {
+            if (!el) return;
+
+            const size = el.getBoundingClientRect()[sizeKey];
+
+            if (size !== getItemSize(i)) {
+              measureSizesRef.current[i] = size;
+              shouldRecalc = true;
+            }
+
+            if (i === end - 1 && shouldRecalc) {
+              totalSizeRef.current = getTotalSize();
+              calcDataRef.current = getCalcData();
+            }
+          },
         });
 
       setItems(nextItems);
     },
-    [getItemSize, marginKey, sizeKey]
+    [getCalcData, getItemSize, getTotalSize, marginKey, sizeKey]
   );
 
   useResizeObserver<O>(outerRef, (rect) => setOuterSize(rect[sizeKey]));
