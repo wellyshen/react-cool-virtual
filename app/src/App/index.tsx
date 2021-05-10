@@ -18,13 +18,13 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(50),
+    itemData: getMockData(1),
     // itemCount: 20,
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // isHorizontal: true,
     // defaultItemSize: 100,
-    // overscanCount: 1,
+    overscanCount: 0,
   });
 
   return (
