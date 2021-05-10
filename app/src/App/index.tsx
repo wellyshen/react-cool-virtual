@@ -10,7 +10,7 @@ import { root, app, outer, inner, item, itemDark } from "./styles";
 
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
-  new Array(count).fill({}).map((_, idx) => ({ text: uuidv4() }));
+  new Array(count).fill({}).map((_, idx) => ({ text: idx }));
 
 export default (): JSX.Element => {
   // const mockData = getMockData(1000);
@@ -18,7 +18,7 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(100),
+    itemData: getMockData(10),
     // itemCount: 20,
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
@@ -43,7 +43,7 @@ export default (): JSX.Element => {
               <div
                 key={index}
                 css={[item, !(index % 2) && itemDark]}
-                style={{ height: `${size - 40}px` }}
+                style={{ height: `${size}px` }}
                 // ref={measureRef}
               >
                 {data.text}
