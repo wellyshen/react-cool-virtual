@@ -23,11 +23,12 @@ const useVirtual = <
   overscanCount = 2,
 }: Config<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
-  const [outerSize, setOuterSize] = useState(0);
   const hasWarn = useRef(false);
+  const idxRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const itemDataRef = useRef<D[] | undefined>(itemData);
+  const outerSizeRef = useRef(0);
   const totalSizeRef = useRef(0);
   const calcDataRef = useRef<CalcData[]>([]);
   const measureSizesRef = useRef<number[]>([]);
@@ -38,12 +39,12 @@ const useVirtual = <
   itemCount = itemCount !== undefined ? itemCount : itemData?.length;
 
   if (overscanCount < 1) {
-    overscanCount = 1;
-
     if (!hasWarn.current) {
-      warn("overscanCount warning");
+      warn("Fallback to 1");
       hasWarn.current = true;
     }
+
+    overscanCount = 1;
   }
 
   const getItemSize = useCallback(
@@ -74,9 +75,9 @@ const useVirtual = <
       if (!itemCount) return 0;
 
       if (typeof itemSizeRef.current === "number")
-        return outerSize / itemSizeRef.current;
+        return outerSizeRef.current / itemSizeRef.current;
 
-      let size = outerSize;
+      let size = outerSizeRef.current;
       let count = 0;
 
       while (size > 0 && idx < itemCount) {
@@ -87,7 +88,7 @@ const useVirtual = <
 
       return count;
     },
-    [getItemSize, itemCount, itemSizeRef, outerSize]
+    [getItemSize, itemCount, itemSizeRef]
   );
 
   const getCalcData = useCallback(() => {
@@ -123,7 +124,7 @@ const useVirtual = <
       inner.style[marginKey] = `${offset}px`;
       inner.style[sizeKey] = `${innerSize}px`;
 
-      const nextItems: Item[] = [];
+      const nextItems: Item<D>[] = [];
       let shouldRecalc = false;
 
       for (let i = start; i < end; i += 1)
@@ -154,7 +155,13 @@ const useVirtual = <
     [getCalcData, getItemSize, getTotalSize, marginKey, sizeKey]
   );
 
-  useResizeObserver<O>(outerRef, (rect) => setOuterSize(rect[sizeKey]));
+  useResizeObserver<O>(outerRef, (rect) => {
+    outerSizeRef.current = rect[sizeKey];
+    totalSizeRef.current = getTotalSize();
+    calcDataRef.current = getCalcData();
+
+    updateItems(idxRef.current);
+  });
 
   useLayoutEffect(() => {
     const { current: outer } = outerRef;
@@ -164,13 +171,6 @@ const useVirtual = <
     invariant(!inner, "Inner error");
     invariant(itemCount === undefined, "Item count error");
 
-    totalSizeRef.current = getTotalSize();
-    calcDataRef.current = getCalcData();
-
-    updateItems(0);
-
-    let prevIdx: number;
-
     const scrollHandler = ({ target }: Event) => {
       const idx = findNearestBinarySearch(
         0,
@@ -179,16 +179,16 @@ const useVirtual = <
         calcDataRef.current.map(({ idxRange }) => idxRange)
       );
 
-      if (idx !== prevIdx) {
+      if (idx !== idxRef.current) {
         updateItems(idx);
-        prevIdx = idx;
+        idxRef.current = idx;
       }
     };
 
     outer!.addEventListener("scroll", scrollHandler);
 
     return () => outer!.removeEventListener("scroll", scrollHandler);
-  }, [getCalcData, getTotalSize, itemCount, scrollKey, updateItems]);
+  }, [itemCount, scrollKey, updateItems]);
 
   return { outerRef, innerRef, items };
 };
