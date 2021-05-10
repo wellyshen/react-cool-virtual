@@ -17,7 +17,7 @@ declare module "react-cool-virtual" {
     itemCount: number;
     itemSize: ItemSize;
     defaultItemSize: number;
-    isHorizontal: boolean;
+    horizontal: boolean;
     overscanCount: number;
   }>;
 

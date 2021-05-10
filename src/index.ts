@@ -19,7 +19,7 @@ const useVirtual = <
   itemCount,
   itemSize,
   defaultItemSize = 50,
-  isHorizontal,
+  horizontal,
   overscanCount = 2,
 }: Config<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
@@ -33,9 +33,9 @@ const useVirtual = <
   const calcDataRef = useRef<CalcData[]>([]);
   const measureSizesRef = useRef<number[]>([]);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
-  const sizeKey = !isHorizontal ? "height" : "width";
-  const marginKey = !isHorizontal ? "marginTop" : "marginLeft";
-  const scrollKey = !isHorizontal ? "scrollTop" : "scrollLeft";
+  const sizeKey = !horizontal ? "height" : "width";
+  const marginKey = !horizontal ? "marginTop" : "marginLeft";
+  const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
   itemCount = itemCount !== undefined ? itemCount : itemData?.length;
 
   if (overscanCount < 1) {

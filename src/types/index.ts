@@ -24,7 +24,7 @@ export type Config<D> = Partial<{
   itemCount: number;
   itemSize: ItemSize;
   defaultItemSize: number;
-  isHorizontal: boolean;
+  horizontal: boolean;
   overscanCount: number;
 }>;
 
