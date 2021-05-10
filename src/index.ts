@@ -165,10 +165,9 @@ const useVirtual = <
 
   useLayoutEffect(() => {
     const { current: outer } = outerRef;
-    const { current: inner } = innerRef;
 
     invariant(!outer, "Outer error");
-    invariant(!inner, "Inner error");
+    invariant(!innerRef.current, "Inner error");
     invariant(itemCount === undefined, "Item count error");
 
     const scrollHandler = ({ target }: Event) => {
