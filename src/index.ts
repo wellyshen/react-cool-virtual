@@ -28,7 +28,7 @@ const useVirtual = <
   itemSize,
   defaultItemSize = 50,
   horizontal,
-  overscanCount = 2,
+  overscanCount = 1,
   onScroll,
 }: Options<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
