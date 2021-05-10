@@ -42,7 +42,7 @@ export default (): JSX.Element => {
               <div
                 key={index}
                 css={[item, !(index % 2) && itemDark]}
-                style={{ height: size }}
+                style={{ height: `${size - 40}px` }}
                 // ref={measureRef}
               >
                 {data.text}
