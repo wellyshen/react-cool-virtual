@@ -132,6 +132,7 @@ const useVirtual = <
           data: itemDataRef.current ? itemDataRef.current[i] : undefined,
           index: i,
           size: getItemSize(i),
+          outerSize: outerSizeRef.current,
           // eslint-disable-next-line no-loop-func
           measureRef: (el) => {
             if (!el) return;

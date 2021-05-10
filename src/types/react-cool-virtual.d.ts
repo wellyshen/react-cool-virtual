@@ -7,6 +7,7 @@ declare module "react-cool-virtual" {
     data?: D;
     readonly index: number;
     readonly size: number;
+    readonly outerSize: number;
     measureRef: (el: HTMLElement | null) => void;
   }
 

@@ -14,6 +14,7 @@ export interface Item<D> {
   data?: D;
   readonly index: number;
   readonly size: number;
+  readonly outerSize: number;
   measureRef: (el: HTMLElement | null) => void;
 }
 
