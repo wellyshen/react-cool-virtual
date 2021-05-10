@@ -5,6 +5,7 @@ export type Data = Record<string, any>;
 export interface CalcData {
   start: number;
   end: number;
+  displayCount: number;
   offset: number;
   innerSize: number;
   idxRange: number;
@@ -20,6 +21,16 @@ export interface Item<D> {
 
 export type ItemSize = number | ((index: number) => number) | undefined;
 
+export interface OnScroll {
+  (options: {
+    startIndex: number;
+    endIndex: number;
+    offset: number;
+    direction: string;
+    userScroll: boolean;
+  }): void;
+}
+
 export type Options<D> = Partial<{
   itemData: D[];
   itemCount: number;
@@ -27,6 +38,7 @@ export type Options<D> = Partial<{
   defaultItemSize: number;
   horizontal: boolean;
   overscanCount: number;
+  onScroll: OnScroll;
 }>;
 
 export interface Return<O, I, D> {

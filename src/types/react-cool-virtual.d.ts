@@ -13,6 +13,16 @@ declare module "react-cool-virtual" {
 
   export type ItemSize = number | ((index: number) => number) | undefined;
 
+  export interface OnScroll {
+    (options: {
+      startIndex: number;
+      endIndex: number;
+      offset: number;
+      direction: string;
+      userScroll: boolean;
+    }): void;
+  }
+
   export type Options<D extends Data = Data> = Partial<{
     itemData: D[];
     itemCount: number;
@@ -20,6 +30,7 @@ declare module "react-cool-virtual" {
     defaultItemSize: number;
     horizontal: boolean;
     overscanCount: number;
+    onScroll: OnScroll;
   }>;
 
   export interface Return<
