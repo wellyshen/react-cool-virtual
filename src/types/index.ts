@@ -20,7 +20,7 @@ export interface Item<D> {
 
 export type ItemSize = number | ((index: number) => number) | undefined;
 
-export type Config<D> = Partial<{
+export type Options<D> = Partial<{
   itemData: D[];
   itemCount: number;
   itemSize: ItemSize;

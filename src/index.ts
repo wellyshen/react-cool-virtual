@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, useLayoutEffect } from "react";
 
-import { CalcData, Config, Data, Item, ItemSize, Return } from "./types";
+import { CalcData, Options, Data, Item, ItemSize, Return } from "./types";
 import {
   findNearestBinarySearch,
   invariant,
@@ -21,7 +21,7 @@ const useVirtual = <
   defaultItemSize = 50,
   horizontal,
   overscanCount = 2,
-}: Config<D>): Return<O, I, D> => {
+}: Options<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
   const hasWarn = useRef(false);
   const idxRef = useRef(0);

@@ -13,7 +13,7 @@ declare module "react-cool-virtual" {
 
   export type ItemSize = number | ((index: number) => number) | undefined;
 
-  export type Config<D extends Data = Data> = Partial<{
+  export type Options<D extends Data = Data> = Partial<{
     itemData: D[];
     itemCount: number;
     itemSize: ItemSize;
@@ -36,5 +36,5 @@ declare module "react-cool-virtual" {
     O extends HTMLElement = HTMLElement,
     I extends HTMLElement = HTMLElement,
     D extends Data = Data
-  >(config: Config<D>): Return<O, I, D>;
+  >(config: Options<D>): Return<O, I, D>;
 }
