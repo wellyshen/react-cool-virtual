@@ -22,7 +22,7 @@ export default (): JSX.Element => {
     // itemCount: 20,
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
-    // isHorizontal: true,
+    // horizontal: true,
     // defaultItemSize: 100,
     overscanCount: 0,
   });
