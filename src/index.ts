@@ -152,7 +152,7 @@ const useVirtual = <
           measureRef: (el) => {
             if (!el) return;
 
-            const size = el.getBoundingClientRect()[sizeKey];
+            const { [sizeKey]: size } = el.getBoundingClientRect();
 
             if (size !== getItemSize(i)) {
               measureSizesRef.current[i] = size;
@@ -187,7 +187,7 @@ const useVirtual = <
     invariant(itemCount === undefined, "Item count error");
 
     const scrollHandler = ({ target }: Event) => {
-      const offset = (target as O)[scrollKey];
+      const { [scrollKey]: offset } = target as O;
       const idx = findNearestBinarySearch(
         0,
         calcDataRef.current.length,
