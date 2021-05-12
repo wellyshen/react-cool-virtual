@@ -42,8 +42,8 @@ jobs:
         run: yarn lint
       - name: Run test
         run: yarn test:cov
-      - name: Run bundlesize
-        run: yarn bundlesize
+      - name: Run size limit
+        run: yarn size
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@master

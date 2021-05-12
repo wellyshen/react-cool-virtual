@@ -42,7 +42,7 @@ There're several useful commands that you can use during the development:
 - `yarn test` runs the complete test suite.
 - `yarn test:watch` runs an interactive test watcher (helpful in development).
 - `yarn test:cov` runs the complete test suite with coverage report.
-- `yarn bundlesize` checks the bundle size of each format.
+- `yarn size` checks the bundle size of each format.
 - `yarn clean:build` deletes the `dist` build folder.
 - `yarn clean:size`: deletes the `.size-snapshot.json` file.
 - `yarn clean:cov` deletes the `coverage` report folder.
