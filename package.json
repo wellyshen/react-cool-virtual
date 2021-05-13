@@ -59,7 +59,7 @@
     "test": "jest --config scripts/jest/config.js",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn clean:cov && yarn test --coverage",
-    "bundlesize": "yarn build && bundlesize",
+    "size": "yarn build && bundlesize",
     "clean": "run-p clean:*",
     "clean:build": "rimraf dist",
     "clean:size": "rimraf .size-snapshot.json",

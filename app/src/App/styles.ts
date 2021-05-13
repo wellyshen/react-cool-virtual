@@ -16,7 +16,6 @@ export const outer = css`
   height: 300px;
   border: 1px solid #000;
   overflow: auto;
-  background: greenyellow;
 `;
 
 export const inner = css`

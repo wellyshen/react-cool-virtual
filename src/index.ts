@@ -1,21 +1,21 @@
 import { useCallback, useRef, useState, useLayoutEffect } from "react";
 
 import {
-  CalcData,
   Data,
   Item,
   ItemSize,
+  Measure,
   OnScroll,
   Options,
   Return,
 } from "./types";
 import {
+  createIndexes,
   findNearestBinarySearch,
   invariant,
   // useIsoLayoutEffect,
   useLatest,
   useResizeObserver,
-  warn,
 } from "./utils";
 
 const useVirtual = <
@@ -32,16 +32,12 @@ const useVirtual = <
   onScroll,
 }: Options<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
-  const hasWarn = useRef(false);
-  const idxRef = useRef(0);
-  const prevOffsetRef = useRef(0);
+  const offsetRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const itemDataRef = useRef<D[] | undefined>(itemData);
   const outerSizeRef = useRef(0);
-  const totalSizeRef = useRef(0);
-  const calcDataRef = useRef<CalcData[]>([]);
-  const measureSizesRef = useRef<number[]>([]);
+  const measuresRef = useRef<Measure[]>([]);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const sizeKey = !horizontal ? "height" : "width";
@@ -51,102 +47,91 @@ const useVirtual = <
   const directionUL = !horizontal ? "up" : "left";
   itemCount = itemCount !== undefined ? itemCount : itemData?.length;
 
-  if (overscanCount < 1) {
-    if (!hasWarn.current) {
-      warn("Fallback to 1");
-      hasWarn.current = true;
-    }
-
-    overscanCount = 1;
-  }
-
   const getItemSize = useCallback(
     (idx: number) => {
-      if (measureSizesRef.current[idx] !== undefined)
-        return measureSizesRef.current[idx];
+      if (measuresRef.current[idx]) return measuresRef.current[idx].size;
 
-      let { current: itemSz } = itemSizeRef;
-      itemSz = typeof itemSz === "function" ? itemSz(idx) : itemSz;
+      let { current: size } = itemSizeRef;
+      size = typeof size === "function" ? size(idx) : size;
 
-      return itemSz ?? defaultItemSize;
+      return size ?? defaultItemSize;
     },
     [defaultItemSize, itemSizeRef]
   );
 
-  const getTotalSize = useCallback(() => {
-    if (!itemCount) return 0;
-
-    let size = 0;
-
-    for (let i = 0; i < itemCount; i += 1) size += getItemSize(i);
-
-    return size;
-  }, [getItemSize, itemCount]);
-
-  const getDisplayCount = useCallback(
-    (idx: number) => {
-      if (!itemCount) return 0;
-
-      if (typeof itemSizeRef.current === "number")
-        return outerSizeRef.current / itemSizeRef.current;
-
-      let size = outerSizeRef.current;
-      let count = 0;
-
-      while (size > 0 && idx < itemCount) {
-        size -= getItemSize(idx);
-        count += 1;
-        idx += 1;
-      }
-
-      return count;
-    },
-    [getItemSize, itemCount, itemSizeRef]
-  );
-
-  const getCalcData = useCallback(() => {
+  const getMeasures = useCallback(() => {
     if (!itemCount) return [];
 
-    const data: CalcData[] = [];
+    const measures: Measure[] = [];
 
     for (let i = 0; i < itemCount; i += 1) {
-      const start = Math.max(i - overscanCount, 0);
-      const offset = start ? data[i - 1].offset + getItemSize(start - 1) : 0;
-      const displayCount = getDisplayCount(i);
+      const start = i ? measures[i - 1].end : 0;
+      const size = getItemSize(i);
 
-      data.push({
-        start,
-        end: Math.min(i + displayCount + overscanCount, itemCount),
-        displayCount,
-        offset,
-        innerSize: totalSizeRef.current - offset,
-        idxRange: i ? data[i - 1].idxRange + getItemSize(i - 1) : 0,
-      });
+      measures.push({ start, end: start + size, size });
     }
 
-    return data;
-  }, [getDisplayCount, getItemSize, itemCount, overscanCount]);
+    return measures;
+  }, [getItemSize, itemCount]);
+
+  const getCalcData = useCallback(
+    (offset: number) => {
+      const { current: measures } = measuresRef;
+      const startIdx = findNearestBinarySearch(
+        0,
+        measures.length,
+        offset,
+        measuresRef.current.map(({ start }) => start)
+      );
+      let endIdx = startIdx;
+
+      while (
+        endIdx < measures.length &&
+        measures[endIdx].start < offset + outerSizeRef.current
+      )
+        endIdx += 1;
+
+      const start = Math.max(startIdx - overscanCount, 0);
+      const margin = measures[start].start;
+
+      return {
+        startIdx,
+        endIdx: endIdx - 1,
+        start,
+        end: Math.min(endIdx + overscanCount, measures.length) - 1,
+        margin,
+        innerSize: measures[measures.length - 1].end - margin,
+      };
+    },
+    [overscanCount]
+  );
 
   const updateItems = useCallback(
-    (idx: number) => {
-      const calcData = calcDataRef.current[idx];
+    (
+      offset: number,
+      {
+        onScrollFn = onScrollRef.current,
+        userScroll = true,
+      }: { onScrollFn?: OnScroll | false; userScroll?: boolean } = {}
+    ) => {
       const { current: inner } = innerRef;
 
-      if (!inner || !calcData) return;
+      if (!inner) return;
 
-      const { start, end, offset, innerSize } = calcData;
+      const { startIdx, endIdx, start, end, margin, innerSize } =
+        getCalcData(offset);
 
-      inner.style[marginKey] = `${offset}px`;
+      inner.style[marginKey] = `${margin}px`;
       inner.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item<D>[] = [];
       let shouldRecalc = false;
 
-      for (let i = start; i < end; i += 1)
+      for (let i = start; i <= end; i += 1)
         nextItems.push({
           data: itemDataRef.current ? itemDataRef.current[i] : undefined,
           index: i,
-          size: getItemSize(i),
+          size: measuresRef.current[i].size,
           outerSize: outerSizeRef.current,
           // eslint-disable-next-line no-loop-func
           measureRef: (el) => {
@@ -154,29 +139,47 @@ const useVirtual = <
 
             const { [sizeKey]: size } = el.getBoundingClientRect();
 
-            if (size !== getItemSize(i)) {
-              measureSizesRef.current[i] = size;
+            if (size !== measuresRef.current[i].size) {
+              measuresRef.current[i].size = size;
               shouldRecalc = true;
             }
 
-            if (i === end - 1 && shouldRecalc) {
-              totalSizeRef.current = getTotalSize();
-              calcDataRef.current = getCalcData();
+            if (i === end && shouldRecalc) {
+              measuresRef.current = getMeasures();
+              updateItems(offset, { onScrollFn, userScroll });
             }
           },
         });
 
       setItems(nextItems);
+
+      if (onScrollFn)
+        onScrollFn({
+          overscanIndexes: createIndexes(start, end),
+          itemIndexes: createIndexes(startIdx, endIdx),
+          offset,
+          direction: offset > offsetRef.current ? directionDR : directionUL,
+          userScroll,
+        });
+
+      offsetRef.current = offset;
     },
-    [getCalcData, getItemSize, getTotalSize, marginKey, sizeKey]
+    [
+      directionDR,
+      directionUL,
+      getCalcData,
+      getMeasures,
+      marginKey,
+      onScrollRef,
+      sizeKey,
+    ]
   );
 
   useResizeObserver<O>(outerRef, (rect) => {
     outerSizeRef.current = rect[sizeKey];
-    totalSizeRef.current = getTotalSize();
-    calcDataRef.current = getCalcData();
+    measuresRef.current = getMeasures();
 
-    updateItems(idxRef.current);
+    updateItems(offsetRef.current, { onScrollFn: false });
   });
 
   useLayoutEffect(() => {
@@ -186,44 +189,13 @@ const useVirtual = <
     invariant(!innerRef.current, "Inner error");
     invariant(itemCount === undefined, "Item count error");
 
-    const scrollHandler = ({ target }: Event) => {
-      const { [scrollKey]: offset } = target as O;
-      const idx = findNearestBinarySearch(
-        0,
-        calcDataRef.current.length,
-        offset,
-        calcDataRef.current.map(({ idxRange }) => idxRange)
-      );
+    const handleScroll = ({ target }: Event) =>
+      updateItems((target as O)[scrollKey]);
 
-      if (idx !== idxRef.current) {
-        updateItems(idx);
-        idxRef.current = idx;
-      }
+    outer!.addEventListener("scroll", handleScroll);
 
-      if (onScrollRef.current) {
-        onScrollRef.current({
-          startIndex: idx,
-          endIndex: idx + calcDataRef.current[idx].displayCount - 1,
-          offset,
-          direction: offset > prevOffsetRef.current ? directionDR : directionUL,
-          userScroll: true,
-        });
-
-        prevOffsetRef.current = offset;
-      }
-    };
-
-    outer!.addEventListener("scroll", scrollHandler);
-
-    return () => outer!.removeEventListener("scroll", scrollHandler);
-  }, [
-    directionDR,
-    directionUL,
-    itemCount,
-    onScrollRef,
-    scrollKey,
-    updateItems,
-  ]);
+    return () => outer!.removeEventListener("scroll", handleScroll);
+  }, [itemCount, scrollKey, updateItems]);
 
   return { outerRef, innerRef, items };
 };
