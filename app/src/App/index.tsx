@@ -15,7 +15,7 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(10);
+const mockData = getMockData(1000);
 
 export default (): JSX.Element => {
   const { outerRef, innerRef, items } = useVirtual<

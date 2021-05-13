@@ -18,6 +18,8 @@ import {
   useResizeObserver,
 } from "./utils";
 
+const DEFAULT_ITEM_SIZE = 50;
+
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
   I extends HTMLElement = HTMLElement,
@@ -26,7 +28,7 @@ const useVirtual = <
   itemData,
   itemCount,
   itemSize,
-  defaultItemSize = 50,
+  defaultItemSize = DEFAULT_ITEM_SIZE,
   horizontal,
   overscanCount = 1,
   onScroll,
@@ -54,7 +56,7 @@ const useVirtual = <
       let { current: size } = itemSizeRef;
       size = typeof size === "function" ? size(idx) : size;
 
-      return size ?? defaultItemSize;
+      return size ?? defaultItemSize ?? DEFAULT_ITEM_SIZE;
     },
     [defaultItemSize, itemSizeRef]
   );
