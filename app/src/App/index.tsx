@@ -16,7 +16,7 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(10);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
   const [nSize, setNSize] = useState(50);
@@ -30,7 +30,8 @@ export default (): JSX.Element => {
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
     // defaultItemSize: 100,
-    overscanCount: 0,
+    // overscanCount: 0,
+    useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
   });
 
@@ -45,20 +46,22 @@ export default (): JSX.Element => {
       <div css={app}>
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
-            {items.map(({ data, index, size, measureRef }: any) => (
-              <div
-                key={index}
-                css={[item, !(index % 2) && itemDark]}
-                // style={{ height: `${size}px` }}
-                style={{
-                  height: `${index === 3 ? nSize : mockData[index].size}px`,
-                }}
-                ref={measureRef}
-              >
-                {/* {data.text} */}
-                {mockData[index].text}
-              </div>
-            ))}
+            {items.map(
+              ({ data, index, size, isScrolling, measureRef }: any) => (
+                <div
+                  key={index}
+                  css={[item, !(index % 2) && itemDark]}
+                  // style={{ height: `${size}px` }}
+                  style={{
+                    height: `${index === 3 ? nSize : mockData[index].size}px`,
+                  }}
+                  ref={measureRef}
+                >
+                  {/* {data.text} */}
+                  {isScrolling ? "Scrolling" : mockData[index].text}
+                </div>
+              )
+            )}
           </div>
         </div>
         <button type="button" onClick={() => setNSize(200)}>
