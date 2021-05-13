@@ -15,7 +15,7 @@ import {
   invariant,
   // useIsoLayoutEffect,
   useLatest,
-  useResizeObserver,
+  useObserver,
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
@@ -43,6 +43,7 @@ const useVirtual = <
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const sizeKey = !horizontal ? "height" : "width";
+  const observerSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
   const directionDR = !horizontal ? "down" : "right";
@@ -139,17 +140,27 @@ const useVirtual = <
           measureRef: (el) => {
             if (!el) return;
 
-            const { [sizeKey]: size } = el.getBoundingClientRect();
+            // eslint-disable-next-line compat/compat
+            let observer: ResizeObserver | null = new ResizeObserver(
+              ([{ borderBoxSize }]) => {
+                const { [observerSizeKey]: size } = borderBoxSize[0];
 
-            if (size !== measuresRef.current[i].size) {
-              measuresRef.current[i].size = size;
-              shouldRecalc = true;
-            }
+                if (size !== measuresRef.current[i].size) {
+                  measuresRef.current[i].size = size;
+                  shouldRecalc = true;
+                }
 
-            if (i === end && shouldRecalc) {
-              measuresRef.current = getMeasures();
-              updateItems(offset, { onScrollFn, userScroll });
-            }
+                if (i === end && shouldRecalc) {
+                  measuresRef.current = getMeasures();
+                  updateItems(offset, { onScrollFn, userScroll });
+                }
+
+                observer?.disconnect();
+                observer = null;
+              }
+            );
+
+            observer.observe(el);
           },
         });
 
@@ -172,12 +183,13 @@ const useVirtual = <
       getCalcData,
       getMeasures,
       marginKey,
+      observerSizeKey,
       onScrollRef,
       sizeKey,
     ]
   );
 
-  useResizeObserver<O>(outerRef, (rect) => {
+  useObserver<O>(outerRef, (rect) => {
     outerSizeRef.current = rect[sizeKey];
     measuresRef.current = getMeasures();
 
