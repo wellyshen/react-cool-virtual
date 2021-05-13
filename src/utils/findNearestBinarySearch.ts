@@ -2,14 +2,14 @@ export default (
   low: number,
   high: number,
   offset: number,
-  ranges: number[]
+  arr: number[]
 ): number => {
   while (low <= high) {
     const middle = ((low + high) / 2) | 0;
 
-    if (offset < ranges[middle]) {
+    if (offset < arr[middle]) {
       high = middle - 1;
-    } else if (offset > ranges[middle]) {
+    } else if (offset > arr[middle]) {
       low = middle + 1;
     } else {
       return middle;

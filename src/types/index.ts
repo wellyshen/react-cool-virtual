@@ -1,15 +1,12 @@
 import { RefObject } from "react";
 
-export type Data = Record<string, any>;
-
-export interface CalcData {
+export interface Measure {
   start: number;
   end: number;
-  displayCount: number;
-  offset: number;
-  innerSize: number;
-  idxRange: number;
+  size: number;
 }
+
+export type Data = Record<string, any>;
 
 export interface Item<D> {
   data?: D;
@@ -23,8 +20,8 @@ export type ItemSize = number | ((index: number) => number) | undefined;
 
 export interface OnScroll {
   (options: {
-    startIndex: number;
-    endIndex: number;
+    overscanIndexes: number[];
+    itemIndexes: number[];
     offset: number;
     direction: string;
     userScroll: boolean;

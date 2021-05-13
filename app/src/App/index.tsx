@@ -10,21 +10,25 @@ import { root, app, outer, inner, item, itemDark } from "./styles";
 
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
-  new Array(count).fill({}).map((_, idx) => ({ text: idx }));
+  new Array(count).fill({}).map((_, idx) => ({
+    text: idx,
+    size: 25 + Math.round(Math.random() * 100),
+  }));
+
+const mockData = getMockData(10);
 
 export default (): JSX.Element => {
-  // const mockData = getMockData(1000);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData: getMockData(10),
-    // itemCount: 20,
-    itemSize: 100,
+    // itemData: getMockData(10),
+    itemCount: mockData.length,
+    // itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
     // defaultItemSize: 100,
-    overscanCount: 0,
+    // overscanCount: 0,
     onScroll: (opts) => console.log("LOG ===> ", opts),
   });
 
@@ -43,10 +47,10 @@ export default (): JSX.Element => {
               <div
                 key={index}
                 css={[item, !(index % 2) && itemDark]}
-                style={{ height: `${size}px` }}
-                // ref={measureRef}
+                style={{ height: `${mockData[index].size}px` }}
+                ref={measureRef}
               >
-                {data.text}
+                {mockData[index].text}
               </div>
             ))}
           </div>
