@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import { useState } from "react";
 import { Global, css } from "@emotion/react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
@@ -15,9 +16,10 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(1000);
+const mockData = getMockData(10);
 
 export default (): JSX.Element => {
+  const [nSize, setNSize] = useState(50);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
@@ -28,8 +30,8 @@ export default (): JSX.Element => {
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
     // defaultItemSize: 100,
-    // overscanCount: 0,
-    onScroll: (opts) => console.log("LOG ===> ", opts),
+    overscanCount: 0,
+    // onScroll: (opts) => console.log("LOG ===> ", opts),
   });
 
   return (
@@ -47,14 +49,21 @@ export default (): JSX.Element => {
               <div
                 key={index}
                 css={[item, !(index % 2) && itemDark]}
-                style={{ height: `${mockData[index].size}px` }}
+                // style={{ height: `${size}px` }}
+                style={{
+                  height: `${index === 3 ? nSize : mockData[index].size}px`,
+                }}
                 ref={measureRef}
               >
+                {/* {data.text} */}
                 {mockData[index].text}
               </div>
             ))}
           </div>
         </div>
+        <button type="button" onClick={() => setNSize(200)}>
+          Set Size
+        </button>
       </div>
     </>
   );
