@@ -8,6 +8,7 @@ declare module "react-cool-virtual" {
     readonly index: number;
     readonly size: number;
     readonly outerSize: number;
+    readonly isScrolling?: boolean;
     measureRef: (el: HTMLElement | null) => void;
   }
 
@@ -30,6 +31,7 @@ declare module "react-cool-virtual" {
     defaultItemSize: number;
     horizontal: boolean;
     overscanCount: number;
+    useIsScrolling: boolean;
     onScroll: OnScroll;
   }>;
 

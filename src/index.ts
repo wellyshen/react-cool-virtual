@@ -13,12 +13,14 @@ import {
   createIndexes,
   findNearestBinarySearch,
   invariant,
+  useDebounce,
   // useIsoLayoutEffect,
   useLatest,
   useObserver,
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
+const DEBOUNCE_INTERVAL = 200;
 
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
@@ -31,6 +33,7 @@ const useVirtual = <
   defaultItemSize = DEFAULT_ITEM_SIZE,
   horizontal,
   overscanCount = 1,
+  useIsScrolling,
   onScroll,
 }: Options<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
@@ -109,13 +112,19 @@ const useVirtual = <
     [overscanCount]
   );
 
+  const resetIsScrolling = useDebounce(
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    () => updateItems(offsetRef.current, { isScrolling: false }),
+    DEBOUNCE_INTERVAL
+  );
+
   const updateItems = useCallback(
     (
       offset: number,
       {
-        onScrollFn = onScrollRef.current,
+        isScrolling = true,
         userScroll = true,
-      }: { onScrollFn?: OnScroll | false; userScroll?: boolean } = {}
+      }: { isScrolling?: boolean; userScroll?: boolean } = {}
     ) => {
       const { current: inner } = innerRef;
 
@@ -136,6 +145,7 @@ const useVirtual = <
           index: i,
           size: measuresRef.current[i].size,
           outerSize: outerSizeRef.current,
+          isScrolling: useIsScrolling ? isScrolling : undefined,
           // eslint-disable-next-line no-loop-func
           measureRef: (el) => {
             if (!el) return;
@@ -152,7 +162,7 @@ const useVirtual = <
 
                 if (i === end && shouldRecalc) {
                   measuresRef.current = getMeasures();
-                  updateItems(offset, { onScrollFn, userScroll });
+                  updateItems(offset, { isScrolling, userScroll });
                 }
 
                 observer?.disconnect();
@@ -166,14 +176,18 @@ const useVirtual = <
 
       setItems(nextItems);
 
-      if (onScrollFn)
-        onScrollFn({
-          overscanIndexes: createIndexes(start, end),
-          itemIndexes: createIndexes(startIdx, endIdx),
-          offset,
-          direction: offset > offsetRef.current ? directionDR : directionUL,
-          userScroll,
-        });
+      if (isScrolling) {
+        if (onScrollRef.current)
+          onScrollRef.current({
+            overscanIndexes: createIndexes(start, end),
+            itemIndexes: createIndexes(startIdx, endIdx),
+            offset,
+            direction: offset > offsetRef.current ? directionDR : directionUL,
+            userScroll,
+          });
+
+        if (useIsScrolling) resetIsScrolling();
+      }
 
       offsetRef.current = offset;
     },
@@ -185,7 +199,9 @@ const useVirtual = <
       marginKey,
       observerSizeKey,
       onScrollRef,
+      resetIsScrolling,
       sizeKey,
+      useIsScrolling,
     ]
   );
 
@@ -193,7 +209,7 @@ const useVirtual = <
     outerSizeRef.current = rect[sizeKey];
     measuresRef.current = getMeasures();
 
-    updateItems(offsetRef.current, { onScrollFn: false });
+    updateItems(offsetRef.current, { isScrolling: false });
   });
 
   useLayoutEffect(() => {

@@ -13,6 +13,7 @@ export interface Item<D> {
   readonly index: number;
   readonly size: number;
   readonly outerSize: number;
+  readonly isScrolling?: boolean;
   measureRef: (el: HTMLElement | null) => void;
 }
 
@@ -35,6 +36,7 @@ export type Options<D> = Partial<{
   defaultItemSize: number;
   horizontal: boolean;
   overscanCount: number;
+  useIsScrolling: boolean;
   onScroll: OnScroll;
 }>;
 
