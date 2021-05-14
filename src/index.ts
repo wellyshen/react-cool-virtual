@@ -13,7 +13,7 @@ import {
   createIndexes,
   findNearestBinarySearch,
   invariant,
-  useDebounce,
+  useAnimDebounce,
   // useIsoLayoutEffect,
   useLatest,
   useResizeEffect,
@@ -112,7 +112,7 @@ const useVirtual = <
     [overscanCount]
   );
 
-  const resetIsScrolling = useDebounce(
+  const resetIsScrolling = useAnimDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => updateItems(offsetRef.current, { isScrolling: false }),
     DEBOUNCE_INTERVAL
