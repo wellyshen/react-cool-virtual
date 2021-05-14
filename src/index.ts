@@ -40,7 +40,7 @@ const useVirtual = <
   const offsetRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const itemDataRef = useRef<D[] | undefined>(itemData);
+  const itemDataRef = useRef<D[]>();
   const outerSizeRef = useRef(0);
   const measuresRef = useRef<Measure[]>([]);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
@@ -208,12 +208,13 @@ const useVirtual = <
   useResizeEffect<O>(
     outerRef,
     (rect) => {
+      itemDataRef.current = itemData;
       outerSizeRef.current = rect[sizeKey];
       measuresRef.current = getMeasures();
 
       updateItems(offsetRef.current, { isScrolling: false });
     },
-    [itemCount]
+    [itemCount, itemData]
   );
 
   useLayoutEffect(() => {
