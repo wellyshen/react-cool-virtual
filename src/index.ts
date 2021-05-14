@@ -1,4 +1,10 @@
-import { useCallback, useRef, useState, useLayoutEffect } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 
 import {
   Data,
@@ -112,7 +118,7 @@ const useVirtual = <
     [overscanCount]
   );
 
-  const resetIsScrolling = useAnimDebounce(
+  const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => updateItems(offsetRef.current, { isScrolling: false }),
     DEBOUNCE_INTERVAL
@@ -230,6 +236,8 @@ const useVirtual = <
 
     return () => outer!.removeEventListener("scroll", handleScroll);
   }, [itemCount, scrollKey, updateItems]);
+
+  useEffect(() => () => cancelResetIsScrolling(), [cancelResetIsScrolling]);
 
   return { outerRef, innerRef, items };
 };

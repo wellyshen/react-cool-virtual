@@ -29,7 +29,7 @@ export default (): JSX.Element => {
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
     // overscanCount: 0,
-    // useIsScrolling: true,
+    useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
   });
 
@@ -52,7 +52,7 @@ export default (): JSX.Element => {
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {index}
+                  {isScrolling ? "Scrolling... " : index}
                 </div>
               )
             )}
