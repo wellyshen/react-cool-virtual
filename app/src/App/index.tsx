@@ -12,21 +12,20 @@ import { root, app, outer, inner, item, itemDark } from "./styles";
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
-    text: idx,
-    size: 50,
+    text: uuidv4(),
     // size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(10);
 
 export default (): JSX.Element => {
-  const [itemCount, setItemCount] = useState(50);
+  const [itemData, setItemData] = useState(getMockData(10));
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    // itemData: getMockData(10),
-    itemCount,
+    itemData,
+    // itemCount: 10,
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
@@ -54,15 +53,14 @@ export default (): JSX.Element => {
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {index}
-                  {/* {data.text} */}
+                  {data.text}
                 </div>
               )
             )}
           </div>
         </div>
-        <button type="button" onClick={() => setItemCount(100)}>
-          Set Size
+        <button type="button" onClick={() => setItemData(getMockData(10))}>
+          Update
         </button>
       </div>
     </>

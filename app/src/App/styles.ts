@@ -29,6 +29,7 @@ export const item = css`
   justify-content: center;
   align-items: center;
   background: #fff;
+  padding: 0 1rem;
 `;
 
 export const itemDark = css`
