@@ -75,8 +75,7 @@
     "**/*": "prettier -w -u"
   },
   "dependencies": {
-    "@babel/runtime": "^7.14.0",
-    "dequal": "^2.0.2"
+    "@babel/runtime": "^7.14.0"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
