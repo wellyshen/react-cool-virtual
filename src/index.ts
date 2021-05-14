@@ -16,7 +16,7 @@ import {
   useDebounce,
   // useIsoLayoutEffect,
   useLatest,
-  useObserver,
+  useResizeEffect,
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
@@ -205,12 +205,16 @@ const useVirtual = <
     ]
   );
 
-  useObserver<O>(outerRef, (rect) => {
-    outerSizeRef.current = rect[sizeKey];
-    measuresRef.current = getMeasures();
+  useResizeEffect<O>(
+    outerRef,
+    (rect) => {
+      outerSizeRef.current = rect[sizeKey];
+      measuresRef.current = getMeasures();
 
-    updateItems(offsetRef.current, { isScrolling: false });
-  });
+      updateItems(offsetRef.current, { isScrolling: false });
+    },
+    [itemCount]
+  );
 
   useLayoutEffect(() => {
     const { current: outer } = outerRef;

@@ -7,7 +7,11 @@ interface CB {
   (rect: { height: number; width: number }): void;
 }
 
-export default <T extends HTMLElement>(ref: RefObject<T>, cb: CB): void => {
+export default <T extends HTMLElement>(
+  ref: RefObject<T>,
+  cb: CB,
+  deps?: any[]
+): void => {
   const cbRef = useLatest(cb);
 
   useIsoLayoutEffect(() => {
@@ -25,5 +29,5 @@ export default <T extends HTMLElement>(ref: RefObject<T>, cb: CB): void => {
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [cbRef, ref]);
+  }, [cbRef, ref, ...(deps || [])]);
 };
