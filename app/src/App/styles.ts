@@ -8,13 +8,15 @@ export const root = css`
 
 export const app = css`
   margin-top: 3rem;
+  text-align: center;
 `;
 
 export const outer = css`
   margin: 0 auto;
-  width: 80%;
-  height: 500px;
+  width: 300px;
+  height: 300px;
   border: 1px solid #000;
+  margin-bottom: 1rem;
   overflow: auto;
 `;
 

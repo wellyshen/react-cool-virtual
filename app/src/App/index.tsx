@@ -20,17 +20,16 @@ const getMockData = (count: number) =>
 const mockData = getMockData(100);
 
 export default (): JSX.Element => {
-  const [nSize, setNSize] = useState(50);
+  const [itemCount, setItemCount] = useState(50);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     // itemData: getMockData(10),
-    itemCount: mockData.length,
-    // itemSize: 100,
+    itemCount,
+    itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
-    defaultItemSize: 300,
     // overscanCount: 0,
     // useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
@@ -52,20 +51,17 @@ export default (): JSX.Element => {
                 <div
                   key={index}
                   css={[item, !(index % 2) && itemDark]}
-                  // style={{ height: `${size}px` }}
-                  style={{
-                    height: `${index === 3 ? nSize : mockData[index].size}px`,
-                  }}
-                  ref={measureRef}
+                  style={{ height: `${size}px` }}
+                  // ref={measureRef}
                 >
+                  {index}
                   {/* {data.text} */}
-                  {isScrolling ? "Scrolling" : mockData[index].text}
                 </div>
               )
             )}
           </div>
         </div>
-        <button type="button" onClick={() => setNSize(200)}>
+        <button type="button" onClick={() => setItemCount(100)}>
           Set Size
         </button>
       </div>
