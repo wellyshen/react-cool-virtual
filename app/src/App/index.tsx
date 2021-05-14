@@ -19,13 +19,12 @@ const getMockData = (count: number) =>
 const mockData = getMockData(10);
 
 export default (): JSX.Element => {
-  const [itemData, setItemData] = useState(getMockData(10));
+  const [itemCount, setItemCount] = useState(10);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemData,
-    // itemCount: 10,
+    itemCount,
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
@@ -53,13 +52,13 @@ export default (): JSX.Element => {
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {data.text}
+                  {index}
                 </div>
               )
             )}
           </div>
         </div>
-        <button type="button" onClick={() => setItemData(getMockData(10))}>
+        <button type="button" onClick={() => setItemCount(20)}>
           Update
         </button>
       </div>
