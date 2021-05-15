@@ -35,7 +35,8 @@ export interface ScrollOptions {
 }
 
 export interface ScrollTo {
-  (offsetOrOptions: number | ScrollOptions): void;
+  (offset: number): void;
+  (options: ScrollOptions): void;
 }
 
 export type Options<D> = Partial<{

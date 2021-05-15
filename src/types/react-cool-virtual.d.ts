@@ -25,7 +25,8 @@ declare module "react-cool-virtual" {
   }
 
   interface ScrollTo {
-    (offsetOrOptions: number | { offset: number; smooth?: boolean }): void;
+    (offset: number): void;
+    (options: ScrollOptions): void;
   }
 
   export type Options<D extends Data = Data> = Partial<{
