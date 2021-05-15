@@ -14,11 +14,14 @@ import {
   OnScroll,
   Options,
   Return,
+  ScrollTo,
 } from "./types";
 import {
   createIndexes,
   findNearestBinarySearch,
   invariant,
+  isNumber,
+  isUndefined,
   useAnimDebounce,
   // useIsoLayoutEffect,
   useLatest,
@@ -48,6 +51,7 @@ const useVirtual = <
   const itemDataRef = useRef<D[] | undefined>(itemData);
   const outerSizeRef = useRef(0);
   const measuresRef = useRef<Measure[]>([]);
+  const userScrollRef = useRef(true);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const sizeKey = !horizontal ? "height" : "width";
@@ -56,14 +60,14 @@ const useVirtual = <
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
   const directionDR = !horizontal ? "down" : "right";
   const directionUL = !horizontal ? "up" : "left";
-  itemCount = itemCount !== undefined ? itemCount : itemData?.length;
+  itemCount = !isUndefined(itemCount) ? itemCount : itemData?.length;
 
   const getItemSize = useCallback(
     (idx: number) => {
       if (measuresRef.current[idx]) return measuresRef.current[idx].size;
 
       let { current: size } = itemSizeRef;
-      size = typeof size === "function" ? size(idx) : size;
+      size = isNumber(size) ? size : size(idx);
 
       return size ?? DEFAULT_ITEM_SIZE;
     },
@@ -119,18 +123,20 @@ const useVirtual = <
 
   const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    () => updateItems(offsetRef.current, { isScrolling: false }),
+    () => updateItems(offsetRef.current, false),
+    ANIM_DEBOUNCE_INTERVAL
+  );
+
+  const [resetUserScroll, cancelResetUserScroll] = useAnimDebounce(
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    () => {
+      userScrollRef.current = true;
+    },
     ANIM_DEBOUNCE_INTERVAL
   );
 
   const updateItems = useCallback(
-    (
-      offset: number,
-      {
-        isScrolling = true,
-        userScroll = true,
-      }: { isScrolling?: boolean; userScroll?: boolean } = {}
-    ) => {
+    (offset: number, isScrolling = true) => {
       const { current: inner } = innerRef;
 
       if (!inner) return;
@@ -167,7 +173,7 @@ const useVirtual = <
 
                 if (i === end && shouldRecalc) {
                   measuresRef.current = getMeasures();
-                  updateItems(offset, { isScrolling, userScroll });
+                  updateItems(offset, isScrolling);
                 }
 
                 observer?.disconnect();
@@ -188,10 +194,11 @@ const useVirtual = <
             itemIndexes: createIndexes(startIdx, endIdx),
             offset,
             direction: offset > offsetRef.current ? directionDR : directionUL,
-            userScroll,
+            userScroll: userScrollRef.current,
           });
 
         if (useIsScrolling) resetIsScrolling();
+        if (!userScrollRef.current) resetUserScroll();
       }
 
       offsetRef.current = offset;
@@ -205,9 +212,24 @@ const useVirtual = <
       observerSizeKey,
       onScrollRef,
       resetIsScrolling,
+      resetUserScroll,
       sizeKey,
       useIsScrolling,
     ]
+  );
+
+  const scrollTo = useCallback<ScrollTo>(
+    (val) => {
+      if (!outerRef.current) return;
+
+      const offset = isNumber(val) ? val : val.offset;
+
+      if (isUndefined(offset)) return;
+
+      userScrollRef.current = false;
+      outerRef.current[scrollKey] = offset;
+    },
+    [scrollKey]
   );
 
   useResizeEffect<O>(
@@ -216,7 +238,7 @@ const useVirtual = <
       outerSizeRef.current = rect[sizeKey];
       measuresRef.current = getMeasures();
 
-      updateItems(offsetRef.current, { isScrolling: false });
+      updateItems(offsetRef.current, false);
     },
     itemCount
   );
@@ -226,7 +248,7 @@ const useVirtual = <
 
     invariant(!outer, "Outer error");
     invariant(!innerRef.current, "Inner error");
-    invariant(itemCount === undefined, "Item count error");
+    invariant(isUndefined(itemCount), "Item count error");
 
     const handleScroll = ({ target }: Event) =>
       updateItems((target as O)[scrollKey]);
@@ -236,9 +258,15 @@ const useVirtual = <
     return () => outer!.removeEventListener("scroll", handleScroll);
   }, [itemCount, scrollKey, updateItems]);
 
-  useEffect(() => () => cancelResetIsScrolling(), [cancelResetIsScrolling]);
+  useEffect(
+    () => () => {
+      cancelResetIsScrolling();
+      cancelResetUserScroll();
+    },
+    [cancelResetIsScrolling, cancelResetUserScroll]
+  );
 
-  return { outerRef, innerRef, items };
+  return { outerRef, innerRef, items, scrollTo };
 };
 
 export default useVirtual;

@@ -12,7 +12,7 @@ declare module "react-cool-virtual" {
     measureRef: (el: HTMLElement | null) => void;
   }
 
-  export type ItemSize = number | ((index: number) => number) | undefined;
+  export type ItemSize = number | ((index: number) => number);
 
   export interface OnScroll {
     (options: {
@@ -22,6 +22,10 @@ declare module "react-cool-virtual" {
       direction: string;
       userScroll: boolean;
     }): void;
+  }
+
+  interface ScrollTo {
+    (offsetOrOptions: number | { offset: number; smooth?: boolean }): void;
   }
 
   export type Options<D extends Data = Data> = Partial<{
@@ -42,6 +46,7 @@ declare module "react-cool-virtual" {
     outerRef: RefObject<O>;
     innerRef: RefObject<I>;
     items: Item<D>[];
+    scrollTo: ScrollTo;
   }
 
   export default function useVirtual<

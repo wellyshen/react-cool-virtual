@@ -17,7 +17,7 @@ export interface Item<D> {
   measureRef: (el: HTMLElement | null) => void;
 }
 
-export type ItemSize = number | ((index: number) => number) | undefined;
+export type ItemSize = number | ((index: number) => number);
 
 export interface OnScroll {
   (options: {
@@ -27,6 +27,10 @@ export interface OnScroll {
     direction: string;
     userScroll: boolean;
   }): void;
+}
+
+export interface ScrollTo {
+  (offsetOrOptions: number | { offset: number; smooth?: boolean }): void;
 }
 
 export type Options<D> = Partial<{
@@ -43,4 +47,5 @@ export interface Return<O, I, D> {
   outerRef: RefObject<O>;
   innerRef: RefObject<I>;
   items: Item<D>[];
+  scrollTo: ScrollTo;
 }
