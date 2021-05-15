@@ -12,7 +12,7 @@ import { root, app, outer, inner, item, itemDark } from "./styles";
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
-    text: uuidv4(),
+    text: idx,
     // size: 25 + Math.round(Math.random() * 100),
   }));
 
@@ -20,17 +20,18 @@ const mockData = getMockData(10);
 
 export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(10);
-  const { outerRef, innerRef, items } = useVirtual<
+  const { outerRef, innerRef, items, scrollTo } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount,
+    itemData: mockData,
+    // itemCount,
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
     // overscanCount: 0,
     useIsScrolling: true,
-    // onScroll: (opts) => console.log("LOG ===> ", opts),
+    onScroll: (opts) => console.log("LOG ===> ", opts),
   });
 
   return (
@@ -52,14 +53,17 @@ export default (): JSX.Element => {
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {isScrolling ? "Scrolling... " : index}
+                  {isScrolling ? "Scrolling... " : data.text}
                 </div>
               )
             )}
           </div>
         </div>
-        <button type="button" onClick={() => setItemCount(20)}>
-          Update
+        <button type="button" onClick={() => scrollTo(100)}>
+          Scroll To 100
+        </button>
+        <button type="button" onClick={() => scrollTo(0)}>
+          Scroll To 0
         </button>
       </div>
     </>
