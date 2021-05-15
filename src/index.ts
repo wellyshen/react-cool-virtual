@@ -35,8 +35,7 @@ const useVirtual = <
 >({
   itemData,
   itemCount,
-  itemSize,
-  defaultItemSize = DEFAULT_ITEM_SIZE,
+  itemSize = DEFAULT_ITEM_SIZE,
   horizontal,
   overscanCount = 1,
   useIsScrolling,
@@ -66,9 +65,9 @@ const useVirtual = <
       let { current: size } = itemSizeRef;
       size = typeof size === "function" ? size(idx) : size;
 
-      return size ?? defaultItemSize ?? DEFAULT_ITEM_SIZE;
+      return size ?? DEFAULT_ITEM_SIZE;
     },
-    [defaultItemSize, itemSizeRef]
+    [itemSizeRef]
   );
 
   const getMeasures = useCallback(() => {

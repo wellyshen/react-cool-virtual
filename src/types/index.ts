@@ -33,7 +33,6 @@ export type Options<D> = Partial<{
   itemData: D[];
   itemCount: number;
   itemSize: ItemSize;
-  defaultItemSize: number;
   horizontal: boolean;
   overscanCount: number;
   useIsScrolling: boolean;

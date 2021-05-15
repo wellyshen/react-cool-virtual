@@ -28,7 +28,6 @@ declare module "react-cool-virtual" {
     itemData: D[];
     itemCount: number;
     itemSize: ItemSize;
-    defaultItemSize: number;
     horizontal: boolean;
     overscanCount: number;
     useIsScrolling: boolean;
