@@ -220,12 +220,12 @@ const useVirtual = <
   );
 
   const scrollTo = useCallback<ScrollTo>(
-    (val) => {
+    (value) => {
       if (!outerRef.current) return;
 
-      const { offset, smooth }: ScrollOptions = isNumber(val)
-        ? { offset: val }
-        : val;
+      const { offset, smooth }: ScrollOptions = isNumber(value)
+        ? { offset: value }
+        : value;
 
       if (isUndefined(offset)) return;
 
