@@ -26,7 +26,7 @@ import {
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
-const DEBOUNCE_INTERVAL = 200;
+const ANIM_DEBOUNCE_INTERVAL = 200;
 
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
@@ -121,7 +121,7 @@ const useVirtual = <
   const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => updateItems(offsetRef.current, { isScrolling: false }),
-    DEBOUNCE_INTERVAL
+    ANIM_DEBOUNCE_INTERVAL
   );
 
   const updateItems = useCallback(
