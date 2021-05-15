@@ -29,8 +29,13 @@ export interface OnScroll {
   }): void;
 }
 
+export interface ScrollOptions {
+  offset: number;
+  smooth?: boolean;
+}
+
 export interface ScrollTo {
-  (offsetOrOptions: number | { offset: number; smooth?: boolean }): void;
+  (offsetOrOptions: number | ScrollOptions): void;
 }
 
 export type Options<D> = Partial<{

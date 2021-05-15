@@ -14,6 +14,7 @@ import {
   OnScroll,
   Options,
   Return,
+  ScrollOptions,
   ScrollTo,
 } from "./types";
 import {
@@ -222,12 +223,19 @@ const useVirtual = <
     (val) => {
       if (!outerRef.current) return;
 
-      const offset = isNumber(val) ? val : val.offset;
+      const { offset, smooth }: ScrollOptions = isNumber(val)
+        ? { offset: val }
+        : val;
 
       if (isUndefined(offset)) return;
 
       userScrollRef.current = false;
-      outerRef.current[scrollKey] = offset;
+
+      if (!smooth) {
+        outerRef.current[scrollKey] = offset;
+      } else {
+        // Handle smooth...
+      }
     },
     [scrollKey]
   );
