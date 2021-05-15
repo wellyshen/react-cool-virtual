@@ -1,1 +1,1 @@
-export default (value: unknown): value is undefined => value === undefined;
+export default (val: unknown): val is undefined => val === undefined;
