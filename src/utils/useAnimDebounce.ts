@@ -2,16 +2,14 @@
 
 import { useCallback, useRef } from "react";
 
+import isUndefined from "./isUndefined";
 import useLatest from "./useLatest";
 
 interface Fn {
   (): void;
 }
 
-const now = () =>
-  typeof performance === "object" && typeof performance.now === "function"
-    ? performance.now()
-    : Date.now();
+const now = () => (!isUndefined(performance) ? performance.now() : Date.now());
 
 export default (cb: Fn, delay: number): [Fn, Fn] => {
   const rafRef = useRef<number | null>();
