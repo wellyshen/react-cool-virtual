@@ -16,10 +16,9 @@ const getMockData = (count: number) =>
     // size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(10);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
-  const [val, setVal] = useState(100);
   const { outerRef, innerRef, items, scrollTo } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
@@ -32,6 +31,9 @@ export default (): JSX.Element => {
     // overscanCount: 0,
     // useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
+    scrollingEffect: {
+      easingFunction: (t) => t,
+    },
   });
 
   return (
@@ -46,11 +48,11 @@ export default (): JSX.Element => {
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
             {items.map(
-              ({ data, id, index, size, isScrolling, measureRef }: any) => (
+              ({ data, index, size, isScrolling, measureRef }: any) => (
                 <div
-                  key={id}
+                  key={index}
                   css={[item, !(index % 2) && itemDark]}
-                  style={{ height: `${index === 3 ? val : size}px` }}
+                  style={{ height: `${size}px` }}
                   ref={measureRef}
                 >
                   {data.text}
@@ -59,8 +61,11 @@ export default (): JSX.Element => {
             )}
           </div>
         </div>
-        <button type="button" onClick={() => setVal(200)}>
-          Update Size
+        <button
+          type="button"
+          onClick={() => scrollTo({ offset: 1000, smooth: true })}
+        >
+          Scroll To
         </button>
       </div>
     </>
