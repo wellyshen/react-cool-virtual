@@ -16,7 +16,7 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(1000);
 
 export default (): JSX.Element => {
   const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
@@ -64,11 +64,9 @@ export default (): JSX.Element => {
         <button
           type="button"
           onClick={() =>
-            scrollToItem({
-              index: 50,
-              smooth: true,
-              callback: () => console.log("LOG ===> HI!"),
-            })
+            scrollToItem({ index: 300, smooth: false }, () =>
+              console.log("LOG ===> HI!")
+            )
           }
         >
           Scroll To
