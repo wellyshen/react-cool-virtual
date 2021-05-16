@@ -36,12 +36,15 @@ declare module "react-cool-virtual" {
   export interface ScrollToOptions {
     offset: number;
     smooth?: boolean;
-    callback?: () => void;
+  }
+
+  export interface Callback {
+    (): void;
   }
 
   interface ScrollTo {
-    (offset: number): void;
-    (options: ScrollToOptions): void;
+    (offset: number, callback?: Callback): void;
+    (options: ScrollToOptions, callback?: Callback): void;
   }
 
   export enum Align {
@@ -55,11 +58,11 @@ declare module "react-cool-virtual" {
     index: number;
     align?: Align;
     smooth?: boolean;
-    callback?: () => void;
   }
 
   interface ScrollToItem {
-    (index: number | ScrollToItemOptions): void;
+    (index: number, callback?: Callback): void;
+    (options: ScrollToItemOptions, callback?: Callback): void;
   }
 
   export type Options<D extends Data = Data> = Partial<{

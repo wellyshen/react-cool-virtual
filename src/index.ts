@@ -8,6 +8,7 @@ import {
 
 import {
   Align,
+  Callback,
   Data,
   Item,
   ItemSize,
@@ -231,10 +232,10 @@ const useVirtual = <
   );
 
   const scrollTo = useCallback<ScrollTo>(
-    (value) => {
+    (value, cb) => {
       if (!outerRef.current) return;
 
-      const { offset, smooth, callback }: ScrollToOptions = isNumber(value)
+      const { offset, smooth }: ScrollToOptions = isNumber(value)
         ? { offset: value }
         : value;
       const prevOffset = offsetRef.current;
@@ -248,6 +249,7 @@ const useVirtual = <
         (isUndefined(smooth) && !Object.keys(scrollingEffectRef.current).length)
       ) {
         outerRef.current[scrollKey] = offset;
+        if (cb) cb();
         return;
       }
 
@@ -265,8 +267,8 @@ const useVirtual = <
 
         if (time < 1) {
           scrollRafIdRef.current = requestAnimationFrame(scroll);
-        } else if (callback) {
-          callback();
+        } else if (cb) {
+          cb();
         }
       };
 
@@ -276,7 +278,10 @@ const useVirtual = <
   );
 
   const handleScrollToItem = useCallback(
-    ({ index, align = Align.auto, smooth, callback }: ScrollToItemOptions) => {
+    (
+      { index, align = Align.auto, smooth }: ScrollToItemOptions,
+      cb?: Callback
+    ) => {
       if (!itemCount) return;
 
       const { start, end, size } =
@@ -303,23 +308,23 @@ const useVirtual = <
           }
       }
 
-      scrollTo({ offset, smooth, callback });
+      scrollTo({ offset, smooth }, cb);
     },
     [itemCount, scrollTo]
   );
 
   const scrollToItem = useCallback<ScrollToItem>(
-    (value) => {
-      const { callback, ...rest }: ScrollToItemOptions = isNumber(value)
+    (value, cb) => {
+      const opts: ScrollToItemOptions = isNumber(value)
         ? { index: value }
         : value;
 
-      if (!isUndefined(rest.index)) {
-        // For dynamic size, measuring the items first to get the target's data
-        handleScrollToItem(rest);
-        // Then we can scroll to the right position of the target
-        setTimeout(() => handleScrollToItem({ callback, ...rest }));
-      }
+      if (!isUndefined(opts.index))
+        // For dynamic size, we need to measure items before getting the target's position
+        // so we double call this method to achieve that
+        handleScrollToItem(opts, () =>
+          setTimeout(() => handleScrollToItem(opts, cb))
+        );
     },
     [handleScrollToItem]
   );

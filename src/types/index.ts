@@ -38,11 +38,14 @@ export interface OnScroll {
 export interface ScrollToOptions {
   offset: number;
   smooth?: boolean;
-  callback?: () => void;
+}
+
+export interface Callback {
+  (): void;
 }
 
 export interface ScrollTo {
-  (value: number | ScrollToOptions): void;
+  (value: number | ScrollToOptions, callback?: Callback): void;
 }
 
 export enum Align {
@@ -56,11 +59,10 @@ export interface ScrollToItemOptions {
   index: number;
   align?: Align;
   smooth?: boolean;
-  callback?: () => void;
 }
 
 export interface ScrollToItem {
-  (index: number | ScrollToItemOptions): void;
+  (index: number | ScrollToItemOptions, callback?: Callback): void;
 }
 
 export type Options<D> = Partial<{
