@@ -13,19 +13,19 @@ const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
     text: idx,
-    // size: 25 + Math.round(Math.random() * 100),
+    size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(1000);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
-  const { outerRef, innerRef, items, scrollTo } = useVirtual<
+  const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemData: mockData,
-    // itemCount,
-    itemSize: 100,
+    // itemCount: mockData.length,
+    // itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
     // overscanCount: 0,
@@ -52,7 +52,7 @@ export default (): JSX.Element => {
                 <div
                   key={index}
                   css={[item, !(index % 2) && itemDark]}
-                  style={{ height: `${size}px` }}
+                  style={{ height: `${data.size}px` }}
                   ref={measureRef}
                 >
                   {data.text}
@@ -63,7 +63,13 @@ export default (): JSX.Element => {
         </div>
         <button
           type="button"
-          onClick={() => scrollTo({ offset: 50000, smooth: true })}
+          onClick={() =>
+            scrollToItem({
+              index: 50,
+              smooth: true,
+              callback: () => console.log("LOG ===> HI!"),
+            })
+          }
         >
           Scroll To
         </button>
