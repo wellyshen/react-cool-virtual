@@ -317,7 +317,7 @@ const useVirtual = <
       if (!isUndefined(rest.index)) {
         // For dynamic size, measuring the items first to get the target's data
         handleScrollToItem(rest);
-        // Then we can scroll to the target correctly
+        // Then we can scroll to the right position of the target
         setTimeout(() => handleScrollToItem({ callback, ...rest }));
       }
     },
