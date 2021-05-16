@@ -1,8 +1,6 @@
 const hex: string[] = [];
 
-for (let i = 0; i < 256; i += 1) {
-  hex[i] = (i < 16 ? "0" : "") + i.toString(16);
-}
+for (let i = 0; i < 256; i += 1) hex[i] = (i < 16 ? "0" : "") + i.toString(16);
 
 export default (): string => {
   const r = crypto.getRandomValues(new Uint8Array(16));
