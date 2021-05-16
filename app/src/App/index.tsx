@@ -46,9 +46,9 @@ export default (): JSX.Element => {
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
             {items.map(
-              ({ data, index, size, isScrolling, measureRef }: any) => (
+              ({ data, id, index, size, isScrolling, measureRef }: any) => (
                 <div
-                  key={index}
+                  key={id}
                   css={[item, !(index % 2) && itemDark]}
                   style={{ height: `${index === 3 ? val : size}px` }}
                   ref={measureRef}
