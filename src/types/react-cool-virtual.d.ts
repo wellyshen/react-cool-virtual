@@ -14,9 +14,13 @@ declare module "react-cool-virtual" {
 
   export type ItemSize = number | ((index: number) => number);
 
+  export interface EasingFunction {
+    (time: number): number;
+  }
+
   export interface ScrollingEffect {
     duration?: number;
-    easingFunction?: (time: number) => number;
+    easingFunction?: EasingFunction;
   }
 
   export interface OnScroll {
@@ -29,14 +33,33 @@ declare module "react-cool-virtual" {
     }): void;
   }
 
-  export interface ScrollOptions {
+  export interface ScrollToOptions {
     offset: number;
     smooth?: boolean;
+    callback?: () => void;
   }
 
   interface ScrollTo {
     (offset: number): void;
-    (options: ScrollOptions): void;
+    (options: ScrollToOptions): void;
+  }
+
+  export enum Align {
+    auto = "auto",
+    start = "start",
+    center = "center",
+    end = "end",
+  }
+
+  export interface ScrollToItemOptions {
+    index: number;
+    align?: Align;
+    smooth?: boolean;
+    callback?: () => void;
+  }
+
+  interface ScrollToItem {
+    (index: number | ScrollToItemOptions): void;
   }
 
   export type Options<D extends Data = Data> = Partial<{
@@ -59,6 +82,7 @@ declare module "react-cool-virtual" {
     innerRef: RefObject<I>;
     items: Item<D>[];
     scrollTo: ScrollTo;
+    scrollToItem: ScrollToItem;
   }
 
   export default function useVirtual<

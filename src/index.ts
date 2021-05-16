@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import {
+  Align,
   Data,
   Item,
   ItemSize,
@@ -15,8 +16,10 @@ import {
   Options,
   Return,
   ScrollingEffect,
-  ScrollOptions,
   ScrollTo,
+  ScrollToOptions,
+  ScrollToItem,
+  ScrollToItemOptions,
 } from "./types";
 import {
   createIndexes,
@@ -92,7 +95,7 @@ const useVirtual = <
       const start = i ? measures[i - 1].end : 0;
       const size = getItemSize(i);
 
-      measures[i] = { start, end: start + size, size };
+      measures[i] = { idx: i, start, end: start + size, size };
     }
 
     return measures;
@@ -231,11 +234,12 @@ const useVirtual = <
     (value) => {
       if (!outerRef.current) return;
 
-      const { offset, smooth }: ScrollOptions = isNumber(value)
+      const { offset, smooth, callback }: ScrollToOptions = isNumber(value)
         ? { offset: value }
         : value;
+      const prevOffset = offsetRef.current;
 
-      if (isUndefined(offset)) return;
+      if (isUndefined(offset) || offset === prevOffset) return;
 
       userScrollRef.current = false;
 
@@ -248,7 +252,6 @@ const useVirtual = <
       }
 
       const start = now();
-      const from = offsetRef.current;
       const {
         duration = DEFAULT_EASING_DURATION,
         easingFunction = DEFAULT_EASING_FUNCTION,
@@ -258,14 +261,67 @@ const useVirtual = <
         const time = Math.min((now() - start) / duration, 1);
 
         outerRef.current![scrollKey] =
-          easingFunction(time) * (offset - from) + from;
+          easingFunction(time) * (offset - prevOffset) + prevOffset;
 
-        if (time < 1) scrollRafIdRef.current = requestAnimationFrame(scroll);
+        if (time < 1) {
+          scrollRafIdRef.current = requestAnimationFrame(scroll);
+        } else if (callback) {
+          callback();
+        }
       };
 
       scrollRafIdRef.current = requestAnimationFrame(scroll);
     },
     [scrollKey]
+  );
+
+  const handleScrollToItem = useCallback(
+    ({ index, align = Align.auto, smooth, callback }: ScrollToItemOptions) => {
+      if (!itemCount) return;
+
+      const { start, end, size } =
+        measuresRef.current[Math.max(0, Math.min(index, itemCount - 1))];
+      const { current: outerSize } = outerSizeRef;
+      let offset = offsetRef.current;
+      const endPos = start - outerSize + size;
+
+      switch (align) {
+        case Align.start:
+          offset = start;
+          break;
+        case Align.center:
+          offset = start - outerSize / 2 + size / 2;
+          break;
+        case Align.end:
+          offset = endPos;
+          break;
+        default:
+          if (offset < start - outerSize + size) {
+            offset = endPos;
+          } else if (offset > end - size) {
+            offset = start;
+          }
+      }
+
+      scrollTo({ offset, smooth, callback });
+    },
+    [itemCount, scrollTo]
+  );
+
+  const scrollToItem = useCallback<ScrollToItem>(
+    (value) => {
+      const { callback, ...rest }: ScrollToItemOptions = isNumber(value)
+        ? { index: value }
+        : value;
+
+      if (!isUndefined(rest.index)) {
+        // For dynamic size, measuring the items first to get the target's data
+        handleScrollToItem(rest);
+        // Then we can scroll to the target correctly
+        setTimeout(() => handleScrollToItem({ callback, ...rest }));
+      }
+    },
+    [handleScrollToItem]
   );
 
   useResizeEffect<O>(
@@ -306,7 +362,7 @@ const useVirtual = <
     [cancelResetIsScrolling, cancelResetUserScroll]
   );
 
-  return { outerRef, innerRef, items, scrollTo };
+  return { outerRef, innerRef, items, scrollTo, scrollToItem };
 };
 
 export default useVirtual;

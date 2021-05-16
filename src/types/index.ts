@@ -1,6 +1,7 @@
 import { RefObject } from "react";
 
 export interface Measure {
+  idx: number;
   start: number;
   end: number;
   size: number;
@@ -34,13 +35,32 @@ export interface OnScroll {
   }): void;
 }
 
-export interface ScrollOptions {
+export interface ScrollToOptions {
   offset: number;
   smooth?: boolean;
+  callback?: () => void;
 }
 
 export interface ScrollTo {
-  (value: number | ScrollOptions): void;
+  (value: number | ScrollToOptions): void;
+}
+
+export enum Align {
+  auto = "auto",
+  start = "start",
+  center = "center",
+  end = "end",
+}
+
+export interface ScrollToItemOptions {
+  index: number;
+  align?: Align;
+  smooth?: boolean;
+  callback?: () => void;
+}
+
+export interface ScrollToItem {
+  (index: number | ScrollToItemOptions): void;
 }
 
 export type Options<D> = Partial<{
@@ -59,4 +79,5 @@ export interface Return<O, I, D> {
   innerRef: RefObject<I>;
   items: Item<D>[];
   scrollTo: ScrollTo;
+  scrollToItem: ScrollToItem;
 }
