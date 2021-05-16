@@ -16,7 +16,7 @@ const getMockData = (count: number) =>
     // size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(1000);
 
 export default (): JSX.Element => {
   const { outerRef, innerRef, items, scrollTo } = useVirtual<
@@ -31,9 +31,9 @@ export default (): JSX.Element => {
     // overscanCount: 0,
     // useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
-    scrollingEffect: {
-      easingFunction: (t) => t,
-    },
+    // scrollingEffect: {
+    //   easingFunction: (t) => t,
+    // },
   });
 
   return (
@@ -63,7 +63,7 @@ export default (): JSX.Element => {
         </div>
         <button
           type="button"
-          onClick={() => scrollTo({ offset: 1000, smooth: true })}
+          onClick={() => scrollTo({ offset: 50000, smooth: true })}
         >
           Scroll To
         </button>
