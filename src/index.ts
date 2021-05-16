@@ -27,6 +27,7 @@ import {
   // useIsoLayoutEffect,
   useLatest,
   useResizeEffect,
+  uuid,
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
@@ -84,7 +85,7 @@ const useVirtual = <
       const start = i ? measures[i - 1].end : 0;
       const size = getItemSize(i);
 
-      measures.push({ start, end: start + size, size });
+      measures[i] = { id: uuid(), start, end: start + size, size };
     }
 
     return measures;
@@ -152,8 +153,9 @@ const useVirtual = <
       let shouldRecalc = false;
 
       for (let i = start; i <= end; i += 1)
-        nextItems.push({
+        nextItems[i] = {
           data: itemDataRef.current ? itemDataRef.current[i] : undefined,
+          id: measuresRef.current[i].id,
           index: i,
           size: measuresRef.current[i].size,
           outerSize: outerSizeRef.current,
@@ -184,7 +186,7 @@ const useVirtual = <
 
             observer.observe(el);
           },
-        });
+        };
 
       setItems(nextItems);
 

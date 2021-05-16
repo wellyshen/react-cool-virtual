@@ -5,6 +5,7 @@ declare module "react-cool-virtual" {
 
   interface Item<D> {
     data?: D;
+    readonly id: string;
     readonly index: number;
     readonly size: number;
     readonly outerSize: number;

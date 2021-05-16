@@ -1,6 +1,7 @@
 import { RefObject } from "react";
 
 export interface Measure {
+  id: string;
   start: number;
   end: number;
   size: number;
@@ -10,6 +11,7 @@ export type Data = Record<string, any>;
 
 export interface Item<D> {
   data?: D;
+  readonly id: string;
   readonly index: number;
   readonly size: number;
   readonly outerSize: number;

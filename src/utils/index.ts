@@ -7,3 +7,4 @@ export { default as useAnimDebounce } from "./useAnimDebounce";
 export { default as useIsoLayoutEffect } from "./useIsoLayoutEffect";
 export { default as useLatest } from "./useLatest";
 export { default as useResizeEffect } from "./useResizeEffect";
+export { default as uuid } from "./uuid";
