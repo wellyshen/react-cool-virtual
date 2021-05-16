@@ -3,6 +3,7 @@ export { default as findNearestBinarySearch } from "./findNearestBinarySearch";
 export { default as invariant } from "./invariant";
 export { default as isNumber } from "./isNumber";
 export { default as isUndefined } from "./isUndefined";
+export { default as now } from "./now";
 export { default as useAnimDebounce } from "./useAnimDebounce";
 export { default as useIsoLayoutEffect } from "./useIsoLayoutEffect";
 export { default as useLatest } from "./useLatest";

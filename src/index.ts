@@ -14,6 +14,7 @@ import {
   OnScroll,
   Options,
   Return,
+  ScrollingEffect,
   ScrollOptions,
   ScrollTo,
 } from "./types";
@@ -23,6 +24,7 @@ import {
   invariant,
   isNumber,
   isUndefined,
+  now,
   useAnimDebounce,
   // useIsoLayoutEffect,
   useLatest,
@@ -30,6 +32,9 @@ import {
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
+const DEFAULT_EASING_DURATION = 500;
+const DEFAULT_EASING_FUNCTION = (t: number) =>
+  t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 const ANIM_DEBOUNCE_INTERVAL = 200;
 
 const useVirtual = <
@@ -43,6 +48,7 @@ const useVirtual = <
   horizontal,
   overscanCount = 1,
   useIsScrolling,
+  scrollingEffect,
   onScroll,
 }: Options<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
@@ -53,6 +59,8 @@ const useVirtual = <
   const outerSizeRef = useRef(0);
   const measuresRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
+  const scrollRafIdRef = useRef<number>();
+  const scrollingEffectRef = useRef<ScrollingEffect>(scrollingEffect || {});
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const sizeKey = !horizontal ? "height" : "width";
@@ -231,11 +239,31 @@ const useVirtual = <
 
       userScrollRef.current = false;
 
-      if (!smooth) {
+      if (
+        smooth === false ||
+        (isUndefined(smooth) && !Object.keys(scrollingEffectRef.current).length)
+      ) {
         outerRef.current[scrollKey] = offset;
-      } else {
-        // Handle smooth...
+        return;
       }
+
+      const start = now();
+      const from = offsetRef.current;
+      const {
+        duration = DEFAULT_EASING_DURATION,
+        easingFunction = DEFAULT_EASING_FUNCTION,
+      } = scrollingEffectRef.current;
+
+      const scroll = () => {
+        const time = Math.min((now() - start) / duration, 1);
+
+        outerRef.current![scrollKey] =
+          easingFunction(time) * (offset - from) + from;
+
+        if (time < 1) scrollRafIdRef.current = requestAnimationFrame(scroll);
+      };
+
+      scrollRafIdRef.current = requestAnimationFrame(scroll);
     },
     [scrollKey]
   );
@@ -270,6 +298,10 @@ const useVirtual = <
     () => () => {
       cancelResetIsScrolling();
       cancelResetUserScroll();
+      if (scrollRafIdRef.current) {
+        cancelAnimationFrame(scrollRafIdRef.current);
+        scrollRafIdRef.current = undefined;
+      }
     },
     [cancelResetIsScrolling, cancelResetUserScroll]
   );

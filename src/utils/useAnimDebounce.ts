@@ -1,24 +1,20 @@
-/* eslint-disable compat/compat */
-
 import { useCallback, useRef } from "react";
 
-import isUndefined from "./isUndefined";
+import now from "./now";
 import useLatest from "./useLatest";
 
 interface Fn {
   (): void;
 }
 
-const now = () => (!isUndefined(performance) ? performance.now() : Date.now());
-
 export default (cb: Fn, delay: number): [Fn, Fn] => {
-  const rafRef = useRef<number | null>();
+  const rafIdRef = useRef<number>();
   const cbRef = useLatest(cb);
 
   const cancel = useCallback(() => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
+    if (rafIdRef.current) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = undefined;
     }
   }, []);
 
@@ -27,7 +23,7 @@ export default (cb: Fn, delay: number): [Fn, Fn] => {
       if (now() - start >= delay) {
         cbRef.current();
       } else {
-        rafRef.current = requestAnimationFrame(() => tick(start));
+        rafIdRef.current = requestAnimationFrame(() => tick(start));
       }
     },
     [cbRef, delay]

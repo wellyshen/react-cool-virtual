@@ -14,6 +14,11 @@ declare module "react-cool-virtual" {
 
   export type ItemSize = number | ((index: number) => number);
 
+  export interface ScrollingEffect {
+    duration?: number;
+    easingFunction?: (time: number) => number;
+  }
+
   export interface OnScroll {
     (options: {
       overscanIndexes: number[];
@@ -22,6 +27,11 @@ declare module "react-cool-virtual" {
       direction: string;
       userScroll: boolean;
     }): void;
+  }
+
+  export interface ScrollOptions {
+    offset: number;
+    smooth?: boolean;
   }
 
   interface ScrollTo {
@@ -36,6 +46,7 @@ declare module "react-cool-virtual" {
     horizontal: boolean;
     overscanCount: number;
     useIsScrolling: boolean;
+    scrollingEffect: ScrollingEffect;
     onScroll: OnScroll;
   }>;
 
