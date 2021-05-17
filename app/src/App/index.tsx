@@ -64,7 +64,7 @@ export default (): JSX.Element => {
         <button
           type="button"
           onClick={() =>
-            scrollToItem({ index: 500, smooth: false, autoPilot: true }, () =>
+            scrollToItem({ index: 500, autoPilot: true }, () =>
               console.log("LOG ===> HI!")
             )
           }
