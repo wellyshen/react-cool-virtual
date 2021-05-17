@@ -9,14 +9,7 @@ export interface Measure {
 
 export type Data = Record<string, any>;
 
-export interface Item<D> {
-  data?: D;
-  readonly index: number;
-  readonly size: number;
-  readonly outerSize: number;
-  readonly isScrolling?: boolean;
-  measureRef: (el: HTMLElement | null) => void;
-}
+export type Items<D> = number | D[];
 
 export type ItemSize = number | ((index: number) => number);
 
@@ -32,6 +25,15 @@ export interface OnScroll {
     direction: string;
     userScroll: boolean;
   }): void;
+}
+
+export interface VirtualItem<D> {
+  data?: D;
+  readonly index: number;
+  readonly size: number;
+  readonly outerSize: number;
+  readonly isScrolling?: boolean;
+  measureRef: (el: HTMLElement | null) => void;
 }
 
 export interface ScrollToOptions {
@@ -62,8 +64,8 @@ export interface ScrollToItem {
 }
 
 export type Options<D> = Partial<{
-  itemData: D[];
-  itemCount: number;
+  items: Items<D>;
+  totalItems: number;
   itemSize: ItemSize;
   horizontal: boolean;
   overscanCount: number;
@@ -76,7 +78,7 @@ export type Options<D> = Partial<{
 export interface Return<O, I, D> {
   outerRef: RefObject<O>;
   innerRef: RefObject<I>;
-  items: Item<D>[];
+  virtualItems: VirtualItem<D>[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
 }

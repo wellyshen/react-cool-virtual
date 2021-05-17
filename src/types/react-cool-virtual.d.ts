@@ -3,20 +3,9 @@ declare module "react-cool-virtual" {
 
   type Data = Record<string, any>;
 
-  interface Item<D> {
-    data?: D;
-    readonly index: number;
-    readonly size: number;
-    readonly outerSize: number;
-    readonly isScrolling?: boolean;
-    measureRef: (el: HTMLElement | null) => void;
-  }
+  export type Items<D extends Data = Data> = number | D[];
 
   export type ItemSize = number | ((index: number) => number);
-
-  export interface EasingFunction {
-    (time: number): number;
-  }
 
   export interface ScrollEasingFunction {
     (time: number): number;
@@ -30,6 +19,15 @@ declare module "react-cool-virtual" {
       direction: string;
       userScroll: boolean;
     }): void;
+  }
+
+  export interface VirtualItem<D extends Data = Data> {
+    data?: D;
+    readonly index: number;
+    readonly size: number;
+    readonly outerSize: number;
+    readonly isScrolling?: boolean;
+    measureRef: (el: HTMLElement | null) => void;
   }
 
   export interface ScrollToOptions {
@@ -59,8 +57,8 @@ declare module "react-cool-virtual" {
   }
 
   export type Options<D extends Data = Data> = Partial<{
-    itemData: D[];
-    itemCount: number;
+    items: Items<D>;
+    totalItems: number;
     itemSize: ItemSize;
     horizontal: boolean;
     overscanCount: number;
@@ -77,7 +75,7 @@ declare module "react-cool-virtual" {
   > {
     outerRef: RefObject<O>;
     innerRef: RefObject<I>;
-    items: Item<D>[];
+    virtualItems: VirtualItem<D>[];
     scrollTo: ScrollTo;
     scrollToItem: ScrollToItem;
   }
