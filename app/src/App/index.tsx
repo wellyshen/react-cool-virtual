@@ -22,13 +22,13 @@ export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(10);
   const { outerRef, innerRef, virtualItems, scrollTo, scrollToItem } =
     useVirtual<HTMLDivElement, HTMLDivElement>({
-      totalItems: 20,
-      items: itemCount,
+      // totalItems: 20,
+      // items: itemCount,
       // items: mockData.length,
       // itemSize: 100,
       // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
       // horizontal: true,
-      // overscan: 0,
+      // overscanCount: 0,
       // useIsScrolling: true,
       // onScroll: (opts) => console.log("LOG ===> ", opts),
       // scrollingEffect: {
@@ -47,17 +47,21 @@ export default (): JSX.Element => {
       <div css={app}>
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
-            {virtualItems.map(
-              ({ data, index, size, isScrolling, measureRef }: any) => (
-                <div
-                  key={index}
-                  css={[item, !(index % 2) && itemDark]}
-                  style={{ height: `${size}px` }}
-                  ref={measureRef}
-                >
-                  {data ? data.text : "Loading"}
-                </div>
+            {virtualItems.length ? (
+              virtualItems.map(
+                ({ data, index, size, isScrolling, measureRef }: any) => (
+                  <div
+                    key={index}
+                    css={[item, !(index % 2) && itemDark]}
+                    style={{ height: `${size}px` }}
+                    ref={measureRef}
+                  >
+                    {data ? data.text : "Loading"}
+                  </div>
+                )
               )
+            ) : (
+              <div>Loading...</div>
             )}
           </div>
         </div>
