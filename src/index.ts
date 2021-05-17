@@ -60,7 +60,7 @@ const useVirtual = <
   const outerSizeRef = useRef(0);
   const measuresRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
-  const scrollRafIdRef = useRef<number>();
+  const scrollRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
@@ -256,13 +256,13 @@ const useVirtual = <
           easingFnRef.current(time) * (offset - prevOffset) + prevOffset;
 
         if (time < 1) {
-          scrollRafIdRef.current = requestAnimationFrame(scroll);
+          scrollRafRef.current = requestAnimationFrame(scroll);
         } else if (cb) {
           cb();
         }
       };
 
-      scrollRafIdRef.current = requestAnimationFrame(scroll);
+      scrollRafRef.current = requestAnimationFrame(scroll);
     },
     [easingFnRef, scrollDuration, scrollKey]
   );
@@ -355,9 +355,9 @@ const useVirtual = <
     () => () => {
       cancelResetIsScrolling();
       cancelResetUserScroll();
-      if (scrollRafIdRef.current) {
-        cancelAnimationFrame(scrollRafIdRef.current);
-        scrollRafIdRef.current = undefined;
+      if (scrollRafRef.current) {
+        cancelAnimationFrame(scrollRafRef.current);
+        scrollRafRef.current = undefined;
       }
     },
     [cancelResetIsScrolling, cancelResetUserScroll]

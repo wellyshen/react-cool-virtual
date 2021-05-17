@@ -8,13 +8,13 @@ interface Fn {
 }
 
 export default (cb: Fn, delay: number): [Fn, Fn] => {
-  const rafIdRef = useRef<number>();
+  const rafRef = useRef<number>();
   const cbRef = useLatest(cb);
 
   const cancel = useCallback(() => {
-    if (rafIdRef.current) {
-      cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = undefined;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = undefined;
     }
   }, []);
 
@@ -23,7 +23,7 @@ export default (cb: Fn, delay: number): [Fn, Fn] => {
       if (now() - start >= delay) {
         cbRef.current();
       } else {
-        rafIdRef.current = requestAnimationFrame(() => tick(start));
+        rafRef.current = requestAnimationFrame(() => tick(start));
       }
     },
     [cbRef, delay]
