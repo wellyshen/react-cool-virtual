@@ -71,7 +71,7 @@ const useVirtual = <
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
   const directionDR = !horizontal ? "down" : "right";
   const directionUL = !horizontal ? "up" : "left";
-  let total = isNumber(totalItems) ? totalItems : (items as number);
+  let total: number = isNumber(totalItems) ? totalItems : (items as any);
   total = isNumber(total) ? total : (total as D[]).length;
 
   const getItemSize = useCallback(
