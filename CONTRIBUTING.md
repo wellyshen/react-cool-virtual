@@ -12,7 +12,7 @@ Please note we have a [code of conduct](CODE_OF_CONDUCT.md), please follow it in
 2. Run `yarn` to install dependencies.
 3. If you’ve fixed a bug or added code that should be tested.
 4. Ensure the test suite passes by running `yarn test`.
-5. Update related [documents](README.md) with details of changes to the interface.
+5. Update related [documents](docs) with details of changes to the interface.
 6. Update related [examples](examples) if needed.
 7. Make sure your code lints by running `yarn lint`.
 8. Run `yarn changeset` to [add a changeset](https://github.com/atlassian/changesets/blob/master/docs/adding-a-changeset.md).
