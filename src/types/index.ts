@@ -56,7 +56,7 @@ export interface ScrollToItemOptions {
   index: number;
   align?: Align;
   smooth?: boolean;
-  autoPilot?: boolean;
+  autoCorrect?: boolean;
 }
 
 export interface ScrollToItem {

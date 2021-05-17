@@ -275,7 +275,7 @@ const useVirtual = <
         index,
         align = Align.auto,
         smooth,
-        autoPilot,
+        autoCorrect,
       }: ScrollToItemOptions = isNumber(value) ? { index: value } : value;
 
       if (isUndefined(index)) return;
@@ -289,7 +289,7 @@ const useVirtual = <
       const { current: outerSize } = outerSizeRef;
       let offset = offsetRef.current;
 
-      if (autoPilot && offset <= start && offset + outerSize >= end && cb) {
+      if (autoCorrect && offset <= start && offset + outerSize >= end && cb) {
         cb();
         return;
       }
@@ -315,7 +315,7 @@ const useVirtual = <
       }
 
       scrollTo({ offset, smooth }, () => {
-        if (!autoPilot) {
+        if (!autoCorrect) {
           if (cb) cb();
         } else if (offset >= start || offset + outerSize <= end) {
           setTimeout(() => scrollToItem(value, cb), 50);

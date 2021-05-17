@@ -48,7 +48,7 @@ declare module "react-cool-virtual" {
     index: number;
     align?: "auto" | "start" | "center" | "end";
     smooth?: boolean;
-    autoPilot?: boolean;
+    autoCorrect?: boolean;
   }
 
   interface ScrollToItem {
