@@ -1,4 +1,5 @@
 export { default as createIndexes } from "./createIndexes";
+export { default as easeInOutCubic } from "./easeInOutCubic";
 export { default as findNearestBinarySearch } from "./findNearestBinarySearch";
 export { default as invariant } from "./invariant";
 export { default as isNumber } from "./isNumber";
