@@ -47,17 +47,11 @@ declare module "react-cool-virtual" {
     (options: ScrollToOptions, callback?: Callback): void;
   }
 
-  export enum Align {
-    auto = "auto",
-    start = "start",
-    center = "center",
-    end = "end",
-  }
-
   export interface ScrollToItemOptions {
     index: number;
-    align?: Align;
+    align?: "auto" | "start" | "center" | "end";
     smooth?: boolean;
+    autoPilot?: boolean;
   }
 
   interface ScrollToItem {
