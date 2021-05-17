@@ -22,7 +22,7 @@ export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(10);
   const { outerRef, innerRef, virtualItems, scrollTo, scrollToItem } =
     useVirtual<HTMLDivElement, HTMLDivElement>({
-      // totalItems: 20,
+      totalItems: 20,
       // items: itemCount,
       // items: mockData.length,
       // itemSize: 100,
@@ -56,7 +56,7 @@ export default (): JSX.Element => {
                     style={{ height: `${size}px` }}
                     ref={measureRef}
                   >
-                    {data ? data.text : "Loading"}
+                    {index}
                   </div>
                 )
               )
@@ -71,7 +71,7 @@ export default (): JSX.Element => {
         <button
           type="button"
           onClick={() =>
-            scrollToItem({ index: 500, smooth: true }, () =>
+            scrollToItem({ index: 10, smooth: true }, () =>
               console.log("LOG ===> Done!")
             )
           }
