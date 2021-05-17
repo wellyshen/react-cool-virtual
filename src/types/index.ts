@@ -20,9 +20,8 @@ export interface Item<D> {
 
 export type ItemSize = number | ((index: number) => number);
 
-export interface ScrollingEffect {
-  duration?: number;
-  easingFunction?: (time: number) => number;
+export interface ScrollEasingFunction {
+  (time: number): number;
 }
 
 export interface OnScroll {
@@ -69,7 +68,8 @@ export type Options<D> = Partial<{
   horizontal: boolean;
   overscanCount: number;
   useIsScrolling: boolean;
-  scrollingEffect: ScrollingEffect;
+  scrollDuration: number;
+  scrollEasingFunction: ScrollEasingFunction;
   onScroll: OnScroll;
 }>;
 

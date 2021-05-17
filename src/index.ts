@@ -15,7 +15,7 @@ import {
   OnScroll,
   Options,
   Return,
-  ScrollingEffect,
+  ScrollEasingFunction,
   ScrollTo,
   ScrollToOptions,
   ScrollToItem,
@@ -23,6 +23,7 @@ import {
 } from "./types";
 import {
   createIndexes,
+  easeInOutCubic,
   findNearestBinarySearch,
   invariant,
   isNumber,
@@ -35,10 +36,6 @@ import {
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
-const DEFAULT_EASING_DURATION = 500;
-const DEFAULT_EASING_FUNCTION = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-const ANIM_DEBOUNCE_INTERVAL = 200;
 
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
@@ -51,7 +48,8 @@ const useVirtual = <
   horizontal,
   overscanCount = 1,
   useIsScrolling,
-  scrollingEffect,
+  scrollDuration = 500,
+  scrollEasingFunction = easeInOutCubic,
   onScroll,
 }: Options<D>): Return<O, I, D> => {
   const [items, setItems] = useState<Item<D>[]>([]);
@@ -63,7 +61,7 @@ const useVirtual = <
   const measuresRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollRafIdRef = useRef<number>();
-  const scrollingEffectRef = useRef<ScrollingEffect>(scrollingEffect || {});
+  const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const sizeKey = !horizontal ? "height" : "width";
@@ -136,7 +134,7 @@ const useVirtual = <
   const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => updateItems(offsetRef.current, false),
-    ANIM_DEBOUNCE_INTERVAL
+    200
   );
 
   const [resetUserScroll, cancelResetUserScroll] = useAnimDebounce(
@@ -144,7 +142,7 @@ const useVirtual = <
     () => {
       userScrollRef.current = true;
     },
-    ANIM_DEBOUNCE_INTERVAL
+    200
   );
 
   const updateItems = useCallback(
@@ -243,26 +241,19 @@ const useVirtual = <
 
       userScrollRef.current = false;
 
-      if (
-        smooth === false ||
-        (isUndefined(smooth) && !Object.keys(scrollingEffectRef.current).length)
-      ) {
+      if (!smooth) {
         outerRef.current[scrollKey] = offset;
         if (cb) cb();
         return;
       }
 
       const start = now();
-      const {
-        duration = DEFAULT_EASING_DURATION,
-        easingFunction = DEFAULT_EASING_FUNCTION,
-      } = scrollingEffectRef.current;
 
       const scroll = () => {
-        const time = Math.min((now() - start) / duration, 1);
+        const time = Math.min((now() - start) / scrollDuration, 1);
 
         outerRef.current![scrollKey] =
-          easingFunction(time) * (offset - prevOffset) + prevOffset;
+          easingFnRef.current(time) * (offset - prevOffset) + prevOffset;
 
         if (time < 1) {
           scrollRafIdRef.current = requestAnimationFrame(scroll);
@@ -273,7 +264,7 @@ const useVirtual = <
 
       scrollRafIdRef.current = requestAnimationFrame(scroll);
     },
-    [scrollKey]
+    [easingFnRef, scrollDuration, scrollKey]
   );
 
   const scrollToItem = useCallback<ScrollToItem>(

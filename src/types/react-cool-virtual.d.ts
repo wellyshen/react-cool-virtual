@@ -18,9 +18,8 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
-  export interface ScrollingEffect {
-    duration?: number;
-    easingFunction?: EasingFunction;
+  export interface ScrollEasingFunction {
+    (time: number): number;
   }
 
   export interface OnScroll {
@@ -66,7 +65,8 @@ declare module "react-cool-virtual" {
     horizontal: boolean;
     overscanCount: number;
     useIsScrolling: boolean;
-    scrollingEffect: ScrollingEffect;
+    scrollDuration: number;
+    scrollEasingFunction: ScrollEasingFunction;
     onScroll: OnScroll;
   }>;
 
