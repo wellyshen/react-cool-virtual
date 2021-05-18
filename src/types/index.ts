@@ -19,8 +19,8 @@ export interface ScrollEasingFunction {
 
 export interface OnScroll {
   (options: {
-    overscanIndexes: number[];
-    itemIndexes: number[];
+    overscanIndices: number[];
+    itemIndices: number[];
     offset: number;
     direction: string;
     userScroll: boolean;

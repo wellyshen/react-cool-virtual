@@ -17,7 +17,7 @@ import {
   SetItemData,
 } from "./types";
 import {
-  createIndexes,
+  createIndices,
   easeInOutCubic,
   findNearestBinarySearch,
   invariant,
@@ -200,8 +200,8 @@ const useVirtual = <
       if (isScrolling) {
         if (onScrollRef.current)
           onScrollRef.current({
-            overscanIndexes: createIndexes(start, end),
-            itemIndexes: createIndexes(startIdx, endIdx),
+            overscanIndices: createIndices(start, end),
+            itemIndices: createIndices(startIdx, endIdx),
             offset,
             direction: offset > offsetRef.current ? directionDR : directionUL,
             userScroll: userScrollRef.current,
