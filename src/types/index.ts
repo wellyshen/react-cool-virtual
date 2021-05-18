@@ -9,8 +9,6 @@ export interface Measure {
 
 export type Data = Record<string, any>;
 
-export type Items<D> = number | D[];
-
 export type ItemSize = number | ((index: number) => number);
 
 export interface ScrollEasingFunction {
@@ -27,7 +25,7 @@ export interface OnScroll {
   }): void;
 }
 
-export interface VirtualItem<D> {
+export interface Item<D> {
   data?: D;
   readonly index: number;
   readonly size: number;
@@ -64,8 +62,8 @@ export interface ScrollToItem {
 }
 
 export type Options<D> = Partial<{
-  items: Items<D>;
-  totalItems: number;
+  itemData: D[];
+  itemCount: number;
   itemSize: ItemSize;
   horizontal: boolean;
   overscanCount: number;
@@ -78,7 +76,7 @@ export type Options<D> = Partial<{
 export interface Return<O, I, D> {
   outerRef: RefObject<O>;
   innerRef: RefObject<I>;
-  virtualItems: VirtualItem<D>[];
+  items: Item<D>[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
 }
