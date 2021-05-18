@@ -9,14 +9,16 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
+  export interface OnScrollOptions {
+    overscanIndexes: number[];
+    itemIndexes: number[];
+    offset: number;
+    direction: string;
+    userScroll: boolean;
+  }
+
   export interface OnScroll {
-    (options: {
-      overscanIndexes: number[];
-      itemIndexes: number[];
-      offset: number;
-      direction: string;
-      userScroll: boolean;
-    }): void;
+    (options: OnScrollOptions): void;
   }
 
   export interface MeasureRef {
