@@ -12,30 +12,28 @@ import { root, app, outer, inner, item, itemDark } from "./styles";
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
-    text: idx,
+    text: uuidv4(),
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(10000);
 
 export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(10);
-  const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
-    HTMLDivElement,
-    HTMLDivElement
-  >({
-    // itemData: [],
-    // itemCount: 0,
-    // itemSize: 100,
-    // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
-    // horizontal: true,
-    // overscanCount: 0,
-    // useIsScrolling: true,
-    // onScroll: (opts) => console.log("LOG ===> ", opts),
-    // scrollingEffect: {
-    //   easingFunction: (t) => t,
-    // },
-  });
+  const { outerRef, innerRef, items, scrollTo, scrollToItem, setItemData } =
+    useVirtual<HTMLDivElement, HTMLDivElement>({
+      itemData: mockData,
+      // itemCount: 10,
+      // itemSize: 100,
+      // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
+      // horizontal: true,
+      // overscanCount: 0,
+      // useIsScrolling: true,
+      // onScroll: (opts) => console.log("LOG ===> ", opts),
+      // scrollingEffect: {
+      //   easingFunction: (t) => t,
+      // },
+    });
 
   return (
     <>
@@ -57,7 +55,7 @@ export default (): JSX.Element => {
                     style={{ height: `${size}px` }}
                     ref={measureRef}
                   >
-                    {index}
+                    {data.text}
                   </div>
                 )
               )
@@ -66,13 +64,19 @@ export default (): JSX.Element => {
             )}
           </div>
         </div>
-        <button type="button" onClick={() => setItemCount(50)}>
-          Set Count
+        <button type="button" onClick={() => setItemCount(20)}>
+          Add Items
+        </button>
+        <button
+          type="button"
+          onClick={() => setItemData(getMockData(25), true)}
+        >
+          Set Items
         </button>
         <button
           type="button"
           onClick={() =>
-            scrollToItem({ index: 10, smooth: true }, () =>
+            scrollToItem({ index: 10000, align: "start", smooth: true }, () =>
               console.log("LOG ===> Done!")
             )
           }
