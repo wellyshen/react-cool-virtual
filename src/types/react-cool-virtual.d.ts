@@ -21,22 +21,26 @@ declare module "react-cool-virtual" {
     }): void;
   }
 
+  export interface MeasureRef {
+    (el: HTMLElement | null): void;
+  }
+
   export interface VirtualItem<D extends Data = Data> {
     data?: D;
     readonly index: number;
     readonly size: number;
     readonly outerSize: number;
     readonly isScrolling?: boolean;
-    measureRef: (el: HTMLElement | null) => void;
+    measureRef: MeasureRef;
+  }
+
+  export interface Callback {
+    (): void;
   }
 
   export interface ScrollToOptions {
     offset: number;
     smooth?: boolean;
-  }
-
-  export interface Callback {
-    (): void;
   }
 
   export interface ScrollTo {
