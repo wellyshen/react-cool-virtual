@@ -8,8 +8,6 @@ export interface Measure {
   size: number;
 }
 
-export type Data = Record<string, any>;
-
 // External
 export type ItemSize = number | ((index: number) => number);
 
@@ -27,8 +25,7 @@ export interface OnScroll {
   }): void;
 }
 
-export interface Item<D> {
-  data?: D;
+export interface Item {
   readonly index: number;
   readonly size: number;
   readonly outerSize: number;
@@ -63,27 +60,21 @@ export interface ScrollToItem {
   (index: number | ScrollToItemOptions, callback?: () => void): void;
 }
 
-export interface SetItemData<D> {
-  (data: D[] | ((prevData?: D[]) => D[]), resetScroll?: boolean): void;
+export interface Options {
+  itemCount: number;
+  itemSize?: ItemSize;
+  horizontal?: boolean;
+  overscanCount?: number;
+  useIsScrolling?: boolean;
+  scrollDuration?: number;
+  scrollEasingFunction?: ScrollEasingFunction;
+  onScroll?: OnScroll;
 }
 
-export type Options<D> = Partial<{
-  itemData: D[];
-  itemCount: number;
-  itemSize: ItemSize;
-  horizontal: boolean;
-  overscanCount: number;
-  useIsScrolling: boolean;
-  scrollDuration: number;
-  scrollEasingFunction: ScrollEasingFunction;
-  onScroll: OnScroll;
-}>;
-
-export interface Return<O, I, D> {
+export interface Return<O, I> {
   outerRef: RefObject<O>;
   innerRef: RefObject<I>;
-  items: Item<D>[];
+  items: Item[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
-  setItemData: SetItemData<D>;
 }

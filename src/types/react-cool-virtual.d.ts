@@ -1,8 +1,6 @@
 declare module "react-cool-virtual" {
   import { RefObject } from "react";
 
-  type Data = Record<string, any>;
-
   export type ItemSize = number | ((index: number) => number);
 
   export interface ScrollEasingFunction {
@@ -25,8 +23,7 @@ declare module "react-cool-virtual" {
     (el: HTMLElement | null): void;
   }
 
-  export interface Item<D extends Data = Data> {
-    data?: D;
+  export interface Item {
     readonly index: number;
     readonly size: number;
     readonly outerSize: number;
@@ -60,42 +57,30 @@ declare module "react-cool-virtual" {
     (options: ScrollToItemOptions, callback?: Callback): void;
   }
 
-  export interface PrevDataFn<D extends Data = Data> {
-    (prevData?: D[]): D[];
-  }
-
-  export interface SetItemData<D extends Data = Data> {
-    (data: D[] | PrevDataFn<D>, resetScroll?: boolean): void;
-  }
-
-  export type Options<D extends Data = Data> = Partial<{
-    itemData: D[];
+  export interface Options {
     itemCount: number;
-    itemSize: ItemSize;
-    horizontal: boolean;
-    overscanCount: number;
-    useIsScrolling: boolean;
-    scrollDuration: number;
-    scrollEasingFunction: ScrollEasingFunction;
-    onScroll: OnScroll;
-  }>;
+    itemSize?: ItemSize;
+    horizontal?: boolean;
+    overscanCount?: number;
+    useIsScrolling?: boolean;
+    scrollDuration?: number;
+    scrollEasingFunction?: ScrollEasingFunction;
+    onScroll?: OnScroll;
+  }
 
   export interface Return<
     O extends HTMLElement = HTMLElement,
-    I extends HTMLElement = HTMLElement,
-    D extends Data = Data
+    I extends HTMLElement = HTMLElement
   > {
     outerRef: RefObject<O>;
     innerRef: RefObject<I>;
-    items: Item<D>[];
+    items: Item[];
     scrollTo: ScrollTo;
     scrollToItem: ScrollToItem;
-    setItemData: SetItemData<D>;
   }
 
   export default function useVirtual<
     O extends HTMLElement = HTMLElement,
-    I extends HTMLElement = HTMLElement,
-    D extends Data = Data
-  >(config: Options<D>): Return<O, I, D>;
+    I extends HTMLElement = HTMLElement
+  >(config: Options): Return<O, I>;
 }

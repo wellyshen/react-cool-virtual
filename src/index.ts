@@ -2,7 +2,6 @@ import { useCallback, useRef, useState, useLayoutEffect } from "react";
 
 import {
   Align,
-  Data,
   Item,
   ItemSize,
   Measure,
@@ -14,7 +13,6 @@ import {
   ScrollToOptions,
   ScrollToItem,
   ScrollToItemOptions,
-  SetItemData,
 } from "./types";
 import {
   createIndices,
@@ -33,10 +31,8 @@ const DEFAULT_ITEM_SIZE = 50;
 
 const useVirtual = <
   O extends HTMLElement = HTMLElement,
-  I extends HTMLElement = HTMLElement,
-  D extends Data = Data
+  I extends HTMLElement = HTMLElement
 >({
-  itemData,
   itemCount,
   itemSize = DEFAULT_ITEM_SIZE,
   horizontal,
@@ -45,13 +41,11 @@ const useVirtual = <
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
   onScroll,
-}: Options<D>): Return<O, I, D> => {
-  const [items, setItems] = useState<Item<D>[]>([]);
+}: Options): Return<O, I> => {
+  const [items, setItems] = useState<Item[]>([]);
   const offsetRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const dataRef = useRef<D[] | undefined>(itemData);
-  const totalRef = useRef<number>();
   const outerSizeRef = useRef(0);
   const measuresRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
@@ -66,11 +60,6 @@ const useVirtual = <
   const directionDR = !horizontal ? "down" : "right";
   const directionUL = !horizontal ? "up" : "left";
 
-  const getTotal = useCallback(
-    () => (isNumber(itemCount) ? itemCount : dataRef.current?.length),
-    [itemCount]
-  );
-
   const getItemSize = useCallback(
     (idx: number) => {
       if (measuresRef.current[idx]) return measuresRef.current[idx].size;
@@ -84,11 +73,9 @@ const useVirtual = <
   );
 
   const getMeasures = useCallback(() => {
-    if (!totalRef.current) return [];
-
     const measures: Measure[] = [];
 
-    for (let i = 0; i < totalRef.current; i += 1) {
+    for (let i = 0; i < itemCount; i += 1) {
       const start = i ? measures[i - 1].end : 0;
       const size = getItemSize(i);
 
@@ -96,7 +83,7 @@ const useVirtual = <
     }
 
     return measures;
-  }, [getItemSize]);
+  }, [getItemSize, itemCount]);
 
   const getCalcData = useCallback(
     (offset: number) => {
@@ -146,7 +133,7 @@ const useVirtual = <
 
   const updateItems = useCallback(
     (offset: number, isScrolling = false) => {
-      if (!totalRef.current) {
+      if (!itemCount) {
         setItems([]);
         return;
       }
@@ -157,12 +144,11 @@ const useVirtual = <
       innerRef.current!.style[marginKey] = `${margin}px`;
       innerRef.current!.style[sizeKey] = `${innerSize}px`;
 
-      const nextItems: Item<D>[] = [];
+      const nextItems: Item[] = [];
       let shouldRecalc = false;
 
       for (let i = start; i <= end; i += 1)
         nextItems[i] = {
-          data: Array.isArray(dataRef.current) ? dataRef.current[i] : undefined,
           index: i,
           size: measuresRef.current[i].size,
           outerSize: outerSizeRef.current,
@@ -218,6 +204,7 @@ const useVirtual = <
       directionUL,
       getCalcData,
       getMeasures,
+      itemCount,
       marginKey,
       observerSizeKey,
       onScrollRef,
@@ -267,8 +254,6 @@ const useVirtual = <
 
   const scrollToItem = useCallback<ScrollToItem>(
     (value, cb) => {
-      if (!totalRef.current) return;
-
       const {
         index,
         align = Align.auto,
@@ -279,7 +264,7 @@ const useVirtual = <
       if (!isNumber(index)) return;
 
       const measure =
-        measuresRef.current[Math.max(0, Math.min(index, totalRef.current - 1))];
+        measuresRef.current[Math.max(0, Math.min(index, itemCount - 1))];
 
       if (!measure) return;
 
@@ -320,32 +305,19 @@ const useVirtual = <
         }
       });
     },
-    [scrollTo]
-  );
-
-  const setItemData = useCallback<SetItemData<D>>(
-    (data, resetScroll) => {
-      dataRef.current =
-        typeof data === "function" ? data(dataRef.current) : data;
-      totalRef.current = getTotal();
-      measuresRef.current = getMeasures();
-
-      updateItems(offsetRef.current);
-      if (resetScroll) scrollTo(0);
-    },
-    [getMeasures, getTotal, scrollTo, updateItems]
+    [itemCount, scrollTo]
   );
 
   useResizeEffect<O>(
     outerRef,
     (rect) => {
-      outerSizeRef.current = rect[sizeKey];
-      totalRef.current = getTotal();
-      measuresRef.current = getMeasures();
+      invariant(!isNumber(itemCount), "Item count error");
 
+      outerSizeRef.current = rect[sizeKey];
+      measuresRef.current = getMeasures();
       updateItems(offsetRef.current);
     },
-    [itemData?.length, itemCount, getMeasures, getTotal, updateItems]
+    [itemCount, getMeasures, updateItems]
   );
 
   useLayoutEffect(() => {
@@ -371,7 +343,7 @@ const useVirtual = <
     };
   }, [cancelResetIsScrolling, cancelResetUserScroll, scrollKey, updateItems]);
 
-  return { outerRef, innerRef, items, scrollTo, scrollToItem, setItemData };
+  return { outerRef, innerRef, items, scrollTo, scrollToItem };
 };
 
 export default useVirtual;
