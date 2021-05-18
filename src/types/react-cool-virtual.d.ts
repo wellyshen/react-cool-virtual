@@ -39,7 +39,7 @@ declare module "react-cool-virtual" {
     (): void;
   }
 
-  interface ScrollTo {
+  export interface ScrollTo {
     (offset: number, callback?: Callback): void;
     (options: ScrollToOptions, callback?: Callback): void;
   }
@@ -51,7 +51,7 @@ declare module "react-cool-virtual" {
     autoCorrect?: boolean;
   }
 
-  interface ScrollToItem {
+  export interface ScrollToItem {
     (index: number, callback?: Callback): void;
     (options: ScrollToItemOptions, callback?: Callback): void;
   }
