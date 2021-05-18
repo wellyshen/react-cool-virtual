@@ -60,6 +60,14 @@ declare module "react-cool-virtual" {
     (options: ScrollToItemOptions, callback?: Callback): void;
   }
 
+  export interface PrevDataFn<D extends Data = Data> {
+    (prevData?: D[]): D[];
+  }
+
+  export interface SetItemData<D extends Data = Data> {
+    (data: D[] | PrevDataFn<D>, resetScroll?: boolean): void;
+  }
+
   export type Options<D extends Data = Data> = Partial<{
     itemData: D[];
     itemCount: number;
@@ -82,6 +90,7 @@ declare module "react-cool-virtual" {
     items: Item<D>[];
     scrollTo: ScrollTo;
     scrollToItem: ScrollToItem;
+    setItemData: SetItemData<D>;
   }
 
   export default function useVirtual<

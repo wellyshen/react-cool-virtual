@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { DependencyList, RefObject } from "react";
 
 import useIsoLayoutEffect from "./useIsoLayoutEffect";
 import useLatest from "./useLatest";
@@ -10,7 +10,7 @@ interface CB {
 export default <T extends HTMLElement>(
   ref: RefObject<T>,
   cb: CB,
-  dep?: number
+  deps: DependencyList
 ): void => {
   const cbRef = useLatest(cb);
 
@@ -29,5 +29,5 @@ export default <T extends HTMLElement>(
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [cbRef, ref, dep]);
+  }, [cbRef, ref, ...deps]);
 };

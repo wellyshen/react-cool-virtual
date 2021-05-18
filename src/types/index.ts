@@ -1,5 +1,6 @@
 import { RefObject } from "react";
 
+// Internal
 export interface Measure {
   idx: number;
   start: number;
@@ -9,6 +10,7 @@ export interface Measure {
 
 export type Data = Record<string, any>;
 
+// External
 export type ItemSize = number | ((index: number) => number);
 
 export interface ScrollEasingFunction {
@@ -61,6 +63,10 @@ export interface ScrollToItem {
   (index: number | ScrollToItemOptions, callback?: () => void): void;
 }
 
+export interface SetItemData<D> {
+  (data: D[] | ((prevData?: D[]) => D[]), resetScroll?: boolean): void;
+}
+
 export type Options<D> = Partial<{
   itemData: D[];
   itemCount: number;
@@ -79,4 +85,5 @@ export interface Return<O, I, D> {
   items: Item<D>[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
+  setItemData: SetItemData<D>;
 }
