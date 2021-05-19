@@ -28,15 +28,16 @@ export default (): JSX.Element => {
     itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
-    overscanCount: 0,
+    // overscanCount: 0,
     // useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
     // scrollingEffect: {
     //   easingFunction: (t) => t,
     // },
+    loadMoreThreshold: 10,
+    // isItemLoaded: (idx) => [true, true][idx],
+    // loadMore: (opts) => console.log("LOG ===> ", opts),
   });
-
-  console.log("LOG ===> Update");
 
   return (
     <>
