@@ -3,7 +3,9 @@ import { useCallback, useRef, useState, useLayoutEffect } from "react";
 import {
   Align,
   Item,
+  IsItemLoaded,
   ItemSize,
+  LoadMore,
   Measure,
   OnScroll,
   Options,
@@ -41,9 +43,14 @@ const useVirtual = <
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
   onScroll,
+  loadMoreThreshold = 15,
+  isItemLoaded,
+  loadMore,
 }: Options): Return<O, I> => {
   const [items, setItems] = useState<Item[]>([]);
+  const isInitRef = useRef(true);
   const offsetRef = useRef(0);
+  const offsetIdxRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerSizeRef = useRef(0);
@@ -53,6 +60,8 @@ const useVirtual = <
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
+  const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
+  const loadMoreRef = useLatest<LoadMore | undefined>(loadMore);
   const sizeKey = !horizontal ? "height" : "width";
   const observerSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
@@ -182,8 +191,10 @@ const useVirtual = <
         });
 
       setItems((prevItems) =>
-        isShallowEqual(prevItems, nextItems) ? prevItems : nextItems
+        !isShallowEqual(prevItems, nextItems) ? nextItems : prevItems
       );
+
+      const direction = offset > offsetRef.current ? directionDR : directionUL;
 
       if (isScrolling) {
         if (onScrollRef.current)
@@ -193,12 +204,35 @@ const useVirtual = <
             itemStartIndex: startIdx,
             itemStopIndex: endIdx,
             offset,
-            direction: offset > offsetRef.current ? directionDR : directionUL,
+            direction,
             userScroll: userScrollRef.current,
           });
 
         if (useIsScrolling) resetIsScrolling();
         if (!userScrollRef.current) resetUserScroll();
+      }
+
+      if (isInitRef.current || isScrolling) {
+        const threshold = loadMoreThreshold - 1;
+        const idx =
+          direction === "down" || direction === "right" ? endIdx : startIdx;
+        const loadIndex = Math.floor(endIdx / threshold);
+
+        if (
+          loadMoreRef.current &&
+          (!isItemLoadedRef.current || !isItemLoadedRef.current(loadIndex)) &&
+          idx !== offsetIdxRef.current &&
+          (isInitRef.current || idx % threshold === 0)
+        )
+          loadMoreRef.current({
+            itemStartIndex: startIdx,
+            itemStopIndex: endIdx,
+            loadIndex,
+            offset,
+          });
+
+        isInitRef.current = false;
+        offsetIdxRef.current = idx;
       }
 
       offsetRef.current = offset;
@@ -209,6 +243,8 @@ const useVirtual = <
       getCalcData,
       getMeasures,
       itemCount,
+      loadMoreRef,
+      loadMoreThreshold,
       marginKey,
       observerSizeKey,
       onScrollRef,

@@ -21,6 +21,21 @@ declare module "react-cool-virtual" {
     (options: OnScrollOptions): void;
   }
 
+  export interface LoadMoreOptions {
+    itemStartIndex: number;
+    itemStopIndex: number;
+    loadIndex: number;
+    offset: number;
+  }
+
+  export interface IsItemLoaded {
+    (index: number): boolean;
+  }
+
+  export interface LoadMore {
+    (options: LoadMoreOptions): void;
+  }
+
   export interface MeasureRef {
     (el: HTMLElement | null): void;
   }
@@ -68,6 +83,9 @@ declare module "react-cool-virtual" {
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
     onScroll?: OnScroll;
+    loadMoreThreshold?: number;
+    isItemLoaded?: IsItemLoaded;
+    loadMore?: LoadMore;
   }
 
   export interface Return<

@@ -27,6 +27,19 @@ export interface OnScroll {
   }): void;
 }
 
+export interface IsItemLoaded {
+  (index: number): boolean;
+}
+
+export interface LoadMore {
+  (options: {
+    itemStartIndex: number;
+    itemStopIndex: number;
+    loadIndex: number;
+    offset: number;
+  }): void;
+}
+
 export interface Item {
   readonly index: number;
   readonly size: number;
@@ -71,6 +84,9 @@ export interface Options {
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
   onScroll?: OnScroll;
+  loadMoreThreshold?: number;
+  isItemLoaded?: IsItemLoaded;
+  loadMore?: LoadMore;
 }
 
 export interface Return<O, I> {
