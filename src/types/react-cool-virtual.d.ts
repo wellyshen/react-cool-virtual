@@ -12,7 +12,7 @@ declare module "react-cool-virtual" {
     overscanStopIndex: number;
     itemStartIndex: number;
     itemStopIndex: number;
-    offset: number;
+    scrollOffset: number;
     direction: string;
     userScroll: boolean;
   }

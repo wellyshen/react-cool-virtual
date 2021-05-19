@@ -21,7 +21,7 @@ export interface OnScroll {
     overscanStopIndex: number;
     itemStartIndex: number;
     itemStopIndex: number;
-    offset: number;
+    scrollOffset: number;
     direction: string;
     userScroll: boolean;
   }): void;

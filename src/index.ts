@@ -192,7 +192,7 @@ const useVirtual = <
             overscanStopIndex: end,
             itemStartIndex: startIdx,
             itemStopIndex: endIdx,
-            offset,
+            scrollOffset: offset,
             direction: offset > offsetRef.current ? directionDR : directionUL,
             userScroll: userScrollRef.current,
           });
