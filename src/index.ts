@@ -20,6 +20,7 @@ import {
   findNearestBinarySearch,
   invariant,
   isNumber,
+  isShallowEqual,
   now,
   useAnimDebounce,
   // useIsoLayoutEffect,
@@ -79,7 +80,7 @@ const useVirtual = <
       const start = i ? measures[i - 1].end : 0;
       const size = getItemSize(i);
 
-      measures[i] = { idx: i, start, end: start + size, size };
+      measures.push({ idx: i, start, end: start + size, size });
     }
 
     return measures;
@@ -148,7 +149,7 @@ const useVirtual = <
       let shouldRecalc = false;
 
       for (let i = start; i <= end; i += 1)
-        nextItems[i] = {
+        nextItems.push({
           index: i,
           size: measuresRef.current[i].size,
           outerSize: outerSizeRef.current,
@@ -179,9 +180,11 @@ const useVirtual = <
 
             observer.observe(el);
           },
-        };
+        });
 
-      setItems(nextItems);
+      setItems((prevItems) =>
+        isShallowEqual(prevItems, nextItems) ? prevItems : nextItems
+      );
 
       if (isScrolling) {
         if (onScrollRef.current)
