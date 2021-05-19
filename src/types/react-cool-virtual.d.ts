@@ -7,7 +7,7 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
-  export interface OnScrollOptions {
+  export type OnScrollOptions = Readonly<{
     overscanStartIndex: number;
     overscanStopIndex: number;
     itemStartIndex: number;
@@ -15,18 +15,18 @@ declare module "react-cool-virtual" {
     scrollOffset: number;
     scrollForward: boolean;
     userScroll: boolean;
-  }
+  }>;
 
   export interface OnScroll {
     (options: OnScrollOptions): void;
   }
 
-  export interface LoadMoreOptions {
+  export type LoadMoreOptions = Readonly<{
     itemStartIndex: number;
     itemStopIndex: number;
     loadIndex: number;
     scrollOffset: number;
-  }
+  }>;
 
   export interface IsItemLoaded {
     (index: number): boolean;
