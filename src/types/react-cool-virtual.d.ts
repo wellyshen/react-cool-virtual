@@ -13,7 +13,7 @@ declare module "react-cool-virtual" {
     itemStartIndex: number;
     itemStopIndex: number;
     scrollOffset: number;
-    direction: string;
+    scrollForward: boolean;
     userScroll: boolean;
   }
 

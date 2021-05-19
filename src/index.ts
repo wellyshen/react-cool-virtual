@@ -57,8 +57,6 @@ const useVirtual = <
   const observerSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
-  const directionDR = !horizontal ? "down" : "right";
-  const directionUL = !horizontal ? "up" : "left";
 
   const getItemSize = useCallback(
     (idx: number) => {
@@ -193,7 +191,7 @@ const useVirtual = <
             itemStartIndex: startIdx,
             itemStopIndex: endIdx,
             scrollOffset: offset,
-            direction: offset > offsetRef.current ? directionDR : directionUL,
+            scrollForward: offset > offsetRef.current,
             userScroll: userScrollRef.current,
           });
 
@@ -204,8 +202,6 @@ const useVirtual = <
       offsetRef.current = offset;
     },
     [
-      directionDR,
-      directionUL,
       getCalcData,
       getMeasures,
       itemCount,

@@ -22,7 +22,7 @@ export interface OnScroll {
     itemStartIndex: number;
     itemStopIndex: number;
     scrollOffset: number;
-    direction: string;
+    scrollForward: boolean;
     userScroll: boolean;
   }): void;
 }
