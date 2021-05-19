@@ -12,11 +12,11 @@ import { root, app, outer, inner, item, itemDark } from "./styles";
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
-    text: uuidv4(),
+    text: idx,
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(10000);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(10);
@@ -24,18 +24,19 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount: 0,
-    // itemCount: mockData.length,
-    // itemSize: 100,
+    itemCount: mockData.length,
+    itemSize: 100,
     // itemSize: (idx: number) => [35, 70, 150, 300, 220, 500, 430, 100][idx],
     // horizontal: true,
-    // overscanCount: 0,
+    overscanCount: 0,
     // useIsScrolling: true,
     // onScroll: (opts) => console.log("LOG ===> ", opts),
     // scrollingEffect: {
     //   easingFunction: (t) => t,
     // },
   });
+
+  console.log("LOG ===> Update");
 
   return (
     <>
