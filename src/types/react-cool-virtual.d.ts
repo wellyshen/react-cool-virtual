@@ -12,8 +12,8 @@ declare module "react-cool-virtual" {
     overscanStopIndex: number;
     itemStartIndex: number;
     itemStopIndex: number;
-    offset: number;
-    direction: string;
+    scrollOffset: number;
+    scrollForward: boolean;
     userScroll: boolean;
   }
 
@@ -25,7 +25,7 @@ declare module "react-cool-virtual" {
     itemStartIndex: number;
     itemStopIndex: number;
     loadIndex: number;
-    offset: number;
+    scrollOffset: number;
   }
 
   export interface IsItemLoaded {

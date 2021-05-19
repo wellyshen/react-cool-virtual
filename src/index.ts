@@ -66,8 +66,6 @@ const useVirtual = <
   const observerSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
-  const directionDR = !horizontal ? "down" : "right";
-  const directionUL = !horizontal ? "up" : "left";
 
   const getItemSize = useCallback(
     (idx: number) => {
@@ -194,7 +192,7 @@ const useVirtual = <
         !isShallowEqual(prevItems, nextItems) ? nextItems : prevItems
       );
 
-      const direction = offset > offsetRef.current ? directionDR : directionUL;
+      const scrollForward = offset > offsetRef.current;
 
       if (isScrolling) {
         if (onScrollRef.current)
@@ -203,8 +201,8 @@ const useVirtual = <
             overscanStopIndex: end,
             itemStartIndex: startIdx,
             itemStopIndex: endIdx,
-            offset,
-            direction,
+            scrollOffset: offset,
+            scrollForward,
             userScroll: userScrollRef.current,
           });
 
@@ -214,8 +212,7 @@ const useVirtual = <
 
       if (isInitRef.current || isScrolling) {
         const threshold = loadMoreThreshold - 1;
-        const idx =
-          direction === "down" || direction === "right" ? endIdx : startIdx;
+        const idx = scrollForward ? endIdx : startIdx;
         const loadIndex = Math.floor(endIdx / threshold);
 
         if (
@@ -228,7 +225,7 @@ const useVirtual = <
             itemStartIndex: startIdx,
             itemStopIndex: endIdx,
             loadIndex,
-            offset,
+            scrollOffset: offset,
           });
 
         isInitRef.current = false;
@@ -238,8 +235,6 @@ const useVirtual = <
       offsetRef.current = offset;
     },
     [
-      directionDR,
-      directionUL,
       getCalcData,
       getMeasures,
       itemCount,
