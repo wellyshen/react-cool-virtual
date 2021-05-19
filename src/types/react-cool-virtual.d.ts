@@ -8,8 +8,10 @@ declare module "react-cool-virtual" {
   }
 
   export interface OnScrollOptions {
-    overscanIndices: number[];
-    itemIndices: number[];
+    overscanStartIndex: number;
+    overscanStopIndex: number;
+    itemStartIndex: number;
+    itemStopIndex: number;
     offset: number;
     direction: string;
     userScroll: boolean;
