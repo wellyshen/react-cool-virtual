@@ -17,7 +17,7 @@ export interface ScrollEasingFunction {
 
 export interface OnScroll {
   (
-    options: Readonly<{
+    event: Readonly<{
       overscanStartIndex: number;
       overscanStopIndex: number;
       itemStartIndex: number;
@@ -35,7 +35,7 @@ export interface IsItemLoaded {
 
 export interface LoadMore {
   (
-    options: Readonly<{
+    event: Readonly<{
       itemStartIndex: number;
       itemStopIndex: number;
       loadIndex: number;
