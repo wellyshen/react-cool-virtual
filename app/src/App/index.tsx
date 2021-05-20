@@ -30,6 +30,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
+    keyGenerator: uuidv4,
     isItemLoaded: (idx) => itemLoadedArr[idx],
     loadMore: async ({ batchIndex }) => {
       console.log("LOG ===> Load More...");
@@ -58,14 +59,14 @@ export default (): JSX.Element => {
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
             {items.length ? (
-              items.map(({ index, size, measureRef }: any) => (
+              items.map(({ key, index, size, measureRef }: any) => (
                 <div
-                  key={index}
+                  key={key}
                   css={[item, index % 2 && itemDark]}
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {mockData[index] ? mockData[index].text : "Loading..."}
+                  {mockData[index] ? key : "Loading..."}
                 </div>
               ))
             ) : (
