@@ -301,7 +301,7 @@ const useVirtual = <
         if (!autoCorrect) {
           if (cb) cb();
         } else if (offset >= start || offset + outerSize <= end) {
-          setTimeout(() => scrollToItem(value, cb), 50);
+          requestAnimationFrame(() => scrollToItem(value, cb));
         }
       });
     },
