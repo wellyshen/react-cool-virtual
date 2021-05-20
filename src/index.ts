@@ -65,7 +65,7 @@ const useVirtual = <
   const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
   const loadMoreRef = useLatest<LoadMore | undefined>(loadMore);
   const sizeKey = !horizontal ? "height" : "width";
-  const observerSizeKey = !horizontal ? "blockSize" : "inlineSize";
+  const itemSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
 
@@ -188,7 +188,7 @@ const useVirtual = <
             // eslint-disable-next-line compat/compat
             let observer: ResizeObserver | undefined = new ResizeObserver(
               ([{ borderBoxSize }]) => {
-                const { [observerSizeKey]: size } = borderBoxSize[0];
+                const { [itemSizeKey]: size } = borderBoxSize[0];
 
                 if (size !== measuresRef.current[i].size) {
                   measuresRef.current[i].size = size;
@@ -260,7 +260,7 @@ const useVirtual = <
       loadMoreRef,
       loadMoreThreshold,
       marginKey,
-      observerSizeKey,
+      itemSizeKey,
       onScrollRef,
       resetIsScrolling,
       resetUserScroll,
