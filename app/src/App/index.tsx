@@ -30,10 +30,12 @@ export default (): JSX.Element => {
   >({
     itemCount: mockData.length,
     ssrItemCount: 10,
-    itemSize: 50,
+    itemSize: 100,
     // itemSize: (_, width) => (width > 600 ? 100 : 50),
     keyExtractor: () => uuidv4(),
   });
+
+  console.log("LOG ===> ", items);
 
   return (
     <>

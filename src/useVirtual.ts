@@ -60,7 +60,7 @@ const useVirtual = <
   const userScrollRef = useRef(true);
   const scrollRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
-  const keyGeneratorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
+  const keyExtractorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
@@ -76,7 +76,7 @@ const useVirtual = <
         return measuresRef.current[idx].size;
 
       let { current: size } = itemSizeRef;
-      size = isNumber(size) ? size : size(idx, outerRectRef.current.width!);
+      size = isNumber(size) ? size : size(idx, outerRectRef.current.width);
 
       return size ?? DEFAULT_ITEM_SIZE;
     },
@@ -92,14 +92,14 @@ const useVirtual = <
         const size = getItemSize(i, skipCache);
         const measure: Measure = { idx: i, start, end: start + size, size };
 
-        if (keyGeneratorRef.current) measure.key = keyGeneratorRef.current(i);
+        if (keyExtractorRef.current) measure.key = keyExtractorRef.current(i);
 
         measures.push(measure);
       }
 
       return measures;
     },
-    [getItemSize, itemCount, keyGeneratorRef]
+    [getItemSize, itemCount, keyExtractorRef]
   );
 
   const getCalcData = useCallback(
@@ -409,7 +409,7 @@ const useVirtual = <
   const isBrowser = typeof window !== "undefined";
   const ssrItems = [];
 
-  if (isBrowser && ssrItemCount !== undefined) {
+  if (!isBrowser && ssrItemCount !== undefined) {
     const [idx, len] = isNumber(ssrItemCount)
       ? [0, ssrItemCount - 1]
       : ssrItemCount;
@@ -417,13 +417,14 @@ const useVirtual = <
     for (let i = idx; i <= len; i += 1) {
       const item: Item = {
         index: i,
-        size: DEFAULT_ITEM_SIZE,
-        width: 0,
+        size: isNumber(itemSize)
+          ? itemSize
+          : itemSize(idx, outerRectRef.current.width),
+        width: outerRectRef.current.width,
         measureRef: () => null,
       };
 
-      if (keyGeneratorRef.current)
-        (item as any).key = keyGeneratorRef.current(i);
+      if (keyExtractor) (item as any).key = keyExtractor(i);
 
       ssrItems.push(item);
     }
