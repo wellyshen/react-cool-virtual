@@ -10,7 +10,7 @@ export interface Measure {
 }
 
 // External
-export type ItemSize = number | ((index: number) => number);
+export type ItemSize = number | ((index: number, width: number) => number);
 
 export interface ScrollEasingFunction {
   (time: number): number;
@@ -49,7 +49,7 @@ export interface Item {
   readonly key?: string;
   readonly index: number;
   readonly size: number;
-  readonly outerSize: number;
+  readonly width: number;
   readonly isScrolling?: boolean;
   measureRef: (el: HTMLElement | null) => void;
 }

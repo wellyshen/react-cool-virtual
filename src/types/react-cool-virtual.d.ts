@@ -1,7 +1,11 @@
 declare module "react-cool-virtual" {
   import { RefObject } from "react";
 
-  export type ItemSize = number | ((index: number) => number);
+  export interface ItemSizeFunction {
+    (index: number, width: number): number;
+  }
+
+  export type ItemSize = number | ItemSizeFunction;
 
   export interface ScrollEasingFunction {
     (time: number): number;
@@ -48,7 +52,7 @@ declare module "react-cool-virtual" {
     readonly key?: string;
     readonly index: number;
     readonly size: number;
-    readonly outerSize: number;
+    readonly width: number;
     readonly isScrolling?: boolean;
     measureRef: MeasureRef;
   }

@@ -54,7 +54,7 @@ const useVirtual = <
   const offsetRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const outerSizeRef = useRef(0);
+  const outerRectRef = useRef({ width: 0, height: 0 });
   const measuresRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollRafRef = useRef<number>();
@@ -70,32 +70,36 @@ const useVirtual = <
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
 
   const getItemSize = useCallback(
-    (idx: number) => {
-      if (measuresRef.current[idx]) return measuresRef.current[idx].size;
+    (idx: number, skipCache: boolean) => {
+      if (!skipCache && measuresRef.current[idx])
+        return measuresRef.current[idx].size;
 
       let { current: size } = itemSizeRef;
-      size = isNumber(size) ? size : size(idx);
+      size = isNumber(size) ? size : size(idx, outerRectRef.current.width!);
 
       return size ?? DEFAULT_ITEM_SIZE;
     },
     [itemSizeRef]
   );
 
-  const getMeasures = useCallback(() => {
-    const measures: Measure[] = [];
+  const getMeasures = useCallback(
+    (skipCache = false) => {
+      const measures: Measure[] = [];
 
-    for (let i = 0; i < itemCount; i += 1) {
-      const start = i ? measures[i - 1].end : 0;
-      const size = getItemSize(i);
-      const measure: Measure = { idx: i, start, end: start + size, size };
+      for (let i = 0; i < itemCount; i += 1) {
+        const start = i ? measures[i - 1].end : 0;
+        const size = getItemSize(i, skipCache);
+        const measure: Measure = { idx: i, start, end: start + size, size };
 
-      if (keyGeneratorRef.current) measure.key = keyGeneratorRef.current(i);
+        if (keyGeneratorRef.current) measure.key = keyGeneratorRef.current(i);
 
-      measures.push(measure);
-    }
+        measures.push(measure);
+      }
 
-    return measures;
-  }, [getItemSize, itemCount, keyGeneratorRef]);
+      return measures;
+    },
+    [getItemSize, itemCount, keyGeneratorRef]
+  );
 
   const getCalcData = useCallback(
     (offset: number) => {
@@ -110,7 +114,7 @@ const useVirtual = <
 
       while (
         endIdx < measures.length &&
-        measures[endIdx].start < offset + outerSizeRef.current
+        measures[endIdx].start < offset + outerRectRef.current[sizeKey]
       )
         endIdx += 1;
 
@@ -126,7 +130,7 @@ const useVirtual = <
         innerSize: measures[measures.length - 1].end - margin,
       };
     },
-    [overscanCount]
+    [overscanCount, sizeKey]
   );
 
   const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
@@ -175,7 +179,7 @@ const useVirtual = <
           key: measuresRef.current[i].key,
           index: i,
           size: measuresRef.current[i].size,
-          outerSize: outerSizeRef.current,
+          width: outerRectRef.current.width,
           isScrolling: useIsScrolling ? isScrolling : undefined,
           // eslint-disable-next-line no-loop-func
           measureRef: (el) => {
@@ -319,7 +323,7 @@ const useVirtual = <
       if (!measure) return;
 
       const { start, end, size } = measure;
-      const { current: outerSize } = outerSizeRef;
+      const { [sizeKey]: outerSize } = outerRectRef.current;
       let offset = offsetRef.current;
 
       if (autoCorrect && offset <= start && offset + outerSize >= end && cb) {
@@ -355,7 +359,7 @@ const useVirtual = <
         }
       });
     },
-    [itemCount, scrollTo]
+    [itemCount, scrollTo, sizeKey]
   );
 
   useResizeEffect<O>(
@@ -363,9 +367,17 @@ const useVirtual = <
     (rect) => {
       invariant(!isNumber(itemCount), "Item count error");
 
-      outerSizeRef.current = rect[sizeKey];
-      measuresRef.current = getMeasures();
+      const measures = getMeasures(true);
+      const ratio =
+        measuresRef.current.length &&
+        measures[measures.length - 1].end /
+          measuresRef.current[measuresRef.current.length - 1].end;
+
+      outerRectRef.current = rect;
+      measuresRef.current = measures;
       updateItems(offsetRef.current);
+
+      if (ratio) scrollTo(offsetRef.current * ratio);
     },
     [itemCount, getMeasures, updateItems]
   );
