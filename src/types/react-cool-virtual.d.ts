@@ -24,7 +24,7 @@ declare module "react-cool-virtual" {
   export type LoadMoreEvent = {
     startIndex: number;
     stopIndex: number;
-    loadIndex: number;
+    batchIndex: number;
     readonly scrollOffset: number;
   };
 

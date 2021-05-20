@@ -35,7 +35,7 @@ export interface LoadMore {
   (event: {
     startIndex: number;
     stopIndex: number;
-    loadIndex: number;
+    batchIndex: number;
     readonly scrollOffset: number;
   }): void;
 }

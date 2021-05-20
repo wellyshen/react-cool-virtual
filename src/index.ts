@@ -50,7 +50,6 @@ const useVirtual = <
   const [items, setItems] = useState<Item[]>([]);
   const shouldLoadMoreOnMountRef = useRef(true);
   const offsetRef = useRef(0);
-  const offsetIdxRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerSizeRef = useRef(0);
@@ -140,23 +139,21 @@ const useVirtual = <
 
   const updateItems = useCallback(
     (offset: number, isScrolling = false) => {
-      if (!itemCount) {
-        if (
-          (shouldLoadMoreOnMountRef.current || isScrolling) &&
-          loadMoreRef.current &&
-          !(isItemLoadedRef.current && isItemLoadedRef.current(0))
-        )
-          loadMoreRef.current({
-            startIndex: 0,
-            stopIndex: loadMoreThreshold - 1,
-            loadIndex: 0,
-            scrollOffset: 0,
-          });
+      if (
+        shouldLoadMoreOnMountRef.current &&
+        loadMoreRef.current &&
+        !(isItemLoadedRef.current && isItemLoadedRef.current(0))
+      )
+        loadMoreRef.current({
+          startIndex: 0,
+          stopIndex: loadMoreThreshold - 1,
+          batchIndex: 0,
+          scrollOffset: 0,
+        });
 
-        shouldLoadMoreOnMountRef.current = false;
+      shouldLoadMoreOnMountRef.current = false;
 
-        return;
-      }
+      if (!itemCount) return;
 
       const { startIdx, endIdx, start, end, margin, innerSize } =
         getCalcData(offset);
@@ -201,13 +198,31 @@ const useVirtual = <
           },
         });
 
-      setItems((prevItems) =>
-        isShallowEqual(prevItems, nextItems) ? prevItems : nextItems
-      );
+      let shouldUpdate = true;
+
+      setItems((prevItems) => {
+        shouldUpdate = !isShallowEqual(prevItems, nextItems);
+        return shouldUpdate ? nextItems : prevItems;
+      });
 
       const scrollForward = offset > offsetRef.current;
 
       if (isScrolling) {
+        const batchIndex = Math.floor(endIdx / loadMoreThreshold);
+        const startIndex = batchIndex * loadMoreThreshold;
+
+        if (
+          shouldUpdate &&
+          loadMoreRef.current &&
+          !(isItemLoadedRef.current && isItemLoadedRef.current(batchIndex))
+        )
+          loadMoreRef.current({
+            startIndex,
+            stopIndex: startIndex + loadMoreThreshold - 1,
+            batchIndex,
+            scrollOffset: offset,
+          });
+
         if (onScrollRef.current)
           onScrollRef.current({
             overscanStartIndex: start,
@@ -221,28 +236,6 @@ const useVirtual = <
 
         if (useIsScrolling) resetIsScrolling();
         if (!userScrollRef.current) resetUserScroll();
-      }
-
-      if (shouldLoadMoreOnMountRef.current || isScrolling) {
-        const idx = scrollForward ? endIdx : startIdx;
-        const loadIndex = Math.floor(endIdx / loadMoreThreshold);
-        const startIndex = loadIndex * loadMoreThreshold;
-
-        if (
-          loadMoreRef.current &&
-          idx !== offsetIdxRef.current &&
-          (shouldLoadMoreOnMountRef.current || idx % loadMoreThreshold === 0) &&
-          !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
-        )
-          loadMoreRef.current({
-            startIndex,
-            stopIndex: startIndex + loadMoreThreshold - 1,
-            loadIndex,
-            scrollOffset: offset,
-          });
-
-        shouldLoadMoreOnMountRef.current = false;
-        offsetIdxRef.current = idx;
       }
 
       offsetRef.current = offset;
