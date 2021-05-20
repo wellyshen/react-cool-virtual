@@ -20,31 +20,20 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-// const mockData: any[] = [];
 const itemLoadedArr: any = [];
 
 export default (): JSX.Element => {
-  const [mockData, setMockData] = useState<any[]>(getMockData(100));
+  const [mockData, setMockData] = useState<any[]>(getMockData(50));
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemCount: mockData.length,
+    itemSize: (_, width) => {
+      console.log("LOG ===> ", width);
+      return width > 600 ? 100 : 50;
+    },
     keyExtractor: () => uuidv4(),
-    isItemLoaded: (idx) => itemLoadedArr[idx],
-    /* loadMore: async ({ batchIndex }) => {
-      console.log("LOG ===> Load More...");
-
-      itemLoadedArr[batchIndex] = true;
-
-      try {
-        await sleep(2500);
-        setMockData((prevData) => [...prevData, ...getMockData(16)]);
-      } catch (err) {
-        itemLoadedArr[batchIndex] = false;
-      }
-    }, */
-    loadMore: (opts) => console.log("LOG ===> ", opts),
   });
 
   return (
