@@ -30,7 +30,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    keyGenerator: uuidv4,
+    keyExtractor: () => uuidv4(),
     isItemLoaded: (idx) => itemLoadedArr[idx],
     loadMore: async ({ batchIndex }) => {
       console.log("LOG ===> Load More...");
