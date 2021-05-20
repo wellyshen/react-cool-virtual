@@ -5,7 +5,7 @@ import {
   Item,
   IsItemLoaded,
   ItemSize,
-  KeyGenerator,
+  KeyExtractor,
   LoadMore,
   Measure,
   OnScroll,
@@ -43,7 +43,7 @@ const useVirtual = <
   useIsScrolling,
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
-  keyGenerator,
+  keyExtractor,
   onScroll,
   loadMoreThreshold = 15,
   isItemLoaded,
@@ -59,7 +59,7 @@ const useVirtual = <
   const userScrollRef = useRef(true);
   const scrollRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
-  const keyGeneratorRef = useLatest<KeyGenerator | undefined>(keyGenerator);
+  const keyGeneratorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
@@ -89,7 +89,7 @@ const useVirtual = <
       const size = getItemSize(i);
       const measure: Measure = { idx: i, start, end: start + size, size };
 
-      if (keyGeneratorRef.current) measure.key = keyGeneratorRef.current();
+      if (keyGeneratorRef.current) measure.key = keyGeneratorRef.current(i);
 
       measures.push(measure);
     }

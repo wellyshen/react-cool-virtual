@@ -16,8 +16,8 @@ export interface ScrollEasingFunction {
   (time: number): number;
 }
 
-export interface KeyGenerator {
-  (): string;
+export interface KeyExtractor {
+  (index: number): string;
 }
 
 export interface IsItemLoaded {
@@ -89,7 +89,7 @@ export interface Options {
   useIsScrolling?: boolean;
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
-  keyGenerator?: KeyGenerator;
+  keyExtractor?: KeyExtractor;
   loadMoreThreshold?: number;
   isItemLoaded?: IsItemLoaded;
   loadMore?: LoadMore;

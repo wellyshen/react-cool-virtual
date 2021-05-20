@@ -7,8 +7,8 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
-  export interface KeyGenerator {
-    (): string;
+  export interface KeyExtractor {
+    (index: number): string;
   }
 
   export interface IsItemLoaded {
@@ -87,7 +87,7 @@ declare module "react-cool-virtual" {
     useIsScrolling?: boolean;
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
-    keyGenerator?: KeyGenerator;
+    keyExtractor?: KeyExtractor;
     loadMoreThreshold?: number;
     isItemLoaded?: IsItemLoaded;
     loadMore?: LoadMore;
