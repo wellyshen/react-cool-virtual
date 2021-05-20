@@ -20,19 +20,20 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
+// @ts-expect-error
+console.log("LOG ===> ", window.ReactCoolForm.default);
+
 const itemLoadedArr: any = [];
 
 export default (): JSX.Element => {
-  const [mockData, setMockData] = useState<any[]>(getMockData(50));
+  const [mockData, setMockData] = useState<any[]>(getMockData(10));
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    itemSize: (_, width) => {
-      console.log("LOG ===> ", width);
-      return width > 600 ? 100 : 50;
-    },
+    itemSize: 50,
+    // itemSize: (_, width) => (width > 600 ? 100 : 50),
     keyExtractor: () => uuidv4(),
   });
 
@@ -52,8 +53,8 @@ export default (): JSX.Element => {
                 <div
                   key={index}
                   css={[item, index % 2 && itemDark]}
-                  style={{ height: `${size}px` }}
-                  // ref={measureRef}
+                  style={{ height: `${200}px` }}
+                  ref={measureRef}
                 >
                   {index}
                 </div>
