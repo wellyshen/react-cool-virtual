@@ -2,6 +2,7 @@ import { RefObject } from "react";
 
 // Internal
 export interface Measure {
+  key?: string;
   idx: number;
   start: number;
   end: number;
@@ -13,6 +14,10 @@ export type ItemSize = number | ((index: number) => number);
 
 export interface ScrollEasingFunction {
   (time: number): number;
+}
+
+export interface KeyGenerator {
+  (): string;
 }
 
 export interface IsItemLoaded {
@@ -41,6 +46,7 @@ export interface OnScroll {
 }
 
 export interface Item {
+  readonly key?: string;
   readonly index: number;
   readonly size: number;
   readonly outerSize: number;
@@ -83,6 +89,7 @@ export interface Options {
   useIsScrolling?: boolean;
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
+  keyGenerator?: KeyGenerator;
   loadMoreThreshold?: number;
   isItemLoaded?: IsItemLoaded;
   loadMore?: LoadMore;

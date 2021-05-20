@@ -5,6 +5,7 @@ import {
   Item,
   IsItemLoaded,
   ItemSize,
+  KeyGenerator,
   LoadMore,
   Measure,
   OnScroll,
@@ -42,6 +43,7 @@ const useVirtual = <
   useIsScrolling,
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
+  keyGenerator,
   onScroll,
   loadMoreThreshold = 15,
   isItemLoaded,
@@ -57,6 +59,7 @@ const useVirtual = <
   const userScrollRef = useRef(true);
   const scrollRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
+  const keyGeneratorRef = useLatest<KeyGenerator | undefined>(keyGenerator);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
@@ -84,12 +87,15 @@ const useVirtual = <
     for (let i = 0; i < itemCount; i += 1) {
       const start = i ? measures[i - 1].end : 0;
       const size = getItemSize(i);
+      const measure: Measure = { idx: i, start, end: start + size, size };
 
-      measures.push({ idx: i, start, end: start + size, size });
+      if (keyGeneratorRef.current) measure.key = keyGeneratorRef.current();
+
+      measures.push(measure);
     }
 
     return measures;
-  }, [getItemSize, itemCount]);
+  }, [getItemSize, itemCount, keyGeneratorRef]);
 
   const getCalcData = useCallback(
     (offset: number) => {
@@ -166,6 +172,7 @@ const useVirtual = <
 
       for (let i = start; i <= end; i += 1)
         nextItems.push({
+          key: measuresRef.current[i].key,
           index: i,
           size: measuresRef.current[i].size,
           outerSize: outerSizeRef.current,

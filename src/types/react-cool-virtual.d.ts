@@ -7,16 +7,20 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
+  export interface KeyGenerator {
+    (): string;
+  }
+
+  export interface IsItemLoaded {
+    (index: number): boolean;
+  }
+
   export type LoadMoreEvent = {
     startIndex: number;
     stopIndex: number;
     batchIndex: number;
     readonly scrollOffset: number;
   };
-
-  export interface IsItemLoaded {
-    (index: number): boolean;
-  }
 
   export interface LoadMore {
     (event: LoadMoreEvent): void;
@@ -41,6 +45,7 @@ declare module "react-cool-virtual" {
   }
 
   export interface Item {
+    readonly key?: string;
     readonly index: number;
     readonly size: number;
     readonly outerSize: number;
@@ -82,6 +87,7 @@ declare module "react-cool-virtual" {
     useIsScrolling?: boolean;
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
+    keyGenerator?: KeyGenerator;
     loadMoreThreshold?: number;
     isItemLoaded?: IsItemLoaded;
     loadMore?: LoadMore;
