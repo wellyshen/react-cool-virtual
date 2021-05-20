@@ -22,8 +22,8 @@ import {
   findNearestBinarySearch,
   invariant,
   isNumber,
-  isShallowEqual,
   now,
+  shouldUpdate,
   useAnimDebounce,
   // useIsoLayoutEffect,
   useLatest,
@@ -205,11 +205,13 @@ const useVirtual = <
           },
         });
 
-      let shouldUpdate = true;
+      let shouldUpdateItems;
 
       setItems((prevItems) => {
-        shouldUpdate = !isShallowEqual(prevItems, nextItems);
-        return shouldUpdate ? nextItems : prevItems;
+        shouldUpdateItems = !shouldUpdate(prevItems, nextItems, {
+          measureRef: true,
+        });
+        return shouldUpdateItems ? nextItems : prevItems;
       });
 
       const scrollForward = offset > offsetRef.current;
@@ -219,7 +221,7 @@ const useVirtual = <
         const startIndex = batchIndex * loadMoreThreshold;
 
         if (
-          shouldUpdate &&
+          shouldUpdateItems &&
           loadMoreRef.current &&
           !(isItemLoadedRef.current && isItemLoadedRef.current(batchIndex))
         )
