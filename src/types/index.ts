@@ -83,6 +83,7 @@ export interface ScrollToItem {
 
 export interface Options {
   itemCount: number;
+  ssrItemCount?: number | [number, number];
   itemSize?: ItemSize;
   horizontal?: boolean;
   overscanCount?: number;

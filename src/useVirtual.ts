@@ -37,6 +37,7 @@ const useVirtual = <
   I extends HTMLElement = HTMLElement
 >({
   itemCount,
+  ssrItemCount,
   itemSize = DEFAULT_ITEM_SIZE,
   horizontal,
   overscanCount = 1,
@@ -405,7 +406,36 @@ const useVirtual = <
     };
   }, [cancelResetIsScrolling, cancelResetUserScroll, scrollKey, updateItems]);
 
-  return { outerRef, innerRef, items, scrollTo, scrollToItem };
+  const isBrowser = typeof window !== "undefined";
+  const ssrItems = [];
+
+  if (isBrowser && ssrItemCount !== undefined) {
+    const [idx, len] = isNumber(ssrItemCount)
+      ? [0, ssrItemCount - 1]
+      : ssrItemCount;
+
+    for (let i = idx; i <= len; i += 1) {
+      const item: Item = {
+        index: i,
+        size: DEFAULT_ITEM_SIZE,
+        width: 0,
+        measureRef: () => null,
+      };
+
+      if (keyGeneratorRef.current)
+        (item as any).key = keyGeneratorRef.current(i);
+
+      ssrItems.push(item);
+    }
+  }
+
+  return {
+    outerRef,
+    innerRef,
+    items: isBrowser ? items : ssrItems,
+    scrollTo,
+    scrollToItem,
+  };
 };
 
 export default useVirtual;
