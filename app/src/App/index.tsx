@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { useState, useReducer } from "react";
+import { useState } from "react";
 import { Global, css } from "@emotion/react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
@@ -9,6 +9,10 @@ import normalize from "normalize.css";
 
 import { root, app, outer, inner, item, itemDark } from "./styles";
 
+const sleep = (time: number) =>
+  // eslint-disable-next-line compat/compat
+  new Promise((resolve) => setTimeout(resolve, time));
+
 const getMockData = (count: number) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
@@ -16,32 +20,29 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const mockData: any[] = [];
+// const mockData: any[] = [];
 const itemLoadedArr: any = [];
 
 export default (): JSX.Element => {
-  const [, forceUpdate] = useReducer((c) => c + 1, 0);
-  // const [mockData, setMockData] = useState<any[]>([]);
+  const [mockData, setMockData] = useState<any[]>([]);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount: 1000,
-    // itemSize: 100,
+    itemCount: mockData.length,
     isItemLoaded: (idx) => itemLoadedArr[idx],
-    loadMore: async ({ loadIndex, startIndex, stopIndex }) => {
-      itemLoadedArr[loadIndex] = true;
+    loadMore: async ({ batchIndex }) => {
+      console.log("LOG ===> Load More...");
+
+      itemLoadedArr[batchIndex] = true;
 
       try {
-        // eslint-disable-next-line compat/compat
-        await new Promise((resolve) => setTimeout(resolve, 2500));
-        for (let i = startIndex; i <= stopIndex; i += 1) mockData[i] = true;
-        forceUpdate();
+        await sleep(2500);
+        setMockData((prevData) => [...prevData, ...getMockData(16)]);
       } catch (err) {
-        itemLoadedArr[loadIndex] = false;
+        itemLoadedArr[batchIndex] = false;
       }
     },
-    // loadMoreThreshold: 10,
     // loadMore: (opts) => console.log("LOG ===> ", opts),
   });
 
@@ -64,7 +65,7 @@ export default (): JSX.Element => {
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {mockData[index] ? index : "Loading..."}
+                  {mockData[index] ? mockData[index].text : "Loading..."}
                 </div>
               ))
             ) : (
