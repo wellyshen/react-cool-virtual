@@ -33,8 +33,8 @@ export interface IsItemLoaded {
 
 export interface LoadMore {
   (event: {
-    itemStartIndex: number;
-    itemStopIndex: number;
+    startIndex: number;
+    stopIndex: number;
     loadIndex: number;
     readonly scrollOffset: number;
   }): void;

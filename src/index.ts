@@ -48,7 +48,7 @@ const useVirtual = <
   loadMore,
 }: Options): Return<O, I> => {
   const [items, setItems] = useState<Item[]>([]);
-  const isInitRef = useRef(true);
+  const shouldLoadMoreOnMountRef = useRef(true);
   const offsetRef = useRef(0);
   const offsetIdxRef = useRef<number>();
   const outerRef = useRef<O>(null);
@@ -141,7 +141,20 @@ const useVirtual = <
   const updateItems = useCallback(
     (offset: number, isScrolling = false) => {
       if (!itemCount) {
-        setItems([]);
+        if (
+          (shouldLoadMoreOnMountRef.current || isScrolling) &&
+          loadMoreRef.current &&
+          !(isItemLoadedRef.current && isItemLoadedRef.current(0))
+        )
+          loadMoreRef.current({
+            startIndex: 0,
+            stopIndex: loadMoreThreshold - 1,
+            loadIndex: 0,
+            scrollOffset: 0,
+          });
+
+        shouldLoadMoreOnMountRef.current = false;
+
         return;
       }
 
@@ -189,7 +202,7 @@ const useVirtual = <
         });
 
       setItems((prevItems) =>
-        !isShallowEqual(prevItems, nextItems) ? nextItems : prevItems
+        isShallowEqual(prevItems, nextItems) ? prevItems : nextItems
       );
 
       const scrollForward = offset > offsetRef.current;
@@ -210,25 +223,25 @@ const useVirtual = <
         if (!userScrollRef.current) resetUserScroll();
       }
 
-      if (isInitRef.current || isScrolling) {
-        const threshold = loadMoreThreshold - 1;
+      if (shouldLoadMoreOnMountRef.current || isScrolling) {
         const idx = scrollForward ? endIdx : startIdx;
-        const loadIndex = Math.floor(endIdx / threshold);
+        const loadIndex = Math.floor(endIdx / loadMoreThreshold);
+        const startIndex = loadIndex * loadMoreThreshold;
 
         if (
           loadMoreRef.current &&
-          (!isItemLoadedRef.current || !isItemLoadedRef.current(loadIndex)) &&
           idx !== offsetIdxRef.current &&
-          (isInitRef.current || idx % threshold === 0)
+          (shouldLoadMoreOnMountRef.current || idx % loadMoreThreshold === 0) &&
+          !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
         )
           loadMoreRef.current({
-            itemStartIndex: startIdx,
-            itemStopIndex: endIdx,
+            startIndex,
+            stopIndex: startIndex + loadMoreThreshold - 1,
             loadIndex,
             scrollOffset: offset,
           });
 
-        isInitRef.current = false;
+        shouldLoadMoreOnMountRef.current = false;
         offsetIdxRef.current = idx;
       }
 
