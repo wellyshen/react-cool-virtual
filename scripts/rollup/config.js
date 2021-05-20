@@ -2,7 +2,7 @@ import createConfig from "./createConfig";
 
 const isDev = process.env.BUILD !== "production";
 const name = "index";
-const umdName = "ReactCoolForm";
+const umdName = "ReactCoolVirtual";
 const options = [
   {
     name,
