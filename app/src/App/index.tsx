@@ -24,7 +24,7 @@ const getMockData = (count: number) =>
 const itemLoadedArr: any = [];
 
 export default (): JSX.Element => {
-  const [mockData, setMockData] = useState<any[]>([]);
+  const [mockData, setMockData] = useState<any[]>(getMockData(100));
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
@@ -32,7 +32,7 @@ export default (): JSX.Element => {
     itemCount: mockData.length,
     keyExtractor: () => uuidv4(),
     isItemLoaded: (idx) => itemLoadedArr[idx],
-    loadMore: async ({ batchIndex }) => {
+    /* loadMore: async ({ batchIndex }) => {
       console.log("LOG ===> Load More...");
 
       itemLoadedArr[batchIndex] = true;
@@ -43,8 +43,8 @@ export default (): JSX.Element => {
       } catch (err) {
         itemLoadedArr[batchIndex] = false;
       }
-    },
-    // loadMore: (opts) => console.log("LOG ===> ", opts),
+    }, */
+    loadMore: (opts) => console.log("LOG ===> ", opts),
   });
 
   return (
@@ -61,12 +61,12 @@ export default (): JSX.Element => {
             {items.length ? (
               items.map(({ key, index, size, measureRef }: any) => (
                 <div
-                  key={key}
+                  key={index}
                   css={[item, index % 2 && itemDark]}
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {mockData[index] ? key : "Loading..."}
+                  {index}
                 </div>
               ))
             ) : (
