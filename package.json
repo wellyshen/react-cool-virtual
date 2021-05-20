@@ -1,7 +1,7 @@
 {
   "name": "react-cool-virtual",
   "version": "0.0.0",
-  "description": "Coming soon...",
+  "description": "A tiny React hook for rendering large data like a breeze.",
   "license": "MIT",
   "homepage": "https://react-cool-virtual.netlify.app",
   "repository": "https://github.com/wellyshen/react-cool-virtual",
