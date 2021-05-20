@@ -15,18 +15,6 @@ export interface ScrollEasingFunction {
   (time: number): number;
 }
 
-export interface OnScroll {
-  (event: {
-    overscanStartIndex: number;
-    overscanStopIndex: number;
-    itemStartIndex: number;
-    itemStopIndex: number;
-    readonly scrollOffset: number;
-    readonly scrollForward: boolean;
-    readonly userScroll: boolean;
-  }): void;
-}
-
 export interface IsItemLoaded {
   (index: number): boolean;
 }
@@ -37,6 +25,18 @@ export interface LoadMore {
     stopIndex: number;
     batchIndex: number;
     readonly scrollOffset: number;
+  }): void;
+}
+
+export interface OnScroll {
+  (event: {
+    overscanStartIndex: number;
+    overscanStopIndex: number;
+    itemStartIndex: number;
+    itemStopIndex: number;
+    readonly scrollOffset: number;
+    readonly scrollForward: boolean;
+    readonly userScroll: boolean;
   }): void;
 }
 
@@ -83,10 +83,10 @@ export interface Options {
   useIsScrolling?: boolean;
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
-  onScroll?: OnScroll;
   loadMoreThreshold?: number;
   isItemLoaded?: IsItemLoaded;
   loadMore?: LoadMore;
+  onScroll?: OnScroll;
 }
 
 export interface Return<O, I> {

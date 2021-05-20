@@ -7,20 +7,6 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
-  export interface OnScrollEvent {
-    overscanStartIndex: number;
-    overscanStopIndex: number;
-    itemStartIndex: number;
-    itemStopIndex: number;
-    readonly scrollOffset: number;
-    readonly scrollForward: boolean;
-    readonly userScroll: boolean;
-  }
-
-  export interface OnScroll {
-    (event: OnScrollEvent): void;
-  }
-
   export type LoadMoreEvent = {
     startIndex: number;
     stopIndex: number;
@@ -34,6 +20,20 @@ declare module "react-cool-virtual" {
 
   export interface LoadMore {
     (event: LoadMoreEvent): void;
+  }
+
+  export interface OnScrollEvent {
+    overscanStartIndex: number;
+    overscanStopIndex: number;
+    itemStartIndex: number;
+    itemStopIndex: number;
+    readonly scrollOffset: number;
+    readonly scrollForward: boolean;
+    readonly userScroll: boolean;
+  }
+
+  export interface OnScroll {
+    (event: OnScrollEvent): void;
   }
 
   export interface MeasureRef {
@@ -82,10 +82,10 @@ declare module "react-cool-virtual" {
     useIsScrolling?: boolean;
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
-    onScroll?: OnScroll;
     loadMoreThreshold?: number;
     isItemLoaded?: IsItemLoaded;
     loadMore?: LoadMore;
+    onScroll?: OnScroll;
   }
 
   export interface Return<
