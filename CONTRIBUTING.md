@@ -25,13 +25,13 @@ You can test new features or debug an issue by the way that I'm using.
 2. Run `yarn start` to create `ESM` builds and type definition file by `rollup` watch mode.
 3. Access the [app directory](app).
 4. In the **app directory**, run `yarn link-pkg` to link with the package then run `yarn start:dev` to start development.
-5. Try something cool via the [Playground](app/src/App).
+5. Try something cool via the [playground](app/src/App).
 
 ## Useful Commands
 
 There're several useful commands that you can use during the development:
 
-- `yarn link-pkg` links the package into the [app directory](app). You can develop or debug it via the [Playground](app/src/App).
+- `yarn link-pkg` links the package into the [app directory](app). You can develop or debug it via the [playground](app/src/App).
 - `yarn start` creates a `dist` folder with `ESM` builds and type definition file by `rollup` watch mode. You can test the package locally via `yarn link-pkg` or [yarn link](https://yarnpkg.com/lang/en/docs/cli/link).
 - `yarn build` creates a `dist` folder with package builds (`CJS`, `ESM`, and `UMD`) and type definition file. You can test the package locally via `yarn link-pkg` or [yarn link](https://yarnpkg.com/lang/en/docs/cli/link).
 - `yarn changeset` [adds a changeset](https://github.com/atlassian/changesets/blob/master/docs/adding-a-changeset.md).
