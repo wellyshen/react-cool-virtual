@@ -76,6 +76,7 @@ const useVirtual = <
   );
   const shouldLoadMoreOnMountRef = useRef(true);
   const offsetRef = useRef(0);
+  const endIdxRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
@@ -236,23 +237,29 @@ const useVirtual = <
           },
         });
 
-      let shouldUpdateItems;
-
-      setItems((prevItems) => {
-        shouldUpdateItems = !shouldUpdate(prevItems, nextItems, {
-          measureRef: true,
-        });
-        return shouldUpdateItems ? nextItems : prevItems;
-      });
-
-      const scrollForward = offset > offsetRef.current;
+      setItems((prevItems) =>
+        shouldUpdate(prevItems, nextItems, { measureRef: true })
+          ? nextItems
+          : prevItems
+      );
 
       if (isScrolling) {
-        const loadIndex = Math.floor(endIdx / loadMoreThreshold);
+        if (onScrollRef.current)
+          onScrollRef.current({
+            overscanStartIndex: start,
+            overscanStopIndex: end,
+            itemStartIndex: startIdx,
+            itemStopIndex: endIdx,
+            scrollOffset: offset,
+            scrollForward: offset > offsetRef.current,
+            userScroll: userScrollRef.current,
+          });
+
+        const loadIndex = Math.floor((endIdx + 1) / loadMoreThreshold);
         const startIndex = loadIndex * loadMoreThreshold;
 
         if (
-          shouldUpdateItems &&
+          endIdx !== endIdxRef.current &&
           loadMoreRef.current &&
           !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
         )
@@ -263,17 +270,7 @@ const useVirtual = <
             scrollOffset: offset,
           });
 
-        if (onScrollRef.current)
-          onScrollRef.current({
-            overscanStartIndex: start,
-            overscanStopIndex: end,
-            itemStartIndex: startIdx,
-            itemStopIndex: endIdx,
-            scrollOffset: offset,
-            scrollForward,
-            userScroll: userScrollRef.current,
-          });
-
+        endIdxRef.current = endIdx;
         if (useIsScrolling) resetIsScrolling();
         if (!userScrollRef.current) resetUserScroll();
       }
@@ -397,19 +394,22 @@ const useVirtual = <
         '💡 react-cool-virtual: Please provide "itemCount" for the hook.'
       );
 
-      const measures = getMeasures(true);
-      const ratio =
-        measuresRef.current.length &&
-        measures[measures.length - 1].end /
-          measuresRef.current[measuresRef.current.length - 1].end;
+      const isSameWidth = outerRectRef.current.width === rect.width;
+      const { current: prevMeasures } = measuresRef;
 
       outerRectRef.current = rect;
-      measuresRef.current = measures;
+      measuresRef.current = getMeasures(true);
       updateItems(offsetRef.current);
+
+      const ratio =
+        !isSameWidth &&
+        prevMeasures.length &&
+        measuresRef.current[measuresRef.current.length - 1].end /
+          prevMeasures[prevMeasures.length - 1].end;
 
       if (ratio) scrollTo(offsetRef.current * ratio);
     },
-    [itemCount, getMeasures, updateItems]
+    [itemCount, getMeasures, scrollTo, updateItems]
   );
 
   useLayoutEffect(() => {
