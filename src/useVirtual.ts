@@ -74,7 +74,7 @@ const useVirtual = <
   const [items, setItems] = useState<Item[]>(() =>
     getInitState(ssrItemCount, keyExtractor)
   );
-  const shouldLoadMoreOnMountRef = useRef(true);
+  const hasLoadMoreOnMountRef = useRef(false);
   const offsetRef = useRef(0);
   const endIdxRef = useRef<number>();
   const outerRef = useRef<O>(null);
@@ -175,7 +175,7 @@ const useVirtual = <
   const updateItems = useCallback(
     (offset: number, isScrolling = false) => {
       if (
-        shouldLoadMoreOnMountRef.current &&
+        !hasLoadMoreOnMountRef.current &&
         loadMoreRef.current &&
         !(isItemLoadedRef.current && isItemLoadedRef.current(0))
       )
@@ -186,7 +186,7 @@ const useVirtual = <
           scrollOffset: 0,
         });
 
-      shouldLoadMoreOnMountRef.current = false;
+      hasLoadMoreOnMountRef.current = true;
 
       if (!itemCount) {
         setItems([]);
