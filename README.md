@@ -30,6 +30,14 @@
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 A tiny size ([~ 2.5kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
 
+## Installation
+
+Coming soon...
+
+## Examples
+
+Coming soon...
+
 ## Working in TypeScript
 
 Coming soon...
@@ -37,3 +45,34 @@ Coming soon...
 ## API
 
 Coming soon...
+
+## ResizeObserver Polyfill
+
+[ResizeObserver has good support amongst browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-virtual` doesn't include it.
+
+We recommend using [@juggle/resize-observer](https://github.com/juggle/resize-observer):
+
+```sh
+$ yarn add @juggle/resize-observer
+# or
+$ npm install --save @juggle/resize-observer
+```
+
+Then pollute the `window` object:
+
+```js
+import { ResizeObserver } from "@juggle/resize-observer";
+
+if (!("ResizeObserver" in window)) window.ResizeObserver = ResizeObserver;
+```
+
+You could use dynamic imports to only load the file when the polyfill is required:
+
+```js
+(async () => {
+  if (!("ResizeObserver" in window)) {
+    const module = await import("@juggle/resize-observer");
+    window.ResizeObserver = module.ResizeObserver;
+  }
+})();
+```
