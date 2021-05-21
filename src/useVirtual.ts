@@ -55,7 +55,7 @@ const getInitItems = (
   return ssrItems;
 };
 
-const useVirtual = <
+export default <
   O extends HTMLElement = HTMLElement,
   I extends HTMLElement = HTMLElement
 >({
@@ -454,5 +454,3 @@ const useVirtual = <
 
   return { outerRef, innerRef, items, scrollTo, scrollToItem };
 };
-
-export default useVirtual;
