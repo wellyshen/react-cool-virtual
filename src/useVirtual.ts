@@ -33,7 +33,7 @@ import {
 
 const DEFAULT_ITEM_SIZE = 50;
 
-const getInitState = (
+const getInitItems = (
   ssrItemCount?: SsrItemCount,
   keyExtractor?: KeyExtractor
 ) => {
@@ -72,7 +72,7 @@ const useVirtual = <
   loadMore,
 }: Options): Return<O, I> => {
   const [items, setItems] = useState<Item[]>(() =>
-    getInitState(ssrItemCount, keyExtractor)
+    getInitItems(ssrItemCount, keyExtractor)
   );
   const hasLoadMoreOnMountRef = useRef(false);
   const offsetRef = useRef(0);
