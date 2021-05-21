@@ -17,7 +17,7 @@
 
 </div>
 
-- ♻️ Renders millions of items without costing extra performance/memory, using the technique of [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
+- ♻️ Renders millions of items without costing extra performance/memory, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 🖱 Supports imperative scroll-to control for [offset](#TBC), [index](#TBC), and [smooth scrolling](#TBC).
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) and better SEO.
