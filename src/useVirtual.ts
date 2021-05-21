@@ -181,7 +181,7 @@ const useVirtual = <
         loadMoreRef.current({
           startIndex: 0,
           stopIndex: loadMoreThreshold - 1,
-          batchIndex: 0,
+          loadIndex: 0,
           scrollOffset: 0,
         });
 
@@ -248,18 +248,18 @@ const useVirtual = <
       const scrollForward = offset > offsetRef.current;
 
       if (isScrolling) {
-        const batchIndex = Math.floor(endIdx / loadMoreThreshold);
-        const startIndex = batchIndex * loadMoreThreshold;
+        const loadIndex = Math.floor(endIdx / loadMoreThreshold);
+        const startIndex = loadIndex * loadMoreThreshold;
 
         if (
           shouldUpdateItems &&
           loadMoreRef.current &&
-          !(isItemLoadedRef.current && isItemLoadedRef.current(batchIndex))
+          !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
         )
           loadMoreRef.current({
             startIndex,
             stopIndex: startIndex + loadMoreThreshold - 1,
-            batchIndex,
+            loadIndex,
             scrollOffset: offset,
           });
 
