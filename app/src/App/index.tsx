@@ -32,7 +32,7 @@ export default (): JSX.Element => {
     ssrItemCount: 10,
     itemSize: 100,
     // itemSize: (_, width) => (width > 600 ? 100 : 50),
-    keyExtractor: () => uuidv4(),
+    // keyExtractor: () => uuidv4(),
   });
 
   console.log("LOG ===> ", items);
