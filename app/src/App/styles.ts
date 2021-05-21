@@ -13,7 +13,7 @@ export const app = css`
 
 export const outer = css`
   margin: 0 auto;
-  width: 300px;
+  width: 95%;
   height: 300px;
   border: 1px solid #000;
   margin-bottom: 1rem;

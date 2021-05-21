@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Global, css } from "@emotion/react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
@@ -23,19 +23,23 @@ const getMockData = (count: number) =>
 const itemLoadedArr: any = [];
 
 export default (): JSX.Element => {
-  const [mockData, setMockData] = useState<any[]>(getMockData(20));
+  const [mockData, setMockData] = useState<any[]>([]);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount: 0,
-    ssrItemCount: 10,
-    itemSize: 100,
-    // itemSize: (_, width) => (width > 600 ? 100 : 50),
+    itemCount: mockData.length,
+    // itemCount: 50,
+    itemSize: (_, width) => (width > 500 ? 100 : 50),
     // keyExtractor: () => uuidv4(),
+    isItemLoaded: (idx) => itemLoadedArr[idx],
+    loadMore: async ({ loadIndex }) => {
+      itemLoadedArr[loadIndex] = true;
+      // if (loadIndex === 3) itemLoadedArr[loadIndex + 1] = true;
+      await sleep(2500);
+      setMockData((prev) => [...prev, ...getMockData(15)]);
+    },
   });
-
-  console.log("LOG ===> ", items);
 
   return (
     <>
@@ -56,7 +60,7 @@ export default (): JSX.Element => {
                   style={{ height: `${size}px` }}
                   // ref={measureRef}
                 >
-                  {index}
+                  {mockData[index] ? index : "Loading..."}
                 </div>
               ))
             ) : (
