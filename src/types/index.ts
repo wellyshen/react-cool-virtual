@@ -10,6 +10,8 @@ export interface Measure {
 }
 
 // External
+export type SsrItemCount = number | [number, number];
+
 export type ItemSize = number | ((index: number, width: number) => number);
 
 export interface ScrollEasingFunction {
@@ -83,7 +85,7 @@ export interface ScrollToItem {
 
 export interface Options {
   itemCount: number;
-  ssrItemCount?: number | [number, number];
+  ssrItemCount?: SsrItemCount;
   itemSize?: ItemSize;
   horizontal?: boolean;
   overscanCount?: number;
