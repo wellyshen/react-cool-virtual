@@ -18,7 +18,7 @@ const makeExternalPredicate = (external) =>
     ? () => false
     : (id) => new RegExp(`^(${external.join("|")})($|/)`).test(id);
 
-export default ({ name, umdName, input, format, env, measure }) => {
+export default ({ name, umdName, inputFile, format, env, measure }) => {
   const isUmd = format === "umd";
   const shouldMinify = env === "production";
   const extensions = [".ts"];
@@ -27,7 +27,7 @@ export default ({ name, umdName, input, format, env, measure }) => {
     .join(".");
 
   return {
-    input: input || "src",
+    input: `src/${inputFile}`,
     output: {
       file: `${pkg.files[0]}/${fileName}`,
       format,
