@@ -23,7 +23,6 @@ declare module "react-cool-virtual" {
     startIndex: number;
     stopIndex: number;
     loadIndex: number;
-    readonly scrollOffset: number;
   };
 
   export interface LoadMore {

@@ -183,7 +183,6 @@ const useVirtual = <
           startIndex: 0,
           stopIndex: loadMoreThreshold - 1,
           loadIndex: 0,
-          scrollOffset: 0,
         });
 
       hasLoadMoreOnMountRef.current = true;
@@ -267,7 +266,6 @@ const useVirtual = <
             startIndex,
             stopIndex: startIndex + loadMoreThreshold - 1,
             loadIndex,
-            scrollOffset: offset,
           });
 
         endIdxRef.current = endIdx;
@@ -281,10 +279,10 @@ const useVirtual = <
       getCalcData,
       getMeasures,
       itemCount,
+      itemSizeKey,
       loadMoreRef,
       loadMoreThreshold,
       marginKey,
-      itemSizeKey,
       onScrollRef,
       resetIsScrolling,
       resetUserScroll,
@@ -311,7 +309,6 @@ const useVirtual = <
       }
 
       const start = now();
-
       const scroll = () => {
         const time = Math.min((now() - start) / scrollDuration, 1);
 
@@ -348,7 +345,7 @@ const useVirtual = <
 
       const { start, end, size } = measure;
       const { [sizeKey]: outerSize } = outerRectRef.current;
-      let offset = offsetRef.current;
+      let { current: offset } = offsetRef;
 
       if (autoCorrect && offset <= start && offset + outerSize >= end && cb) {
         cb();
