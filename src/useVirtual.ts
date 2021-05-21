@@ -50,7 +50,22 @@ const useVirtual = <
   isItemLoaded,
   loadMore,
 }: Options): Return<O, I> => {
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<Item[]>(() => {
+    if (ssrItemCount === undefined) return [];
+
+    const [idx, len] = isNumber(ssrItemCount)
+      ? [0, ssrItemCount - 1]
+      : ssrItemCount;
+    const ssrItems = [];
+
+    for (let i = idx; i <= len; i += 1) {
+      const ssrItem = { index: i, size: 0, width: 0, measureRef: () => null };
+      if (keyExtractor) (ssrItem as any).key = keyExtractor(i);
+      ssrItems.push(ssrItem);
+    }
+
+    return ssrItems;
+  });
   const shouldLoadMoreOnMountRef = useRef(true);
   const offsetRef = useRef(0);
   const outerRef = useRef<O>(null);
@@ -406,37 +421,7 @@ const useVirtual = <
     };
   }, [cancelResetIsScrolling, cancelResetUserScroll, scrollKey, updateItems]);
 
-  const isBrowser = typeof window !== "undefined";
-  const ssrItems = [];
-
-  if (!isBrowser && ssrItemCount !== undefined) {
-    const [idx, len] = isNumber(ssrItemCount)
-      ? [0, ssrItemCount - 1]
-      : ssrItemCount;
-
-    for (let i = idx; i <= len; i += 1) {
-      const item: Item = {
-        index: i,
-        size: isNumber(itemSize)
-          ? itemSize
-          : itemSize(idx, outerRectRef.current.width),
-        width: outerRectRef.current.width,
-        measureRef: () => null,
-      };
-
-      if (keyExtractor) (item as any).key = keyExtractor(i);
-
-      ssrItems.push(item);
-    }
-  }
-
-  return {
-    outerRef,
-    innerRef,
-    items: isBrowser ? items : ssrItems,
-    scrollTo,
-    scrollToItem,
-  };
+  return { outerRef, innerRef, items, scrollTo, scrollToItem };
 };
 
 export default useVirtual;
