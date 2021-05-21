@@ -32,6 +32,8 @@ import {
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
+const DEBOUNCE_INTERVAL = 200;
+const MAX_AUTO_CORRECT_TIMES = 10;
 
 const getInitItems = (
   ssrItemCount?: SsrItemCount,
@@ -75,6 +77,7 @@ const useVirtual = <
     getInitItems(ssrItemCount, keyExtractor)
   );
   const hasLoadMoreOnMountRef = useRef(false);
+  const autoCorrectTimesRef = useRef(0);
   const offsetRef = useRef(0);
   const endIdxRef = useRef<number>();
   const outerRef = useRef<O>(null);
@@ -161,7 +164,7 @@ const useVirtual = <
   const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => updateItems(offsetRef.current),
-    200
+    DEBOUNCE_INTERVAL
   );
 
   const [resetUserScroll, cancelResetUserScroll] = useAnimDebounce(
@@ -169,7 +172,7 @@ const useVirtual = <
     () => {
       userScrollRef.current = true;
     },
-    200
+    DEBOUNCE_INTERVAL
   );
 
   const updateItems = useCallback(
@@ -375,8 +378,15 @@ const useVirtual = <
       scrollTo({ offset, smooth }, () => {
         if (!autoCorrect) {
           if (cb) cb();
-        } else if (offset >= start || offset + outerSize <= end) {
-          requestAnimationFrame(() => scrollToItem(value, cb));
+        } else if (
+          autoCorrectTimesRef.current <= MAX_AUTO_CORRECT_TIMES &&
+          (offset >= start || offset + outerSize <= end)
+        ) {
+          setTimeout(() => scrollToItem(value, cb));
+          autoCorrectTimesRef.current += 1;
+        } else {
+          if (cb) cb();
+          autoCorrectTimesRef.current = 0;
         }
       });
     },
