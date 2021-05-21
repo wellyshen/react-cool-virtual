@@ -25,7 +25,7 @@
 - 🖥 Supports [responsive web design (RWD)](#TBC) for better UX.
 - 🧻 Built-ins [load more event](#TBC) for you to deal with infinite scroll without struggle.
 - 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and smooth scrolling.
-- 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) and better SEO.
+- 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 A tiny size ([~ 2.5kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
