@@ -37,6 +37,8 @@
     "memory",
     "reduce-memory",
     "performance",
+    "ssr",
+    "server-side-rendering",
     "typescript"
   ],
   "author": "Welly Shen <hivoid19@gmail.com> (https://github.com/wellyshen)",
