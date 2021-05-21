@@ -27,7 +27,13 @@ export interface IsItemLoaded {
 }
 
 export interface LoadMore {
-  (event: { startIndex: number; stopIndex: number; loadIndex: number }): void;
+  (event: {
+    startIndex: number;
+    stopIndex: number;
+    loadIndex: number;
+    readonly scrollOffset: number;
+    readonly userScroll: boolean;
+  }): void;
 }
 
 export interface OnScroll {

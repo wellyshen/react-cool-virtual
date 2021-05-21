@@ -186,6 +186,8 @@ const useVirtual = <
           startIndex: 0,
           stopIndex: loadMoreThreshold - 1,
           loadIndex: 0,
+          scrollOffset: offset,
+          userScroll: userScrollRef.current,
         });
 
       hasLoadMoreOnMountRef.current = true;
@@ -269,6 +271,8 @@ const useVirtual = <
             startIndex,
             stopIndex: startIndex + loadMoreThreshold - 1,
             loadIndex,
+            scrollOffset: offset,
+            userScroll: userScrollRef.current,
           });
 
         endIdxRef.current = endIdx;
