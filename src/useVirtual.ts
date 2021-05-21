@@ -392,7 +392,10 @@ const useVirtual = <
   useResizeEffect<O>(
     outerRef,
     (rect) => {
-      invariant(!isNumber(itemCount), "Item count error");
+      invariant(
+        !isNumber(itemCount),
+        '💡 react-cool-virtual: Please provide "itemCount" for the hook.'
+      );
 
       const measures = getMeasures(true);
       const ratio =
@@ -412,8 +415,14 @@ const useVirtual = <
   useLayoutEffect(() => {
     const { current: outer } = outerRef;
 
-    invariant(!outer, "Outer error");
-    invariant(!innerRef.current, "Inner error");
+    invariant(
+      !outer,
+      "💡 react-cool-virtual: Please set `outerRef` to the outer element."
+    );
+    invariant(
+      !innerRef.current,
+      "💡 react-cool-virtual: Please set `innerRef` to the inner element."
+    );
 
     const handleScroll = ({ target }: Event) =>
       updateItems((target as O)[scrollKey], true);
