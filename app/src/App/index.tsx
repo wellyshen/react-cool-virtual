@@ -28,7 +28,7 @@ export default (): JSX.Element => {
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount: mockData.length,
+    itemCount: 0,
     ssrItemCount: 10,
     itemSize: 100,
     // itemSize: (_, width) => (width > 600 ? 100 : 50),

@@ -187,7 +187,10 @@ const useVirtual = <
 
       shouldLoadMoreOnMountRef.current = false;
 
-      if (!itemCount) return;
+      if (!itemCount) {
+        setItems([]);
+        return;
+      }
 
       const { startIdx, endIdx, start, end, margin, innerSize } =
         getCalcData(offset);
