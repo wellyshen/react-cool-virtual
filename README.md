@@ -13,5 +13,6 @@
 [![npm version](https://img.shields.io/npm/v/react-cool-virtual?style=flat-square)](https://www.npmjs.com/package/react-cool-virtual)
 [![npm downloads](https://img.shields.io/npm/dm/react-cool-virtual?style=flat-square)](https://www.npmtrends.com/react-cool-virtual)
 [![npm downloads](https://img.shields.io/npm/dt/react-cool-virtual?style=flat-square)](https://www.npmtrends.com/react-cool-virtual)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-cool-virtual?style=flat-square)](https://bundlephobia.com/result?p=react-cool-virtual)
 
 </div>
