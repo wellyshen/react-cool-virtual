@@ -18,13 +18,17 @@
 
 </div>
 
-- ♻️ Renders millions of items without costing extra performance/memory, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
+- ♻️ Renders millions of items without costing extra performance/memory, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller) technique.
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
-- 🖱 Supports imperative scroll-to control for [offset](#TBC), [index](#TBC), and [smooth scrolling](#TBC).
+- 💅🏼 Apply styles without hassle, just [few steps](#TBC).
+- ✨ Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
+- 🖥 Supports [responsive web design (RWD)](#TBC) for better UX.
+- 🧻 Built-ins [load more event](#TBC) for you to deal with infinite scroll without struggle.
+- 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and smooth scrolling.
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
-- 🎛 Super flexible [API](#api) design, built with DX and UX in mind.
-- 🦔 A tiny size ([~ 2.6kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library but powerful. It's completely self-contained.
+- 🎛 Super flexible [API](#api) design, built with DX in mind.
+- 🦔 A tiny size ([~ 2.6kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
 
 ## Working in TypeScript
 
