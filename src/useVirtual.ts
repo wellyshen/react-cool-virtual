@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useLayoutEffect } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import {
   Align,
@@ -26,7 +26,7 @@ import {
   now,
   shouldUpdate,
   useAnimDebounce,
-  // useIsoLayoutEffect,
+  useIsoLayoutEffect,
   useLatest,
   useResizeEffect,
 } from "./utils";
@@ -412,7 +412,7 @@ const useVirtual = <
     [itemCount, getMeasures, scrollTo, updateItems]
   );
 
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
 
     invariant(
