@@ -28,7 +28,7 @@
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
-- 🦔 A tiny size ([~ 2.6kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
+- 🦔 A tiny size ([~ 2.5kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
 
 ## Working in TypeScript
 
