@@ -21,7 +21,7 @@ const options = [
   {
     name,
     umdName,
-    file: "index.umd.ts",
+    input: "src/index.umd.ts",
     format: "umd",
     env: "development",
   },
