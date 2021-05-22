@@ -71,6 +71,40 @@ If you're not using a module bundler or package manager. We also provide a [UMD]
 
 Once you've added this you will have access to the `window.ReactCoolVirtual.useVirtual` variable.
 
+### Basic Usage
+
+Here's the basic concept of how it rocks:
+
+```js
+import useVirtual from "react-cool-virtual";
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 50000, // (Required) The total number of items in the list
+    itemSize: 100, // The size of an item (default = 50)
+  });
+
+  return (
+    <div
+      ref={outerRef} // (Required) Set the scroll container with the `outerRef`
+      style={{ width: "300px", height: "500px", overflow: "auto" }}
+    >
+      {/* (Required) Set the inner element with the `innerRef` */}
+      <div ref={innerRef}>
+        {items.map(({ index, size }) => (
+          // You can set the item's height with the `size` property
+          <div key={index} style={{ height: `${size}px` }}>
+            Row {index}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+✨ Pretty easy right? React Cool Virtual is more powerful than you think. Let's explore more use cases through the examples!
+
 ## Examples
 
 Coming soon...
