@@ -52,7 +52,7 @@ export default (): JSX.Element => {
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
             {items.length ? (
-              items.map(({ key, index, size, measureRef }: any) => (
+              items.map(({ key, index, size, measureRef }) => (
                 <div
                   key={index}
                   css={[item, index % 2 && itemDark]}
