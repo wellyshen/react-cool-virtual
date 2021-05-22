@@ -38,11 +38,11 @@
 
 When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory issues. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that increase a lot of bundle size for our app(s). However [react-virtual](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution, but applying styles for using it can be a little verbose. In addition, it doesn't support TypeScript and lack of some useful features like [real-time dynamic size](#TBC), [RWD](#TBC), [infinite scroll](#TBC), and `onScroll` event etc.
 
-`react-cool-virtual` is a [tiny React hook](https://bundlephobia.com/result?p=react-cool-virtual) that supplies you [these features](#features) natively, which attempts to give you a better DX for virtualizing a large amount of data efficiently!
+React Cool Virtual is a [tiny React hook](https://bundlephobia.com/result?p=react-cool-virtual) that supplies you [these features](#features) natively, which attempts to give you a better DX for virtualizing a large amount of data efficiently!
 
 ## Getting Started
 
-To use `react-cool-virtual`, you must use `react@16.8.0` or greater which includes hooks.
+To use React Cool Virtual, you must use `react@16.8.0` or greater which includes hooks.
 
 ### Installation
 
@@ -104,7 +104,7 @@ const App = () => {
 
 ## Working in TypeScript
 
-`react-cool-virtual` is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
+React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
 
 ```tsx
 import useVirtual from "react-cool-virtual";
@@ -129,7 +129,7 @@ Coming soon...
 
 ## ResizeObserver Polyfill
 
-[ResizeObserver has good support amongst browsers](https://caniuse.com/?search=ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-virtual` doesn't include it.
+[ResizeObserver has good support amongst browsers](https://caniuse.com/?search=ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore React Cool Virtual doesn't include it.
 
 We recommend using [@juggle/resize-observer](https://github.com/juggle/resize-observer):
 
