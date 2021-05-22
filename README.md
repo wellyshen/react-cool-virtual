@@ -18,7 +18,7 @@
 
 </div>
 
-- ♻️ Renders millions of items without costing extra performance/memory, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller) technique.
+- ♻️ Renders millions of items with highly performant, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller) technique.
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few steps](#TBC).
 - ✨ Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
