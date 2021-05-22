@@ -80,8 +80,8 @@ import useVirtual from "react-cool-virtual";
 
 const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 50000, // (Required) The total number of items in the list
-    itemSize: 100, // The size of an item (default = 50)
+    itemCount: 10000, // (Required) The total number of items in the list
+    itemSize: 50, // The size of an item (default = 50)
   });
 
   return (
