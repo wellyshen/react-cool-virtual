@@ -83,24 +83,20 @@ Coming soon...
 
 `react-cool-virtual` is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
 
-<!-- prettier-ignore-start -->
 ```tsx
 import useVirtual from "react-cool-virtual";
 
 const App = () => {
-  const { outerRef, innerRef } = useDimensions<HTMLDivElement, HTMLDivElement>();
+  // 1st is the `outerRef`, 2nd is the `innerRef`
+  const { outerRef, innerRef } = useVirtual<HTMLDivElement, HTMLDivElement>();
 
   return (
     <div ref={outerRef}>
-      <div ref={innerRef}>
-        {/* Rendering items... */}
-      </div>
+      <div ref={innerRef}>{/* Rendering items... */}</div>
     </div>
   );
 };
 ```
-
-<!-- prettier-ignore-end -->
 
 💡 For more available types, please [check it out](src/types/react-cool-virtual.d.ts).
 
