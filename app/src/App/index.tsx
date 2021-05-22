@@ -38,6 +38,7 @@ export default (): JSX.Element => {
       await sleep(2500);
       setMockData((prev) => [...prev, ...getMockData(15)]);
     }, */
+    onScroll: () => console.log("LOG ===> HI!"),
   });
 
   return (
@@ -56,10 +57,13 @@ export default (): JSX.Element => {
                 <div
                   key={index}
                   css={[item, index % 2 && itemDark]}
-                  style={{ height: `${mockData[index].size}px` }}
+                  style={{
+                    height: `${size}px`,
+                    overflow: "auto",
+                  }}
                   ref={measureRef}
                 >
-                  {index}
+                  <div style={{ height: "500px" }} />
                 </div>
               ))
             ) : (
