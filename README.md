@@ -9,7 +9,7 @@
   <br />
 </h1>
 
-<p align="center">A tiny React hook for rendering large data like a breeze.</p>
+<p align="center">A tiny React hook for rendering large datasets like a breeze.</p>
 
 <div align="center">
 
@@ -20,9 +20,11 @@
 
 </div>
 
+## Features
+
 - ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
-- 💅🏼 Apply styles without hassle, just [few steps](#TBC).
+- 💅🏼 Apply styles without hassle, just [few setups](#TBC).
 - ✨ Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
 - 🧻 Built-ins [load more event](#TBC) for you to deal with infinite scroll without struggle.
@@ -32,11 +34,13 @@
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 A tiny size ([~ 2.5kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
 
+## Motivation
+
+When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory issues. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that increase a lot of bundle size for our app(s). However [react-virtual](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution, but applying styles for using it can be a little verbose. In addition, it doesn't support TypeScript and lack of some useful features like [real-time dynamic size](#TBC), [RWD](#TBC), [infinite scroll](#TBC), and `onScroll` event etc.
+
+`react-cool-virtual` is a [tiny React hook](https://bundlephobia.com/result?p=react-cool-virtual) that supplies you [these features](#features) natively, which attempts to give you a better DX for virtualizing a large amount of data efficiently!
+
 ## Getting Started
-
-Coming soon...
-
-### Requirement
 
 To use `react-cool-virtual`, you must use `react@16.8.0` or greater which includes hooks.
 
@@ -75,7 +79,7 @@ Coming soon...
 
 Coming soon...
 
-## How to Share A `ref`?
+## Sharing A `ref`
 
 You can share a `ref` as follows, here we take the `outerRef` as the example:
 
@@ -153,6 +157,13 @@ You could use dynamic imports to only load the file when the polyfill is require
   }
 })();
 ```
+
+## To Do...
+
+- [ ] Unit testing
+- [ ] Reverse scrolling
+- [ ] Infinite loop
+- [ ] `scrollBy` method
 
 ## Contributors ✨
 
