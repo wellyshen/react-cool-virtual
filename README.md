@@ -1,8 +1,10 @@
 <h1 align="center">
   <br />
+  <br />
   ♻️
   <br />
   react-cool-virtual
+  <br />
   <br />
   <br />
 </h1>
@@ -22,7 +24,7 @@
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few steps](#TBC).
 - ✨ Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
-- 🖥 Supports [responsive web design (RWD)](#TBC) for better UX.
+- 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
 - 🧻 Built-ins [load more event](#TBC) for you to deal with infinite scroll without struggle.
 - 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and smooth scrolling.
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
