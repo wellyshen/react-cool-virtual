@@ -113,7 +113,7 @@ Coming soon...
 
 Coming soon...
 
-## How to Sharing A `ref`?
+## How to Share A `ref`?
 
 You can share a `ref` as follows, here we take the `outerRef` as the example:
 
