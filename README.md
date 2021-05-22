@@ -27,7 +27,7 @@
 - 💅🏼 Apply styles without hassle, just [few setups](#TBC).
 - 🧱 Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
-- 🧻 Built-ins [load more event](#TBC) for you to deal with infinite scroll without struggle.
+- 🧻 Built-ins [load more event](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and smooth scrolling.
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
@@ -38,7 +38,7 @@
 
 When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory issues. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that increase a lot of bundle size for our app(s). However [react-virtual](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution, but applying styles for using it can be a little verbose. In addition, it doesn't support TypeScript and lack of some useful features like [real-time dynamic size](#TBC), [RWD](#TBC), [infinite scroll](#TBC), and `onScroll` event etc.
 
-React Cool Virtual is a [tiny React hook](https://bundlephobia.com/result?p=react-cool-virtual) that supplies you [these features](#features) natively, which attempts to give you a better DX for virtualizing a large amount of data efficiently ✨.
+React Cool Virtual is a [tiny React hook](https://bundlephobia.com/result?p=react-cool-virtual) that supplies you [these features](#features) natively, which attempts to give you a better DX for virtualizing a large amount of data without struggle 😭.
 
 ## Getting Started
 
