@@ -69,9 +69,38 @@ Once you've added this you will have access to the `window.ReactCoolVirtual.useV
 
 Coming soon...
 
-## Working in TypeScript
+## Performance Optimization
 
 Coming soon...
+
+## How to Share the `ref`?
+
+Coming soon...
+
+## Working in TypeScript
+
+`react-cool-virtual` is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
+
+<!-- prettier-ignore-start -->
+```tsx
+import useVirtual from "react-cool-virtual";
+
+const App = () => {
+  const { outerRef, innerRef } = useDimensions<HTMLDivElement, HTMLDivElement>();
+
+  return (
+    <div ref={outerRef}>
+      <div ref={innerRef}>
+        {/* Rendering items... */}
+      </div>
+    </div>
+  );
+};
+```
+
+<!-- prettier-ignore-end -->
+
+💡 For more available types, please [check it out](src/types/react-cool-virtual.d.ts).
 
 ## API
 
