@@ -438,7 +438,7 @@ export default <
     const handleScroll = ({ target }: Event) =>
       updateItems((target as O)[scrollKey], true);
 
-    outer!.addEventListener("scroll", handleScroll);
+    outer!.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       cancelResetIsScrolling();
