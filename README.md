@@ -18,7 +18,7 @@
 
 </div>
 
-- ♻️ Renders millions of items with highly performant, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller) technique.
+- ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few steps](#TBC).
 - ✨ Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
@@ -30,9 +30,40 @@
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 A tiny size ([~ 2.5kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)) library, it's completely self-contained.
 
-## Installation
+## Getting Started
 
 Coming soon...
+
+### Requirement
+
+To use `react-cool-virtual`, you must use `react@16.8.0` or greater which includes hooks.
+
+### Installation
+
+This package is distributed via [npm](https://www.npmjs.com/package/react-cool-virtual).
+
+```sh
+$ yarn add react-cool-virtual
+# or
+$ npm install --save react-cool-virtual
+```
+
+> ⚠️ This package using [ResizeObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API) under the hook. [Most modern browsers support it natively](https://caniuse.com/?search=ResizeObserver), you can also add [polyfill](#resizeobserver-polyfill) for full browser support.
+
+### CDN
+
+If you're not using a module bundler or package manager. We also provide a [UMD](https://github.com/umdjs/umd) build which is available over the [unpkg.com](https://unpkg.com) CDN. Simply use a `<script>` tag to add it after [React CND links](https://reactjs.org/docs/cdn-links.html) as below:
+
+<!-- prettier-ignore-start -->
+```html
+<script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+<!-- react-cool-virtual comes here -->
+<script crossorigin src="https://unpkg.com/react-cool-virtual/dist/index.umd.production.min.js"></script>
+```
+<!-- prettier-ignore-end -->
+
+Then you can access it via the `window.ReactCoolVirtual.useVirtual` variables.
 
 ## Examples
 
@@ -48,7 +79,7 @@ Coming soon...
 
 ## ResizeObserver Polyfill
 
-[ResizeObserver has good support amongst browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-virtual` doesn't include it.
+[ResizeObserver has good support amongst browsers](https://caniuse.com/?search=ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-virtual` doesn't include it.
 
 We recommend using [@juggle/resize-observer](https://github.com/juggle/resize-observer):
 
