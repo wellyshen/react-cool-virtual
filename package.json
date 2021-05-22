@@ -1,7 +1,7 @@
 {
   "name": "react-cool-virtual",
   "version": "0.0.5",
-  "description": "A tiny React hook for rendering large data like a breeze.",
+  "description": "A tiny React hook for rendering large datasets like a breeze.",
   "license": "MIT",
   "homepage": "https://github.com/wellyshen/react-cool-virtual#readme",
   "repository": "https://github.com/wellyshen/react-cool-virtual",
@@ -31,7 +31,6 @@
     "grid",
     "table",
     "carousel",
-    "chat",
     "resize",
     "resize-observer",
     "dynamic",
