@@ -75,9 +75,28 @@ Coming soon...
 
 Coming soon...
 
-## How to Share the `ref`?
+## How to Share A `ref`?
 
-Coming soon...
+You can share a `ref` as follows, here we take the `outerRef` as the example:
+
+```js
+import { useRef } from "react";
+import useVirtual from "react-cool-virtual";
+
+const App = () => {
+  const ref = useRef();
+  const { outerRef } = useVirtual();
+
+  return (
+    <div
+      ref={(el) => {
+        outerRef.current = el; // Set the element to the `outerRef`
+        ref.current = el; // Share the element for other purposes
+      }}
+    />
+  );
+};
+```
 
 ## Working in TypeScript
 
