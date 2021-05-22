@@ -63,7 +63,7 @@ If you're not using a module bundler or package manager. We also provide a [UMD]
 ```
 <!-- prettier-ignore-end -->
 
-Then you can access it via the `window.ReactCoolVirtual.useVirtual` variables.
+Once you've added this you will have access to the `window.ReactCoolVirtual.useVirtual` variable.
 
 ## Examples
 
