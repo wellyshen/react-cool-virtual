@@ -25,7 +25,7 @@
 - ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few setups](#TBC).
-- 🧱 Supports [fixed](#TBC),[variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
+- 🧱 Supports [fixed](#TBC), [variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
 - 🧻 Built-ins [load more callback](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and smooth scrolling.
