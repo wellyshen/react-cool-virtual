@@ -7,11 +7,11 @@ import "./styles.scss";
 
 const Grid = () => {
   const row = useVirtual({
-    itemCount: 10000
+    itemCount: 1000
   });
   const col = useVirtual({
     horizontal: true,
-    itemCount: 10000,
+    itemCount: 1000,
     itemSize: 100
   });
 

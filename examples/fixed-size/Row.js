@@ -6,7 +6,7 @@ import "./styles.scss";
 
 const Row = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 10000
+    itemCount: 1000
   });
 
   return (

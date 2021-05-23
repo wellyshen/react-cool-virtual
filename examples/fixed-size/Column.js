@@ -7,7 +7,7 @@ import "./styles.scss";
 const Column = () => {
   const { outerRef, innerRef, items } = useVirtual({
     horizontal: true,
-    itemCount: 10000,
+    itemCount: 1000,
     itemSize: 100
   });
 
