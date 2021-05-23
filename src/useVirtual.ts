@@ -83,8 +83,9 @@ export default <
   );
   const hasLoadMoreOnMountRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
-  const offsetRef = useRef(0);
+  const roQueueRef = useRef<ResizeObserver[]>([]);
   const vStopRef = useRef<number>();
+  const offsetRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
@@ -211,45 +212,40 @@ export default <
       innerRef.current.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item[] = [];
-      let shouldRecalc = false;
 
       for (let i = oStart; i <= oStop; i += 1) {
-        const { key, start: s, size } = measuresRef.current[i];
+        const { key, start, size } = measuresRef.current[i];
 
         nextItems.push({
           key,
           index: i,
-          start: s - margin,
+          start: start - margin,
           size,
           width: outerRectRef.current.width,
           isScrolling: useIsScrolling ? isScrolling : undefined,
-          // eslint-disable-next-line no-loop-func
           measureRef: (el) => {
             if (!el) return;
 
-            // eslint-disable-next-line compat/compat
-            let observer: ResizeObserver | undefined = new ResizeObserver(
-              ([{ borderBoxSize }]) => {
+            while (roQueueRef.current.length > oStop - oStart) {
+              let prevRo = roQueueRef.current.shift();
+              prevRo?.disconnect();
+              prevRo = undefined;
+            }
+
+            roQueueRef.current.push(
+              // eslint-disable-next-line compat/compat
+              new ResizeObserver(([{ borderBoxSize }]) => {
                 const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
-                if (!measuredSize) return;
-
-                if (size !== measuredSize) {
+                if (measuredSize && measuredSize !== size) {
                   measuresRef.current[i].size = measuredSize;
-                  shouldRecalc = true;
-                }
-
-                if (i === oStop && shouldRecalc) {
                   measuresRef.current = getMeasures();
                   updateItems(offset, isScrolling);
                 }
-
-                observer?.disconnect();
-                observer = undefined;
-              }
+              })
             );
 
-            observer.observe(el);
+            roQueueRef.current[roQueueRef.current.length - 1].observe(el);
           },
         });
       }
@@ -449,6 +445,12 @@ export default <
       if (scrollRafRef.current) {
         cancelAnimationFrame(scrollRafRef.current);
         scrollRafRef.current = undefined;
+      }
+
+      while (roQueueRef.current.length) {
+        let ro = roQueueRef.current.shift();
+        ro?.disconnect();
+        ro = undefined;
       }
 
       outer.removeEventListener("scroll", handleScroll);
