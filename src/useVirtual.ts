@@ -232,6 +232,8 @@ export default <
               ([{ borderBoxSize }]) => {
                 const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
+                if (!measuredSize) return;
+
                 if (size !== measuredSize) {
                   measuresRef.current[i].size = measuredSize;
                   shouldRecalc = true;
