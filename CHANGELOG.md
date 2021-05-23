@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.8
+
+### Patch Changes
+
+- [#29](https://github.com/wellyshen/react-cool-virtual/pull/29) [`0488cbf`](https://github.com/wellyshen/react-cool-virtual/commit/0488cbfe1223ca6979246a8bc47615fa249050ae) Thanks [@wellyshen](https://github.com/wellyshen)! - Fix(useVirtual): correct the `start` value of `items`
+
 ## 0.0.7
 
 ### Patch Changes

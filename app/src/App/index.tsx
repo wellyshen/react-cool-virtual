@@ -9,22 +9,25 @@ const sleep = (time: number) =>
   // eslint-disable-next-line compat/compat
   new Promise((resolve) => setTimeout(resolve, time));
 
-const getMockData = (count: number) =>
+const getMockData = (count: number, min = 25) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
     text: uuidv4(),
-    size: 25 + Math.round(Math.random() * 100),
+    size: min + Math.round(Math.random() * 100),
   }));
+
+const rowHeights = getMockData(100);
+const colWidths = getMockData(100, 50);
 
 export default (): JSX.Element => {
   const row = useVirtual<HTMLDivElement, HTMLDivElement>({
-    itemCount: 10000,
-    itemSize: 35,
+    itemCount: rowHeights.length,
+    itemSize: (idx) => rowHeights[idx].size,
     overscanCount: 5,
   });
   const col = useVirtual<HTMLDivElement, HTMLDivElement>({
-    itemCount: 10000,
-    itemSize: 100,
+    itemCount: colWidths.length,
+    itemSize: (idx) => colWidths[idx].size,
     overscanCount: 5,
     horizontal: true,
   });
