@@ -122,7 +122,7 @@ import useVirtual from "react-cool-virtual";
 
 const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 10000,
+    itemCount: 1000,
   });
 
   return (
@@ -133,11 +133,40 @@ const List = () => {
     >
       <div ref={innerRef}>
         {items.map(({ index, size }) => (
-          <div
-            key={index}
-            className={`item ${index % 2 && "light"}`}
-            style={{ height: `${size}px` }}
-          >
+          <div key={index} style={{ height: `${size}px` }}>
+            ♻️ {index}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+### Variable Size
+
+This example demonstrates how to create a variable size list. For horizontal list or table, please refer to CodeSandbox.
+
+[![Edit RCV - Variable Size](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-variable-size-8vu3u?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import useVirtual from "react-cool-virtual";
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 1000,
+    itemSize: (idx) => (idx % 2 ? 100 : 50),
+  });
+
+  return (
+    <div
+      className="outer"
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size }) => (
+          <div key={index} style={{ height: `${size}px` }}>
             ♻️ {index}
           </div>
         ))}
