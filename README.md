@@ -193,7 +193,7 @@ const rowHeights = () =>
 const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: rowHeights.length,
-    itemSize: 75, // The unmeasured item sizes will refer to this value (default = 50)
+    itemSize: 75, // The unmeasured item sizes will refer to this value (default = 100)
   });
 
   return (
