@@ -82,16 +82,16 @@ import useVirtual from "react-cool-virtual";
 
 const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 10000, // (Required) The total number of items in the list
-    itemSize: 50, // The size of an item (default = 50)
+    itemCount: 10000, // Provide the total number of the list items
+    itemSize: 50, // The size of each item (default = 50)
   });
 
   return (
     <div
-      ref={outerRef} // (Required) Set the scroll container with the `outerRef`
+      ref={outerRef} // Set the scroll container with the `outerRef`
       style={{ width: "300px", height: "500px", overflow: "auto" }}
     >
-      {/* (Required) Set the inner element with the `innerRef` */}
+      {/* Set the inner element with the `innerRef` */}
       <div ref={innerRef}>
         {items.map(({ index, size }) => (
           // You can set the item's height with the `size` property
