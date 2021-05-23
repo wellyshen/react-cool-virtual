@@ -40,8 +40,8 @@ export interface OnScroll {
   (event: {
     overscanStartIndex: number;
     overscanStopIndex: number;
-    itemStartIndex: number;
-    itemStopIndex: number;
+    visibleStartIndex: number;
+    visibleStopIndex: number;
     readonly scrollOffset: number;
     readonly scrollForward: boolean;
     readonly userScroll: boolean;
