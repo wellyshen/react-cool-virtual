@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
+
 import { Fragment } from "react";
 import useVirtual from "react-cool-virtual";
 
@@ -16,7 +18,7 @@ const VerticalList = () => {
   return (
     <div
       className="outer"
-      style={{ width: "400px", height: "300px", overflow: "auto" }}
+      style={{ width: "400px", height: "400px", overflow: "auto" }}
       ref={(el) => {
         row.outerRef.current = el;
         col.outerRef.current = el;
@@ -46,7 +48,7 @@ const VerticalList = () => {
                   transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`
                 }}
               >
-                {rowItem.index}, {colItem.index}
+                ♻️ {rowItem.index}, {colItem.index}
               </div>
             ))}
           </Fragment>

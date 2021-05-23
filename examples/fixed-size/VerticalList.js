@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
+
 import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
@@ -20,7 +22,7 @@ const VerticalList = () => {
             className={`item ${index % 2 && "light"}`}
             style={{ height: `${size}px` }}
           >
-            {index}
+            ♻️ {index}
           </div>
         ))}
       </div>
