@@ -3,7 +3,7 @@ import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
 import "normalize.css";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 const sleep = (time: number) =>
   // eslint-disable-next-line compat/compat
@@ -54,10 +54,10 @@ export default (): JSX.Element => {
                     // eslint-disable-next-line no-nested-ternary
                     rowItem.index % 2
                       ? colItem.index % 2
-                        ? styles.itemDark
+                        ? styles.dark
                         : ""
                       : !(colItem.index % 2)
-                      ? styles.itemDark
+                      ? styles.dark
                       : ""
                   }`}
                   style={{

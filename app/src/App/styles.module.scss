@@ -25,8 +25,8 @@ body {
   justify-content: center;
   align-items: center;
   background: #fff;
-}
 
-.itemDark {
-  background: #ccc;
+  &.dark {
+    background: #ccc;
+  }
 }
