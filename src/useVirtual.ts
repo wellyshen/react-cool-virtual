@@ -252,8 +252,8 @@ export default <
           onScrollRef.current({
             overscanStartIndex: start,
             overscanStopIndex: end,
-            itemStartIndex: startIdx,
-            itemStopIndex: endIdx,
+            visibleStartIndex: startIdx,
+            visibleStopIndex: endIdx,
             scrollOffset: offset,
             scrollForward: offset > offsetRef.current,
             userScroll: userScrollRef.current,
