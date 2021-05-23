@@ -1,13 +1,9 @@
-/** @jsxImportSource @emotion/react */
-
-import { useState } from "react";
-import { Global, css } from "@emotion/react";
+import { Fragment } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
-import normalize from "normalize.css";
-
-import { root, app, outer, inner, item, itemDark } from "./styles";
+import "normalize.css";
+import styles from "./styles.module.css";
 
 const sleep = (time: number) =>
   // eslint-disable-next-line compat/compat
@@ -20,38 +16,64 @@ const getMockData = (count: number) =>
     size: 25 + Math.round(Math.random() * 100),
   }));
 
-const itemLoadedArr: any = [];
-
 export default (): JSX.Element => {
-  const {
-    outerRef,
-    innerRef,
-    items: rowItems,
-  } = useVirtual<HTMLDivElement, HTMLDivElement>({ itemCount: 100 });
+  const row = useVirtual<HTMLDivElement, HTMLDivElement>({
+    itemCount: 10000,
+    itemSize: 35,
+    overscanCount: 5,
+  });
+  const col = useVirtual<HTMLDivElement, HTMLDivElement>({
+    itemCount: 10000,
+    itemSize: 100,
+    overscanCount: 5,
+    horizontal: true,
+  });
 
   return (
-    <>
-      <Global
-        styles={css`
-          ${normalize}
-          ${root}
-        `}
-      />
-      <div css={app}>
-        <div css={outer} ref={outerRef}>
-          <div css={inner} ref={innerRef}>
-            {rowItems.map(({ index, size }) => (
-              <div
-                key={index}
-                css={[item, index % 2 && itemDark]}
-                style={{ height: `${size}px` }}
-              >
-                {index}
-              </div>
-            ))}
-          </div>
+    <div className={styles.app}>
+      <div
+        className={styles.outer}
+        ref={(el) => {
+          row.outerRef.current = el;
+          col.outerRef.current = el;
+        }}
+      >
+        <div
+          style={{ position: "relative" }}
+          ref={(el) => {
+            row.innerRef.current = el;
+            col.innerRef.current = el;
+          }}
+        >
+          {row.items.map((rowItem) => (
+            <Fragment key={rowItem.index}>
+              {col.items.map((colItem) => (
+                <div
+                  key={colItem.index}
+                  className={`${styles.item} ${
+                    // eslint-disable-next-line no-nested-ternary
+                    rowItem.index % 2
+                      ? colItem.index % 2
+                        ? styles.itemDark
+                        : ""
+                      : !(colItem.index % 2)
+                      ? styles.itemDark
+                      : ""
+                  }`}
+                  style={{
+                    position: "absolute",
+                    height: `${rowItem.size}px`,
+                    width: `${colItem.size}px`,
+                    transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
+                  }}
+                >
+                  {rowItem.index}, {colItem.index}
+                </div>
+              ))}
+            </Fragment>
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };

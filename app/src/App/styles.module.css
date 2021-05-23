@@ -1,0 +1,32 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.app {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.outer {
+  margin: 0 auto;
+  width: 500px;
+  height: 500px;
+  border: 1px solid #000;
+  margin-bottom: 1rem;
+  overflow: auto;
+}
+
+.inner {
+  position: relative;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+}
+
+.itemDark {
+  background: #ccc;
+}
