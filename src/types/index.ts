@@ -51,6 +51,7 @@ export interface OnScroll {
 export interface Item {
   readonly key?: string;
   readonly index: number;
+  readonly start: number;
   readonly size: number;
   readonly width: number;
   readonly isScrolling?: boolean;
