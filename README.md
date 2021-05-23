@@ -113,6 +113,33 @@ Some of the common use cases that React Cool Virtual can help you out.
 
 ### Fixed Size
 
+This example demonstrates how to create a vertical fixed size list. For horizontal list or table, please refer to CodeSandbox.
+
+[![Edit RCV - Fixed Size](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-fixed-size-bowcu?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import useVirtual from "react-cool-virtual";
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({ itemCount: 10000 });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size }) => (
+          <div key={index} style={{ height: `${size}px` }}>
+            {index}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
 ## Performance Optimization
 
 Coming soon...
