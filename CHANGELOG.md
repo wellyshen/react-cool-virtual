@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.9
+
+### Patch Changes
+
+- [#31](https://github.com/wellyshen/react-cool-virtual/pull/31) [`3fb42de`](https://github.com/wellyshen/react-cool-virtual/commit/3fb42de49f02005559b4979e82436bf366936cf3) Thanks [@wellyshen](https://github.com/wellyshen)! - Fix(useVirtual): fix the randomly grid cells when working with dynamic size
+
 ## 0.0.8
 
 ### Patch Changes
