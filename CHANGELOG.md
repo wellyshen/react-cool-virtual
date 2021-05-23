@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.10
+
+### Patch Changes
+
+- [#33](https://github.com/wellyshen/react-cool-virtual/pull/33) [`ca43b7e`](https://github.com/wellyshen/react-cool-virtual/commit/ca43b7ef1448786bbb9c12b94a40c455bf92eb65) Thanks [@wellyshen](https://github.com/wellyshen)! - Fix(useVirtual): real-time dynamic size not working
+
 ## 0.0.9
 
 ### Patch Changes
