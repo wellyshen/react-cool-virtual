@@ -214,12 +214,12 @@ export default <
       let shouldRecalc = false;
 
       for (let i = start; i <= end; i += 1) {
-        const { key, size } = measuresRef.current[i];
+        const { key, start: s, size } = measuresRef.current[i];
 
         nextItems.push({
           key,
           index: i,
-          start: i * size - margin,
+          start: s - margin,
           size,
           width: outerRectRef.current.width,
           isScrolling: useIsScrolling ? isScrolling : undefined,
