@@ -46,7 +46,13 @@ const getInitItems = (
   const ssrItems = [];
 
   for (let i = idx; i <= len; i += 1) {
-    const ssrItem = { index: i, size: 0, width: 0, measureRef: () => null };
+    const ssrItem = {
+      index: i,
+      start: 0,
+      size: 0,
+      width: 0,
+      measureRef: () => null,
+    };
     if (keyExtractor) (ssrItem as any).key = keyExtractor(i);
     ssrItems.push(ssrItem);
   }
@@ -207,11 +213,14 @@ export default <
       const nextItems: Item[] = [];
       let shouldRecalc = false;
 
-      for (let i = start; i <= end; i += 1)
+      for (let i = start; i <= end; i += 1) {
+        const { key, size } = measuresRef.current[i];
+
         nextItems.push({
-          key: measuresRef.current[i].key,
+          key,
           index: i,
-          size: measuresRef.current[i].size,
+          start: i * size - margin,
+          size,
           width: outerRectRef.current.width,
           isScrolling: useIsScrolling ? isScrolling : undefined,
           // eslint-disable-next-line no-loop-func
@@ -221,10 +230,10 @@ export default <
             // eslint-disable-next-line compat/compat
             let observer: ResizeObserver | undefined = new ResizeObserver(
               ([{ borderBoxSize }]) => {
-                const { [itemSizeKey]: size } = borderBoxSize[0];
+                const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
-                if (size !== measuresRef.current[i].size) {
-                  measuresRef.current[i].size = size;
+                if (size !== measuredSize) {
+                  measuresRef.current[i].size = measuredSize;
                   shouldRecalc = true;
                 }
 
@@ -241,6 +250,7 @@ export default <
             observer.observe(el);
           },
         });
+      }
 
       setItems((prevItems) =>
         shouldUpdate(prevItems, nextItems, { measureRef: true })
