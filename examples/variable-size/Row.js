@@ -4,9 +4,10 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const VerticalList = () => {
+const VerticalList = ({ rowHeights }) => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 10000
+    itemCount: rowHeights.length,
+    itemSize: (idx) => rowHeights[idx]
   });
 
   return (

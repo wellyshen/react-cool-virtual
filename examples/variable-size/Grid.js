@@ -5,14 +5,15 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const VerticalList = () => {
+const Table = ({ rowHeights, colWidths }) => {
   const row = useVirtual({
-    itemCount: 10000
+    itemCount: rowHeights.length,
+    itemSize: (idx) => rowHeights[idx]
   });
   const col = useVirtual({
     horizontal: true,
-    itemCount: 10000,
-    itemSize: 100
+    itemCount: colWidths.length,
+    itemSize: (idx) => colWidths[idx]
   });
 
   return (
@@ -58,4 +59,4 @@ const VerticalList = () => {
   );
 };
 
-export default VerticalList;
+export default Table;
