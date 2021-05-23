@@ -33,7 +33,7 @@ import {
 
 const DEFAULT_ITEM_SIZE = 50;
 const DEBOUNCE_INTERVAL = 200;
-const MAX_AUTO_CORRECT_TIMES = 10;
+const AUTO_CORRECT_LIMIT = 10;
 
 const getInitItems = (
   ssrItemCount?: SsrItemCount,
@@ -383,7 +383,7 @@ export default <
         if (!autoCorrect) {
           if (cb) cb();
         } else if (
-          autoCorrectTimesRef.current <= MAX_AUTO_CORRECT_TIMES &&
+          autoCorrectTimesRef.current <= AUTO_CORRECT_LIMIT &&
           (offset >= start || offset + outerSize <= end)
         ) {
           setTimeout(() => scrollToItem(value, cb));
