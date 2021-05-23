@@ -1,6 +1,5 @@
-<p align="center"><code><strong>🚧 Work in progress, don't use it now.</strong></code></p>
-
 <h1 align="center">
+  <code><strong>🚧 Work in progress, don't use it now.</strong>
   <br />
   <br />
   ♻️
