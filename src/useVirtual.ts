@@ -84,7 +84,7 @@ export default <
   const hasLoadMoreOnMountRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
   const offsetRef = useRef(0);
-  const endIdxRef = useRef<number>();
+  const vStopRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
@@ -137,28 +137,28 @@ export default <
   const getCalcData = useCallback(
     (offset: number) => {
       const { current: measures } = measuresRef;
-      const startIdx = findNearestBinarySearch(
+      const vStart = findNearestBinarySearch(
         0,
         measures.length,
         offset,
         measuresRef.current.map(({ start }) => start)
       );
-      let endIdx = startIdx;
+      let vStop = vStart;
 
       while (
-        endIdx < measures.length &&
-        measures[endIdx].start < offset + outerRectRef.current[sizeKey]
+        vStop < measures.length &&
+        measures[vStop].start < offset + outerRectRef.current[sizeKey]
       )
-        endIdx += 1;
+        vStop += 1;
 
-      const start = Math.max(startIdx - overscanCount, 0);
-      const margin = measures[start].start;
+      const oStart = Math.max(vStart - overscanCount, 0);
+      const margin = measures[oStart].start;
 
       return {
-        startIdx,
-        endIdx: endIdx - 1,
-        start,
-        end: Math.min(endIdx + overscanCount, measures.length) - 1,
+        oStart,
+        oStop: Math.min(vStop + overscanCount, measures.length) - 1,
+        vStart,
+        vStop: vStop - 1,
         margin,
         innerSize: measures[measures.length - 1].end - margin,
       };
@@ -204,7 +204,7 @@ export default <
         return;
       }
 
-      const { startIdx, endIdx, start, end, margin, innerSize } =
+      const { oStart, oStop, vStart, vStop, margin, innerSize } =
         getCalcData(offset);
 
       innerRef.current.style[marginKey] = `${margin}px`;
@@ -213,7 +213,7 @@ export default <
       const nextItems: Item[] = [];
       let shouldRecalc = false;
 
-      for (let i = start; i <= end; i += 1) {
+      for (let i = oStart; i <= oStop; i += 1) {
         const { key, start: s, size } = measuresRef.current[i];
 
         nextItems.push({
@@ -239,7 +239,7 @@ export default <
                   shouldRecalc = true;
                 }
 
-                if (i === end && shouldRecalc) {
+                if (i === oStop && shouldRecalc) {
                   measuresRef.current = getMeasures();
                   updateItems(offset, isScrolling);
                 }
@@ -263,20 +263,20 @@ export default <
       if (isScrolling) {
         if (onScrollRef.current)
           onScrollRef.current({
-            overscanStartIndex: start,
-            overscanStopIndex: end,
-            visibleStartIndex: startIdx,
-            visibleStopIndex: endIdx,
+            overscanStartIndex: oStart,
+            overscanStopIndex: oStop,
+            visibleStartIndex: vStart,
+            visibleStopIndex: vStop,
             scrollOffset: offset,
             scrollForward: offset > offsetRef.current,
             userScroll: userScrollRef.current,
           });
 
-        const loadIndex = Math.floor((endIdx + 1) / loadMoreThreshold);
+        const loadIndex = Math.floor((vStop + 1) / loadMoreThreshold);
         const startIndex = loadIndex * loadMoreThreshold;
 
         if (
-          endIdx !== endIdxRef.current &&
+          vStop !== vStopRef.current &&
           loadMoreRef.current &&
           !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
         )
@@ -288,7 +288,7 @@ export default <
             userScroll: userScrollRef.current,
           });
 
-        endIdxRef.current = endIdx;
+        vStopRef.current = vStop;
         if (useIsScrolling) resetIsScrolling();
         if (!userScrollRef.current) resetUserScroll();
       }
