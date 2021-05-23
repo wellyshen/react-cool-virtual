@@ -19,7 +19,7 @@ const App = () => (
     <br />
     <br />
     <h4>Grid</h4>
-    <Grid rowHeights={getSizes(25)} colWidths={getSizes(75)} />
+    <Grid rowHeights={getSizes(25)} colWidths={getSizes(100)} />
     <br />
   </div>
 );
