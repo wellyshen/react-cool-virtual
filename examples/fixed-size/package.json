@@ -1,7 +1,7 @@
 {
-  "name": "rcv-basic",
+  "name": "rcv-fixed-size",
   "version": "0.0.0",
-  "description": "The basic example of RCV.",
+  "description": "The fixed size example of RCV.",
   "main": "index.js",
   "dependencies": {
     "react": "^17.0.2",
