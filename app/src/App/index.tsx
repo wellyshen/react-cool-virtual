@@ -22,12 +22,10 @@ const colWidths = getMockData(100, 50);
 export default (): JSX.Element => {
   const row = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: rowHeights.length,
-    // overscanCount: 100,
   });
   const col = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: colWidths.length,
     horizontal: true,
-    // overscanCount: 100,
   });
 
   return (
