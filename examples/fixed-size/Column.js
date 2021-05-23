@@ -4,7 +4,7 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const VerticalList = () => {
+const Column = () => {
   const { outerRef, innerRef, items } = useVirtual({
     horizontal: true,
     itemCount: 10000,
@@ -32,4 +32,4 @@ const VerticalList = () => {
   );
 };
 
-export default VerticalList;
+export default Column;

@@ -5,7 +5,7 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const VerticalList = () => {
+const Grid = () => {
   const row = useVirtual({
     itemCount: 10000
   });
@@ -58,4 +58,4 @@ const VerticalList = () => {
   );
 };
 
-export default VerticalList;
+export default Grid;
