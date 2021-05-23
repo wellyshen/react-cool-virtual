@@ -21,7 +21,6 @@ import {
 import {
   easeInOutCubic,
   findNearestBinarySearch,
-  invariant,
   isNumber,
   now,
   shouldUpdate,
@@ -177,6 +176,8 @@ export default <
 
   const updateItems = useCallback(
     (offset: number, isScrolling = false) => {
+      if (!innerRef.current) return;
+
       if (
         !hasLoadMoreOnMountRef.current &&
         loadMoreRef.current &&
@@ -200,8 +201,8 @@ export default <
       const { startIdx, endIdx, start, end, margin, innerSize } =
         getCalcData(offset);
 
-      innerRef.current!.style[marginKey] = `${margin}px`;
-      innerRef.current!.style[sizeKey] = `${innerSize}px`;
+      innerRef.current.style[marginKey] = `${margin}px`;
+      innerRef.current.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item[] = [];
       let shouldRecalc = false;
@@ -300,6 +301,8 @@ export default <
 
   const scrollTo = useCallback<ScrollTo>(
     (value, cb) => {
+      if (!outerRef.current) return;
+
       const { offset, smooth }: ScrollToOptions = isNumber(value)
         ? { offset: value }
         : value;
@@ -310,7 +313,7 @@ export default <
       userScrollRef.current = false;
 
       if (!smooth) {
-        outerRef.current![scrollKey] = offset;
+        outerRef.current[scrollKey] = offset;
         if (cb) cb();
         return;
       }
@@ -400,11 +403,6 @@ export default <
   useResizeEffect<O>(
     outerRef,
     (rect) => {
-      invariant(
-        !isNumber(itemCount),
-        '💡 react-cool-virtual: Please provide "itemCount" for the hook.'
-      );
-
       const isSameWidth = outerRectRef.current.width === rect.width;
       const { current: prevMeasures } = measuresRef;
 
@@ -426,19 +424,12 @@ export default <
   useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
 
-    invariant(
-      !outer,
-      "💡 react-cool-virtual: Please set `outerRef` to the outer element."
-    );
-    invariant(
-      !innerRef.current,
-      "💡 react-cool-virtual: Please set `innerRef` to the inner element."
-    );
+    if (!outer) return () => null;
 
     const handleScroll = ({ target }: Event) =>
       updateItems((target as O)[scrollKey], true);
 
-    outer!.addEventListener("scroll", handleScroll, { passive: true });
+    outer.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       cancelResetIsScrolling();
@@ -448,7 +439,7 @@ export default <
         scrollRafRef.current = undefined;
       }
 
-      outer!.removeEventListener("scroll", handleScroll);
+      outer.removeEventListener("scroll", handleScroll);
     };
   }, [cancelResetIsScrolling, cancelResetUserScroll, scrollKey, updateItems]);
 

@@ -1,5 +1,5 @@
 declare module "react-cool-virtual" {
-  import { RefObject } from "react";
+  import { MutableRefObject } from "react";
 
   export interface ItemSizeFunction {
     (index: number, width: number): number;
@@ -104,8 +104,8 @@ declare module "react-cool-virtual" {
     O extends HTMLElement = HTMLElement,
     I extends HTMLElement = HTMLElement
   > {
-    outerRef: RefObject<O>;
-    innerRef: RefObject<I>;
+    outerRef: MutableRefObject<O | null>;
+    innerRef: MutableRefObject<I | null>;
     items: Item[];
     scrollTo: ScrollTo;
     scrollToItem: ScrollToItem;

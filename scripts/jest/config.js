@@ -8,5 +8,4 @@ module.exports = {
     "!**/index.umd.ts",
     "!src/types/*",
   ],
-  globals: { __DEV__: true },
 };
