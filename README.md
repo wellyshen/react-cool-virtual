@@ -138,7 +138,7 @@ const List = () => {
             className={`item ${index % 2 && "light"}`}
             style={{ height: `${size}px` }}
           >
-            {index}
+            ♻️ {index}
           </div>
         ))}
       </div>
