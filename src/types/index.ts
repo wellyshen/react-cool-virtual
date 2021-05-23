@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { MutableRefObject } from "react";
 
 // Internal
 export interface Measure {
@@ -101,8 +101,8 @@ export interface Options {
 }
 
 export interface Return<O, I> {
-  outerRef: RefObject<O>;
-  innerRef: RefObject<I>;
+  outerRef: MutableRefObject<O | null>;
+  innerRef: MutableRefObject<I | null>;
   items: Item[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
