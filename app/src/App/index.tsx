@@ -23,23 +23,11 @@ const getMockData = (count: number) =>
 const itemLoadedArr: any = [];
 
 export default (): JSX.Element => {
-  const [mockData, setMockData] = useState<any[]>(getMockData(1000));
-  const { outerRef, innerRef, items, scrollToItem } = useVirtual<
-    HTMLDivElement,
-    HTMLDivElement
-  >({
-    itemCount: mockData.length,
-    // itemSize: (_, width) => (width > 500 ? 100 : 50),
-    // keyExtractor: () => uuidv4(),
-    /* isItemLoaded: (idx) => itemLoadedArr[idx],
-    loadMore: async ({ loadIndex }) => {
-      itemLoadedArr[loadIndex] = true;
-      // if (loadIndex === 3) itemLoadedArr[loadIndex + 1] = true;
-      await sleep(2500);
-      setMockData((prev) => [...prev, ...getMockData(15)]);
-    }, */
-    onScroll: () => console.log("LOG ===> HI!"),
-  });
+  const {
+    outerRef,
+    innerRef,
+    items: rowItems,
+  } = useVirtual<HTMLDivElement, HTMLDivElement>({ itemCount: 100 });
 
   return (
     <>
@@ -52,35 +40,17 @@ export default (): JSX.Element => {
       <div css={app}>
         <div css={outer} ref={outerRef}>
           <div css={inner} ref={innerRef}>
-            {items.length ? (
-              items.map(({ key, index, size, measureRef }) => (
-                <div
-                  key={index}
-                  css={[item, index % 2 && itemDark]}
-                  style={{
-                    height: `${size}px`,
-                    overflow: "auto",
-                  }}
-                  ref={measureRef}
-                >
-                  <div style={{ height: "500px" }} />
-                </div>
-              ))
-            ) : (
-              <div>Loading...</div>
-            )}
+            {rowItems.map(({ index, size }) => (
+              <div
+                key={index}
+                css={[item, index % 2 && itemDark]}
+                style={{ height: `${size}px` }}
+              >
+                {index}
+              </div>
+            ))}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() =>
-            scrollToItem({ index: 500, smooth: false, autoCorrect: true }, () =>
-              console.log("Done!")
-            )
-          }
-        >
-          Scroll To
-        </button>
       </div>
     </>
   );

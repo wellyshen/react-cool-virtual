@@ -27,9 +27,10 @@
 - 💅🏼 Apply styles without hassle, just [few setups](#basic-usage).
 - 🧱 Supports [fixed](#TBC), [variable](#TBC), [dynamic](#TBC), and [real-time dynamic](#TBC) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
-- 🧻 Built-ins [load more callback](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
-- 🖱 Imperative [scroll-to controls](#TBC) for **offset** and **index** with **smooth scrolling** out of the box.
-- 🧭 Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
+- 🚚 Built-ins [load more callback](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
+- 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and alignment.
+- 🛹 Out of the box [smooth scrolling](#TBC) and be able to customize it.
+- ⛳ Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
@@ -37,7 +38,7 @@
 
 ## Motivation
 
-When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that increase a lot of bundle size for our app(s). However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution, but applying styles for using it can be verbose. In addition, it doesn't support TypeScript and miss some of the [useful features](#features).
+When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that increase a lot of bundle size for our app(s). However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution, but applying styles for using it can be verbose. Furthermore, it lacks some of the [useful features](#features).
 
 React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 😭.
 
