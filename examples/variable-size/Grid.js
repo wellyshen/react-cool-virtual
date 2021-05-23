@@ -5,7 +5,7 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const Table = ({ rowHeights, colWidths }) => {
+const Grid = ({ rowHeights, colWidths }) => {
   const row = useVirtual({
     itemCount: rowHeights.length,
     itemSize: (idx) => rowHeights[idx]
@@ -59,4 +59,4 @@ const Table = ({ rowHeights, colWidths }) => {
   );
 };
 
-export default Table;
+export default Grid;
