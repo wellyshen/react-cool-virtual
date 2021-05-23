@@ -4,10 +4,10 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const VerticalList = ({ rowHeights }) => {
+const Row = ({ rowHeights }) => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: rowHeights.length,
-    itemSize: (idx) => rowHeights[idx]
+    itemSize: 75 // The unmeasured item sizes will refer to this value (default = 50)
   });
 
   return (
@@ -17,13 +17,14 @@ const VerticalList = ({ rowHeights }) => {
       ref={outerRef}
     >
       <div ref={innerRef}>
-        {items.map(({ index, size }) => (
+        {items.map(({ index, size, measureRef }) => (
           <div
             key={index}
             className={`item ${index % 2 && "light"}`}
-            style={{ height: `${size}px` }}
+            style={{ height: `${rowHeights[index]}px` }}
+            ref={measureRef} // It will measure the item size for us
           >
-            ♻️ {index}
+            📏 {size}
           </div>
         ))}
       </div>
@@ -31,4 +32,4 @@ const VerticalList = ({ rowHeights }) => {
   );
 };
 
-export default VerticalList;
+export default Row;

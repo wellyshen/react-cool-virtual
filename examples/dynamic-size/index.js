@@ -6,7 +6,7 @@ import Grid from "./Grid";
 import "./styles.scss";
 
 const getSizes = (min) =>
-  new Array(1000).fill().map(() => min + Math.round(Math.random() * 100));
+  new Array(1000).fill().map(() => min + Math.round(Math.random() * 50));
 
 const App = () => (
   <div className="app">

@@ -5,15 +5,15 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const Table = ({ rowHeights, colWidths }) => {
+const Grid = ({ rowHeights, colWidths }) => {
   const row = useVirtual({
     itemCount: rowHeights.length,
-    itemSize: (idx) => rowHeights[idx]
+    itemSize: 75 // The unmeasured item sizes will refer to this value (default = 50)
   });
   const col = useVirtual({
     horizontal: true,
     itemCount: colWidths.length,
-    itemSize: (idx) => colWidths[idx]
+    itemSize: 75
   });
 
   return (
@@ -44,12 +44,16 @@ const Table = ({ rowHeights, colWidths }) => {
                 }`}
                 style={{
                   position: "absolute",
-                  height: `${rowItem.size}px`,
-                  width: `${colItem.size}px`,
+                  height: `${rowHeights[rowItem.index]}px`,
+                  width: `${colWidths[colItem.index]}px`,
                   transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`
                 }}
+                ref={(el) => {
+                  rowItem.measureRef(el); // It will measure the item size for us
+                  colItem.measureRef(el);
+                }}
               >
-                ♻️ {rowItem.index}, {colItem.index}
+                📏 {rowItem.size}, {colItem.size}
               </div>
             ))}
           </Fragment>
@@ -59,4 +63,4 @@ const Table = ({ rowHeights, colWidths }) => {
   );
 };
 
-export default Table;
+export default Grid;

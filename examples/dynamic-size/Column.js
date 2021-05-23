@@ -4,11 +4,11 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const HorizontalList = ({ colWidths }) => {
+const Column = ({ colWidths }) => {
   const { outerRef, innerRef, items } = useVirtual({
     horizontal: true,
     itemCount: colWidths.length,
-    itemSize: (idx) => colWidths[idx]
+    itemSize: 75 // The unmeasured item sizes will refer to this value (default = 50)
   });
 
   return (
@@ -18,13 +18,14 @@ const HorizontalList = ({ colWidths }) => {
       ref={outerRef}
     >
       <div ref={innerRef} style={{ display: "flex" }}>
-        {items.map(({ index, size }) => (
+        {items.map(({ index, size, measureRef }) => (
           <div
             key={index}
             className={`item ${index % 2 && "light"}`}
-            style={{ minWidth: `${size}px`, height: "75px" }}
+            style={{ minWidth: `${colWidths[index]}px`, height: "75px" }}
+            ref={measureRef} // It will measure the item size for us
           >
-            ♻️ {index}
+            📏 {size}
           </div>
         ))}
       </div>
@@ -32,4 +33,4 @@ const HorizontalList = ({ colWidths }) => {
   );
 };
 
-export default HorizontalList;
+export default Column;
