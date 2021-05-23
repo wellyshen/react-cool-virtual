@@ -51,7 +51,6 @@ export default ({ name, umdName, inputFile, format, env, measure }) => {
         extensions,
       }),
       replace({
-        __DEV__: 'process.env.NODE_ENV !== "production"',
         ...(env ? { "process.env.NODE_ENV": JSON.stringify(env) } : {}),
       }),
       measure && sizeSnapshot(),

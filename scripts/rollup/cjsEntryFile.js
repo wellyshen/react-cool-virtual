@@ -1,7 +1,6 @@
 "use strict";
 
-if (process.env.NODE_ENV === "production") {
-  module.exports = require("./index.cjs.production.min.js");
-} else {
-  module.exports = require("./index.cjs.development.js");
-}
+module.exports =
+  process.env.NODE_ENV === "production"
+    ? require("./index.cjs.production.min.js")
+    : require("./index.cjs.development.js");
