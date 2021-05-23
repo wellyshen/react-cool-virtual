@@ -11,7 +11,7 @@ const getSizes = (min) =>
 const App = () => (
   <div className="app">
     <h4>Row</h4>
-    <Row rowHeights={getSizes(25)} />
+    <Row rowHeights={getSizes(35)} />
     <br />
     <br />
     <h4>Column</h4>
@@ -19,7 +19,7 @@ const App = () => (
     <br />
     <br />
     <h4>Grid</h4>
-    <Grid rowHeights={getSizes(25)} colWidths={getSizes(100)} />
+    <Grid rowHeights={getSizes(35)} colWidths={getSizes(100)} />
     <br />
   </div>
 );
