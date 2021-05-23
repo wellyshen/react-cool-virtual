@@ -40,7 +40,7 @@
 
 When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that increase a lot of bundle size for our app(s). However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution, but applying styles for using it can be verbose. Furthermore, it lacks some of the [useful features](#features).
 
-React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 😭.
+React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 🤯.
 
 ## Getting Started
 
