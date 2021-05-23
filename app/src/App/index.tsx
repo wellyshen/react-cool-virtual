@@ -22,14 +22,12 @@ const colWidths = getMockData(100, 50);
 export default (): JSX.Element => {
   const row = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: rowHeights.length,
-    itemSize: (idx) => rowHeights[idx].size,
-    overscanCount: 5,
+    // overscanCount: 100,
   });
   const col = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: colWidths.length,
-    itemSize: (idx) => colWidths[idx].size,
-    overscanCount: 5,
     horizontal: true,
+    // overscanCount: 100,
   });
 
   return (
@@ -61,9 +59,13 @@ export default (): JSX.Element => {
                   }`}
                   style={{
                     position: "absolute",
-                    height: `${rowItem.size}px`,
-                    width: `${colItem.size}px`,
+                    height: `${rowHeights[rowItem.index].size}px`,
+                    width: `${colWidths[colItem.index].size}px`,
                     transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
+                  }}
+                  ref={(el) => {
+                    rowItem.measureRef(el);
+                    colItem.measureRef(el);
                   }}
                 >
                   {rowItem.index}, {colItem.index}
