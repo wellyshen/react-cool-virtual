@@ -53,12 +53,8 @@ export default (): JSX.Element => {
                   className={`${styles.item} ${
                     // eslint-disable-next-line no-nested-ternary
                     rowItem.index % 2
-                      ? colItem.index % 2
-                        ? styles.dark
-                        : ""
-                      : !(colItem.index % 2)
-                      ? styles.dark
-                      : ""
+                      ? colItem.index % 2 && styles.dark
+                      : !(colItem.index % 2) && styles.dark
                   }`}
                   style={{
                     position: "absolute",
