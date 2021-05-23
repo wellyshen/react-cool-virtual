@@ -176,6 +176,48 @@ const List = () => {
 };
 ```
 
+### Dynamic Size
+
+This example demonstrates how to create a dynamic size list. For horizontal list or table, please refer to CodeSandbox.
+
+[![Edit RCV - Dynamic Size](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-dynamic-size-0wurg?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import useVirtual from "react-cool-virtual";
+
+const rowHeights = () =>
+  new Array(1000).fill().map(() => 25 + Math.round(Math.random() * 100));
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: rowHeights.length,
+    itemSize: 75, // The unmeasured item sizes will refer to this value (default = 50)
+  });
+
+  return (
+    <div
+      className="outer"
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size, measureRef }) => (
+          <div
+            key={index}
+            style={{ height: `${rowHeights[index]}px` }}
+            ref={measureRef} // It will measure the item size for us
+          >
+            📏 {size}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+> 💡 Jumping while scrolling? It's because the total size of the items is gradually corrected along with an item has been measured. You can tweak the `itemSize` to reduce the phenomenon.
+
 ## Performance Optimization
 
 Coming soon...
