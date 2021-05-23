@@ -188,7 +188,7 @@ This example demonstrates how to create a dynamic size list. For horizontal list
 import useVirtual from "react-cool-virtual";
 
 const rowHeights = () =>
-  new Array(1000).fill().map(() => 25 + Math.round(Math.random() * 100));
+  new Array(1000).fill().map(() => 35 + Math.round(Math.random() * 50));
 
 const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
