@@ -21,7 +21,7 @@ const Column = ({ colWidths }) => {
         {items.map(({ index, size }) => (
           <div
             key={index}
-            className={`item ${index % 2 ? "light" : ""}`}
+            className={`item ${index % 2 ? "dark" : ""}`}
             style={{ minWidth: `${size}px`, height: "75px" }}
           >
             ♻️ {index}

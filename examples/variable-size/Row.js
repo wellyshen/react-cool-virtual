@@ -20,7 +20,7 @@ const Row = ({ rowHeights }) => {
         {items.map(({ index, size }) => (
           <div
             key={index}
-            className={`item ${index % 2 ? "light" : ""}`}
+            className={`item ${index % 2 ? "dark" : ""}`}
             style={{ height: `${size}px` }}
           >
             ♻️ {index}

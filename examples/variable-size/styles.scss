@@ -1,15 +1,14 @@
 body {
   font-family: sans-serif;
-  background: #1a1a1a;
+  background: #fff;
 }
 
 .app {
   padding: 0 1rem;
-  color: #fff;
 }
 
 .outer {
-  border: 1px solid #333;
+  border: 1px solid #ddd;
   border-radius: 4px;
 }
 
@@ -17,10 +16,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
-  background: #1a1a1a;
+  background: #fff;
 
-  &.light {
-    background: #0a0a0a;
+  &.dark {
+    background: #e5e5e5;
   }
 }
