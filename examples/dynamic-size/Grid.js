@@ -39,8 +39,12 @@ const Grid = ({ rowHeights, colWidths }) => {
                 key={colItem.index}
                 className={`item ${
                   rowItem.index % 2
-                    ? colItem.index % 2 && "light"
-                    : !(colItem.index % 2) && "light"
+                    ? colItem.index % 2
+                      ? "light"
+                      : ""
+                    : !(colItem.index % 2)
+                    ? "light"
+                    : ""
                 }`}
                 style={{
                   position: "absolute",
@@ -53,7 +57,7 @@ const Grid = ({ rowHeights, colWidths }) => {
                   colItem.measureRef(el);
                 }}
               >
-                📏 {rowItem.size}, {colItem.size}
+                📏 {rowItem.size} x {colItem.size}
               </div>
             ))}
           </Fragment>
