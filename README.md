@@ -187,12 +187,9 @@ This example demonstrates how to create a dynamic size list. For horizontal list
 ```js
 import useVirtual from "react-cool-virtual";
 
-const rowHeights = () =>
-  new Array(1000).fill().map(() => 35 + Math.round(Math.random() * 100));
-
 const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: rowHeights.length,
+    itemCount: 1000,
     itemSize: 75, // The unmeasured item sizes will refer to this value (default = 50)
   });
 
@@ -203,13 +200,10 @@ const List = () => {
       ref={outerRef}
     >
       <div ref={innerRef}>
-        {items.map(({ index, size, measureRef }) => (
-          <div
-            key={index}
-            style={{ height: `${rowHeights[index]}px` }}
-            ref={measureRef} // It will measure the item size for us
-          >
-            📏 {size}
+        {items.map(({ index, measureRef }) => (
+          // Use the `measureRef` to measure the item size
+          <div key={index} ref={measureRef}>
+            {/* Some data... */}
           </div>
         ))}
       </div>
