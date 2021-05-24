@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+/* import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,8 +16,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(50);
-const colWidths = getMockData(50, 50);
+const rowHeights = getMockData(100000);
+const colWidths = getMockData(100000, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -68,6 +68,8 @@ export default (): JSX.Element => {
                   }`}
                   style={{
                     position: "absolute",
+                    // height: `${rowHeights[rowItem.index].size}px`,
+                    // width: `${colWidths[colItem.index].size}px`,
                     height: `${
                       rowItem.index ? rowHeights[rowItem.index].size : sz
                     }px`,
@@ -88,6 +90,59 @@ export default (): JSX.Element => {
           ))}
         </div>
       </div>
+    </div>
+  );
+}; */
+
+import { Fragment, useState } from "react";
+import useVirtual from "react-cool-virtual";
+import { v4 as uuidv4 } from "uuid";
+
+import "normalize.css";
+import styles from "./styles.module.scss";
+
+const sleep = (time: number) =>
+  // eslint-disable-next-line compat/compat
+  new Promise((resolve) => setTimeout(resolve, time));
+
+const getMockData = (count: number, min = 25) =>
+  // eslint-disable-next-line no-plusplus
+  new Array(count).fill({}).map((_, idx) => ({
+    text: uuidv4(),
+    size: min + Math.round(Math.random() * 100),
+  }));
+
+export default (): JSX.Element => {
+  const [sz, setSz] = useState(50);
+  const { outerRef, innerRef, items } = useVirtual<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    itemCount: 10,
+  });
+
+  return (
+    <div className={styles.app}>
+      <div className={styles.outer} ref={outerRef}>
+        <div style={{ position: "relative" }} ref={innerRef}>
+          {items.map(({ index, size, measureRef }) => (
+            <div
+              key={index}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              style={{ height: `${index === 1 ? sz : size}px` }}
+              ref={measureRef}
+            >
+              {index}
+            </div>
+          ))}
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
+      >
+        Resize
+      </button>
     </div>
   );
 };
