@@ -19,7 +19,7 @@ const Row = () => {
         {items.map(({ index, size }) => (
           <div
             key={index}
-            className={`item ${index % 2 && "light"}`}
+            className={`item ${index % 2 ? "light" : ""}`}
             style={{ height: `${size}px` }}
           >
             ♻️ {index}
