@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,10 +16,11 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(100);
-const colWidths = getMockData(100, 50);
+const rowHeights = getMockData(50);
+const colWidths = getMockData(50, 50);
 
 export default (): JSX.Element => {
+  const [sz, setSz] = useState(25);
   const row = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: rowHeights.length,
   });
@@ -30,6 +31,12 @@ export default (): JSX.Element => {
 
   return (
     <div className={styles.app}>
+      <button
+        type="button"
+        onClick={() => setSz((prev) => (prev === 25 ? 250 : 25))}
+      >
+        Resize
+      </button>
       <div
         className={styles.outer}
         ref={(el) => {
@@ -52,13 +59,21 @@ export default (): JSX.Element => {
                   className={`${styles.item} ${
                     // eslint-disable-next-line no-nested-ternary
                     rowItem.index % 2
-                      ? colItem.index % 2 && styles.dark
-                      : !(colItem.index % 2) && styles.dark
+                      ? colItem.index % 2
+                        ? styles.dark
+                        : ""
+                      : !(colItem.index % 2)
+                      ? styles.dark
+                      : ""
                   }`}
                   style={{
                     position: "absolute",
-                    height: `${rowHeights[rowItem.index].size}px`,
-                    width: `${colWidths[colItem.index].size}px`,
+                    height: `${
+                      rowItem.index ? rowHeights[rowItem.index].size : sz
+                    }px`,
+                    width: `${
+                      colItem.index ? colWidths[colItem.index].size : sz
+                    }px`,
                     transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
                   }}
                   ref={(el) => {
