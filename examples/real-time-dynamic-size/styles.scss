@@ -1,0 +1,26 @@
+body {
+  font-family: sans-serif;
+  background: #1a1a1a;
+}
+
+.app {
+  padding: 0 1rem;
+  color: #fff;
+}
+
+.outer {
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  background: #1a1a1a;
+
+  &.light {
+    background: #0a0a0a;
+  }
+}
