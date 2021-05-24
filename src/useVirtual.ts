@@ -211,7 +211,6 @@ export default <
       innerRef.current.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item[] = [];
-      let shouldRecalc = false;
 
       for (let i = oStart; i <= oStop; i += 1) {
         const { key, start, size } = measuresRef.current[i];
@@ -223,33 +222,19 @@ export default <
           size,
           width: outerRectRef.current.width,
           isScrolling: useIsScrolling ? isScrolling : undefined,
-          // eslint-disable-next-line no-loop-func
           measureRef: (el) => {
             if (!el) return;
 
             // eslint-disable-next-line compat/compat
-            let observer: ResizeObserver | undefined = new ResizeObserver(
-              ([{ borderBoxSize }]) => {
-                const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
+            new ResizeObserver(([{ borderBoxSize }]) => {
+              const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
-                if (!measuredSize) return;
-
-                if (size !== measuredSize) {
-                  measuresRef.current[i].size = measuredSize;
-                  shouldRecalc = true;
-                }
-
-                if (i === oStop && shouldRecalc) {
-                  measuresRef.current = getMeasures();
-                  updateItems(offset, isScrolling);
-                }
-
-                observer?.disconnect();
-                observer = undefined;
+              if (measuredSize && measuredSize !== size) {
+                measuresRef.current[i].size = measuredSize;
+                measuresRef.current = getMeasures();
+                updateItems(offset, isScrolling);
               }
-            );
-
-            observer.observe(el);
+            }).observe(el);
           },
         });
       }
