@@ -40,10 +40,10 @@ const Grid = ({ rowHeights, colWidths }) => {
                 className={`item ${
                   rowItem.index % 2
                     ? colItem.index % 2
-                      ? "light"
+                      ? "dark"
                       : ""
                     : !(colItem.index % 2)
-                    ? "light"
+                    ? "dark"
                     : ""
                 }`}
                 style={{
