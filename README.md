@@ -27,7 +27,7 @@
 - ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few setups](#basic-usage).
-- 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time dynamic](#real-time-dynamic-size) heights/widths.
+- 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
 - 🚚 Built-ins [load more callback](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and alignment.
@@ -214,11 +214,9 @@ const List = () => {
 
 > 💡 Jumping while scrolling? It's because the total size of the items is gradually corrected along with an item has been measured. You can tweak the `itemSize` to reduce the phenomenon.
 
-### Real-time Dynamic Size
+### Real-time Resize
 
-This example demonstrates how to create a real-time dynamic size row (e.g. expand/collapse). For column or grid, please refer to CodeSandbox.
-
-[![Edit RCV - Real-time Dynamic Size](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-real-time-dynamic-size-9czkd?fontsize=14&hidenavigation=1&theme=dark)
+This example demonstrates how to create a real-time resize row (e.g. expand/collapse). For column or grid, please refer to CodeSandbox.
 
 ```js
 // Coming soon...
