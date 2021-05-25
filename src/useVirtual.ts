@@ -250,41 +250,40 @@ export default <
           : prevItems
       );
 
-      if (isScrolling) {
-        if (onScrollRef.current)
-          onScrollRef.current({
-            overscanStartIndex: oStart,
-            overscanStopIndex: oStop,
-            visibleStartIndex: vStart,
-            visibleStopIndex: vStop,
-            scrollOffset: offset,
-            scrollForward: offset > offsetRef.current,
-            userScroll: userScrollRef.current,
-          });
+      if (!isScrolling) return;
 
-        const loadIndex = Math.floor((vStop + 1) / loadMoreThreshold);
-        const startIndex = loadIndex * loadMoreThreshold;
+      if (onScrollRef.current)
+        onScrollRef.current({
+          overscanStartIndex: oStart,
+          overscanStopIndex: oStop,
+          visibleStartIndex: vStart,
+          visibleStopIndex: vStop,
+          scrollOffset: offset,
+          scrollForward: offset > offsetRef.current,
+          userScroll: userScrollRef.current,
+        });
 
-        if (
-          vStop !== vStopRef.current &&
-          loadMoreRef.current &&
-          !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
-        )
-          loadMoreRef.current({
-            startIndex,
-            stopIndex: startIndex + loadMoreThreshold - 1,
-            loadIndex,
-            scrollOffset: offset,
-            userScroll: userScrollRef.current,
-          });
+      const loadIndex = Math.floor((vStop + 1) / loadMoreThreshold);
+      const startIndex = loadIndex * loadMoreThreshold;
 
-        vStopRef.current = vStop;
+      if (
+        vStop !== vStopRef.current &&
+        loadMoreRef.current &&
+        !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
+      )
+        loadMoreRef.current({
+          startIndex,
+          stopIndex: startIndex + loadMoreThreshold - 1,
+          loadIndex,
+          scrollOffset: offset,
+          userScroll: userScrollRef.current,
+        });
 
-        if (useIsScrolling) resetIsScrolling();
-        resetOthers();
-      }
-
+      vStopRef.current = vStop;
       offsetRef.current = offset;
+
+      if (useIsScrolling) resetIsScrolling();
+      resetOthers();
     },
     [
       getCalcData,
