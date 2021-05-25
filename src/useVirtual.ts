@@ -83,6 +83,7 @@ export default <
   );
   const hasLoadMoreOnMountRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
+  const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const offsetRef = useRef(0);
   const vStopRef = useRef<number>();
   const outerRef = useRef<O>(null);
@@ -172,13 +173,14 @@ export default <
     DEBOUNCE_INTERVAL
   );
 
-  const [resetUserScroll, cancelResetUserScroll] = useAnimDebounce(
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    () => {
-      userScrollRef.current = true;
-    },
-    DEBOUNCE_INTERVAL
-  );
+  const [resetOthers, cancelResetOthers] = useAnimDebounce(() => {
+    userScrollRef.current = true;
+
+    const len = rosRef.current.size - measuresRef.current.length;
+    const iter = rosRef.current[Symbol.iterator]();
+    for (let i = 0; i < len; i += 1)
+      rosRef.current.delete(iter.next().value[0]);
+  }, DEBOUNCE_INTERVAL);
 
   const updateItems = useCallback(
     (offset: number, isScrolling = false) => {
@@ -226,7 +228,7 @@ export default <
             if (!el) return;
 
             // eslint-disable-next-line compat/compat
-            new ResizeObserver(([{ borderBoxSize }]) => {
+            new ResizeObserver(([{ borderBoxSize, target }], ro) => {
               const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
               if (measuredSize && measuredSize !== size) {
@@ -234,6 +236,9 @@ export default <
                 measuresRef.current = getMeasures();
                 updateItems(offset, isScrolling);
               }
+
+              rosRef.current.get(target)?.disconnect();
+              rosRef.current.set(target, ro);
             }).observe(el);
           },
         });
@@ -274,8 +279,9 @@ export default <
           });
 
         vStopRef.current = vStop;
+
         if (useIsScrolling) resetIsScrolling();
-        if (!userScrollRef.current) resetUserScroll();
+        resetOthers();
       }
 
       offsetRef.current = offset;
@@ -290,7 +296,7 @@ export default <
       marginKey,
       onScrollRef,
       resetIsScrolling,
-      resetUserScroll,
+      resetOthers,
       sizeKey,
       useIsScrolling,
     ]
@@ -428,17 +434,22 @@ export default <
 
     outer.addEventListener("scroll", handleScroll, { passive: true });
 
+    const ros = rosRef.current;
+
     return () => {
       cancelResetIsScrolling();
-      cancelResetUserScroll();
+      cancelResetOthers();
       if (scrollRafRef.current) {
         cancelAnimationFrame(scrollRafRef.current);
         scrollRafRef.current = undefined;
       }
 
       outer.removeEventListener("scroll", handleScroll);
+
+      ros.forEach((ro) => ro.disconnect());
+      ros.clear();
     };
-  }, [cancelResetIsScrolling, cancelResetUserScroll, scrollKey, updateItems]);
+  }, [cancelResetIsScrolling, cancelResetOthers, scrollKey, updateItems]);
 
   return { outerRef, innerRef, items, scrollTo, scrollToItem };
 };
