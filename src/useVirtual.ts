@@ -104,10 +104,7 @@ export default <
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
 
   const getItemSize = useCallback(
-    (idx: number, skipCache: boolean) => {
-      if (!skipCache && measuresRef.current[idx])
-        return measuresRef.current[idx].size;
-
+    (idx: number) => {
       let { current: size } = itemSizeRef;
       size = isNumber(size) ? size : size(idx, outerRectRef.current.width);
 
@@ -117,17 +114,18 @@ export default <
   );
 
   const getMeasures = useCallback(
-    (skipCache = false) => {
-      const measures: Measure[] = [];
+    ({ idx = 0, skipCache = false } = {}) => {
+      const { current: measures } = measuresRef;
 
-      for (let i = 0; i < itemCount; i += 1) {
-        const start = i ? measures[i - 1].end : 0;
-        const size = getItemSize(i, skipCache);
+      for (let i = idx; i < itemCount; i += 1) {
+        const start = measures[i - 1] ? measures[i - 1].end : 0;
+        const size =
+          !skipCache && measures[i] ? measures[i].size : getItemSize(i);
         const measure: Measure = { idx: i, start, end: start + size, size };
 
         if (keyExtractorRef.current) measure.key = keyExtractorRef.current(i);
 
-        measures.push(measure);
+        measures[i] = measure;
       }
 
       return measures;
@@ -233,7 +231,7 @@ export default <
 
               if (measuredSize && measuredSize !== size) {
                 measuresRef.current[i].size = measuredSize;
-                measuresRef.current = getMeasures();
+                measuresRef.current = getMeasures({ idx: i });
                 updateItems(offset, isScrolling);
               }
 
@@ -409,7 +407,7 @@ export default <
       const { current: prevMeasures } = measuresRef;
 
       outerRectRef.current = rect;
-      measuresRef.current = getMeasures(true);
+      measuresRef.current = getMeasures({ skipCache: true });
       updateItems(offsetRef.current);
 
       const ratio =
