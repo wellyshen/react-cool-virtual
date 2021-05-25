@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.11
+
+### Patch Changes
+
+- [#40](https://github.com/wellyshen/react-cool-virtual/pull/40) [`fdc3aef`](https://github.com/wellyshen/react-cool-virtual/commit/fdc3aef2c4a0b0214b3c038466db96524cffcd16) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: performance improvement for real-time resize
+
 ## 0.0.10
 
 ### Patch Changes
