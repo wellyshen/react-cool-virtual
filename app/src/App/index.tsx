@@ -1,4 +1,4 @@
-/* import { Fragment, useState, useCallback } from "react";
+import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,8 +16,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(10000);
-const colWidths = getMockData(10000, 75);
+const rowHeights = getMockData(1000000);
+const colWidths = getMockData(1000000, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -92,9 +92,9 @@ export default (): JSX.Element => {
       </div>
     </div>
   );
-}; */
+};
 
-import { useState } from "react";
+/* import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -145,4 +145,4 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-};
+}; */
