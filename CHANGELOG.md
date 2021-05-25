@@ -1,5 +1,13 @@
 # react-cool-virtual
 
+## 0.0.13
+
+### Patch Changes
+
+- [`c1ab0a0`](https://github.com/wellyshen/react-cool-virtual/commit/c1ab0a0d8139602733a4f06a4f3b563cc85d3496) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: slightly performance improvement
+
+* [`40c1fec`](https://github.com/wellyshen/react-cool-virtual/commit/40c1fec7868bbad68aa8cc77aa7e66ec003e770f) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: correct the value of event objects
+
 ## 0.0.12
 
 ### Patch Changes
