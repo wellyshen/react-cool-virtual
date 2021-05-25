@@ -24,7 +24,7 @@ import {
   isNumber,
   now,
   shouldUpdate,
-  useAnimDebounce,
+  useDebounce,
   useIsoLayoutEffect,
   useLatest,
   useResizeEffect,
@@ -167,13 +167,13 @@ export default <
     [overscanCount, sizeKey]
   );
 
-  const [resetIsScrolling, cancelResetIsScrolling] = useAnimDebounce(
+  const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => updateItems(offsetRef.current),
     DEBOUNCE_INTERVAL
   );
 
-  const [resetOthers, cancelResetOthers] = useAnimDebounce(() => {
+  const [resetOthers, cancelResetOthers] = useDebounce(() => {
     userScrollRef.current = true;
 
     const len = rosRef.current.size - measuresRef.current.length;
