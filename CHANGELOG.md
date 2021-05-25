@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.12
+
+### Patch Changes
+
+- [`c51eee7`](https://github.com/wellyshen/react-cool-virtual/commit/c51eee75d0832c29acfcbe769b068ad9eff88f6e) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: slightly performance improvement
+
 ## 0.0.11
 
 ### Patch Changes
