@@ -16,8 +16,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(100000);
-const colWidths = getMockData(100000, 75);
+const rowHeights = getMockData(1000);
+const colWidths = getMockData(1000, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -68,14 +68,14 @@ export default (): JSX.Element => {
                   }`}
                   style={{
                     position: "absolute",
-                    // height: `${rowHeights[rowItem.index].size}px`,
-                    // width: `${colWidths[colItem.index].size}px`,
-                    height: `${
-                      rowItem.index ? rowHeights[rowItem.index].size : sz
-                    }px`,
-                    width: `${
-                      colItem.index ? colWidths[colItem.index].size : sz
-                    }px`,
+                    height: `${rowHeights[rowItem.index].size}px`,
+                    width: `${colWidths[colItem.index].size}px`,
+                    // height: `${
+                    //   rowItem.index ? rowHeights[rowItem.index].size : sz
+                    // }px`,
+                    // width: `${
+                    //   colItem.index ? colWidths[colItem.index].size : sz
+                    // }px`,
                     transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
                   }}
                   ref={(el) => {
@@ -94,7 +94,7 @@ export default (): JSX.Element => {
   );
 }; */
 
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -125,7 +125,7 @@ export default (): JSX.Element => {
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div style={{ position: "relative" }} ref={innerRef}>
-          {items.map(({ index, size, measureRef }) => (
+          {items.map(({ index, size, isScrolling, measureRef }) => (
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
