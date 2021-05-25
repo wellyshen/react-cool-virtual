@@ -1,0 +1,24 @@
+body {
+  font-family: sans-serif;
+  background: #fff;
+}
+
+.app {
+  padding: 0 1rem;
+}
+
+.outer {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+
+  &.dark {
+    background: #e5e5e5;
+  }
+}
