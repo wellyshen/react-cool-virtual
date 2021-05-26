@@ -16,8 +16,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(1000000);
-const colWidths = getMockData(1000000, 75);
+const rowHeights = getMockData(10000);
+const colWidths = getMockData(10000, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -31,12 +31,6 @@ export default (): JSX.Element => {
 
   return (
     <div className={styles.app}>
-      <button
-        type="button"
-        onClick={() => setSz((prev) => (prev === 25 ? 250 : 25))}
-      >
-        Resize
-      </button>
       <div
         className={styles.outer}
         ref={(el) => {
@@ -90,6 +84,12 @@ export default (): JSX.Element => {
           ))}
         </div>
       </div>
+      <button
+        type="button"
+        onClick={() => setSz((prev) => (prev === 25 ? 250 : 25))}
+      >
+        Resize
+      </button>
     </div>
   );
 };
