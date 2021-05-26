@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useLayoutEffect } from "react";
 
 import {
   Align,
@@ -113,32 +113,33 @@ export default <
     [itemSizeRef]
   );
 
-  const getMeasures = useCallback(
-    ({ idx = 0, skipCache = false } = {}) => {
-      const { current: measures } = measuresRef;
+  const getMeasure = useCallback(
+    (idx: number, size: number) => {
+      const start = measuresRef.current[idx - 1]
+        ? measuresRef.current[idx - 1].end
+        : 0;
+      const measure: Measure = { idx, start, end: start + size, size };
 
-      for (let i = idx; i < itemCount; i += 1) {
-        const start = measures[i - 1] ? measures[i - 1].end : 0;
-        const size =
-          !skipCache && measures[i] ? measures[i].size : getItemSize(i);
-        const measure: Measure = { idx: i, start, end: start + size, size };
+      if (keyExtractorRef.current) measure.key = keyExtractorRef.current(idx);
 
-        if (keyExtractorRef.current) measure.key = keyExtractorRef.current(i);
-
-        measures[i] = measure;
-      }
-
-      return measures;
+      return measure;
     },
-    [getItemSize, itemCount, keyExtractorRef]
+    [keyExtractorRef]
   );
 
   const getCalcData = useCallback(
     (offset: number) => {
       const { current: measures } = measuresRef;
+      let edge = 0;
+
+      for (let i = 1; i < measures.length; i += 1) {
+        if (measures[i - 1].start >= measures[i].start) break;
+        edge += 1;
+      }
+
       const vStart = findNearestBinarySearch(
         0,
-        measures.length,
+        edge,
         offset,
         (idx) => measures[idx].start
       );
@@ -213,7 +214,8 @@ export default <
       const nextItems: Item[] = [];
 
       for (let i = oStart; i <= oStop; i += 1) {
-        const { key, start, size } = measuresRef.current[i];
+        const { current: measure } = measuresRef;
+        const { key, start, size } = measure[i];
 
         nextItems.push({
           key,
@@ -227,16 +229,20 @@ export default <
 
             // eslint-disable-next-line compat/compat
             new ResizeObserver(([{ borderBoxSize, target }], ro) => {
-              const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
-
-              if (measuredSize && measuredSize !== size) {
-                measuresRef.current[i].size = measuredSize;
-                measuresRef.current = getMeasures({ idx: i });
-                handleScroll(offset, isScrolling);
-              }
-
               rosRef.current.get(target)?.disconnect();
               rosRef.current.set(target, ro);
+
+              const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
+
+              if (
+                (measuredSize && measuredSize !== size) ||
+                (measure[i - 1] && measure[i - 1].end !== start)
+              ) {
+                measuresRef.current[measure.length - 1].end +=
+                  measuredSize - size;
+                measuresRef.current[i] = getMeasure(i, measuredSize);
+                handleScroll(offset, isScrolling);
+              }
             }).observe(el);
           },
         });
@@ -285,7 +291,7 @@ export default <
     },
     [
       getCalcData,
-      getMeasures,
+      getMeasure,
       itemCount,
       itemSizeKey,
       loadMoreRef,
@@ -407,7 +413,10 @@ export default <
       const { current: prevMeasures } = measuresRef;
 
       outerRectRef.current = rect;
-      measuresRef.current = getMeasures({ skipCache: true });
+
+      for (let i = 0; i < itemCount; i += 1)
+        measuresRef.current[i] = getMeasure(i, getItemSize(i));
+
       handleScroll(offsetRef.current);
 
       const ratio =
@@ -418,10 +427,10 @@ export default <
 
       if (ratio) scrollTo(offsetRef.current * ratio);
     },
-    [itemCount, getMeasures, handleScroll, scrollTo]
+    [getItemSize, getMeasure, handleScroll, itemCount, scrollTo]
   );
 
-  useIsoLayoutEffect(() => {
+  useLayoutEffect(() => {
     const { current: outer } = outerRef;
 
     if (!outer) return () => null;
