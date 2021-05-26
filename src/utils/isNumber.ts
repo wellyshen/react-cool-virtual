@@ -1,2 +1,2 @@
-export default (value: unknown): value is number =>
-  typeof value === "number" && !Number.isNaN(value);
+export default (val: unknown): val is number =>
+  typeof val === "number" && !Number.isNaN(val);

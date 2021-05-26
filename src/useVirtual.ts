@@ -300,12 +300,12 @@ export default <
   );
 
   const scrollTo = useCallback<ScrollTo>(
-    (value, cb) => {
+    (val, cb) => {
       if (!outerRef.current) return;
 
-      const { offset, smooth }: ScrollToOptions = isNumber(value)
-        ? { offset: value }
-        : value;
+      const { offset, smooth }: ScrollToOptions = isNumber(val)
+        ? { offset: val }
+        : val;
       const prevOffset = offsetRef.current;
 
       if (!isNumber(offset) || offset === prevOffset) return;
@@ -338,13 +338,13 @@ export default <
   );
 
   const scrollToItem = useCallback<ScrollToItem>(
-    (value, cb) => {
+    (val, cb) => {
       const {
         index,
         align = Align.auto,
         smooth,
         autoCorrect,
-      }: ScrollToItemOptions = isNumber(value) ? { index: value } : value;
+      }: ScrollToItemOptions = isNumber(val) ? { index: val } : val;
 
       if (!isNumber(index)) return;
 
@@ -389,7 +389,7 @@ export default <
           autoCorrectTimesRef.current <= AUTO_CORRECT_LIMIT &&
           (offset >= start || offset + outerSize <= end)
         ) {
-          setTimeout(() => scrollToItem(value, cb));
+          setTimeout(() => scrollToItem(val, cb));
           autoCorrectTimesRef.current += 1;
         } else {
           if (cb) cb();
