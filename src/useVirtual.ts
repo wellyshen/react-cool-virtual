@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useLayoutEffect } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import {
   Align,
@@ -229,9 +229,6 @@ export default <
 
             // eslint-disable-next-line compat/compat
             new ResizeObserver(([{ borderBoxSize, target }], ro) => {
-              rosRef.current.get(target)?.disconnect();
-              rosRef.current.set(target, ro);
-
               const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
               if (
@@ -243,6 +240,9 @@ export default <
                 measuresRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(offset, isScrolling);
               }
+
+              rosRef.current.get(target)?.disconnect();
+              rosRef.current.set(target, ro);
             }).observe(el);
           },
         });
@@ -430,7 +430,7 @@ export default <
     [getItemSize, getMeasure, handleScroll, itemCount, scrollTo]
   );
 
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
 
     if (!outer) return () => null;
