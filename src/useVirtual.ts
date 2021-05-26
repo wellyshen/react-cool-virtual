@@ -140,7 +140,7 @@ export default <
         0,
         measures.length,
         offset,
-        measuresRef.current.map(({ start }) => start)
+        (idx) => measures[idx].start
       );
       let vStop = vStart;
 
