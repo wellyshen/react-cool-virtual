@@ -18,9 +18,9 @@ export default <T extends HTMLElement>(
     if (!ref.current) return () => null;
 
     // eslint-disable-next-line compat/compat
-    const observer = new ResizeObserver(([{ contentBoxSize }]) => {
-      const { inlineSize, blockSize } = contentBoxSize[0];
-      cbRef.current({ width: inlineSize, height: blockSize });
+    const observer = new ResizeObserver(([{ contentRect }]) => {
+      const { width, height } = contentRect;
+      cbRef.current({ width, height });
     });
 
     observer.observe(ref.current);
