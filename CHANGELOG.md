@@ -1,5 +1,17 @@
 # react-cool-virtual
 
+## 0.0.15
+
+### Patch Changes
+
+- [#52](https://github.com/wellyshen/react-cool-virtual/pull/52) [`bdf44c9`](https://github.com/wellyshen/react-cool-virtual/commit/bdf44c9309ea60a7d7ebf92f765b63bbf2395764) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: performance improvement for large data of grid
+
+* [#56](https://github.com/wellyshen/react-cool-virtual/pull/56) [`282aeb0`](https://github.com/wellyshen/react-cool-virtual/commit/282aeb0dadf780e9077d607bbc0d5396841158de) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: scroll position behavior
+
+- [#54](https://github.com/wellyshen/react-cool-virtual/pull/54) [`919144d`](https://github.com/wellyshen/react-cool-virtual/commit/919144d5bb54b91005a2548360204db7b53f22ed) Thanks [@wellyshen](https://github.com/wellyshen)! - feat: new `onResize` event
+
+* [#55](https://github.com/wellyshen/react-cool-virtual/pull/55) [`9a80031`](https://github.com/wellyshen/react-cool-virtual/commit/9a800313fdf2fb6235212b503367c77632b538c6) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: improvement the performance of calculating scroll offset
+
 ## 0.0.14
 
 ### Patch Changes
