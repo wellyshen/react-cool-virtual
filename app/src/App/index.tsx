@@ -1,4 +1,4 @@
-import { useState } from "react";
+/* import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,7 +16,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(50);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(50);
@@ -25,6 +25,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
+    itemSize: 100,
   });
 
   return (
@@ -36,8 +37,7 @@ export default (): JSX.Element => {
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
               // style={{ height: `${index === 1 ? sz : mockData[index].size}px` }}
-              // style={{ height: `${index === 1 ? sz : size}px` }}
-              // style={{ height: `${index % 2 ? mockData[index].size : 50}px` }}
+              // style={{ height: `${index === 50 ? sz : size}px` }}
               // style={{ height: `${mockData[index].size}px` }}
               style={{ height: `${50}px` }}
               ref={measureRef}
@@ -55,9 +55,9 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-};
+}; */
 
-/* import { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -75,8 +75,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(50);
-const colWidths = getMockData(50, 75);
+const rowHeights = getMockData(1000000);
+const colWidths = getMockData(1000000, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -156,4 +156,4 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-}; */
+};
