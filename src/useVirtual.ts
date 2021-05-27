@@ -88,13 +88,13 @@ export default <
   const autoCorrectTimesRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
-  const vStopRef = useRef<number>();
+  const prevVStopRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
-  const scrollRafRef = useRef<number>();
+  const scrollToRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
   const keyExtractorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
@@ -282,7 +282,7 @@ export default <
       const startIndex = loadIndex * loadMoreThreshold;
 
       if (
-        vStop !== vStopRef.current &&
+        vStop !== prevVStopRef.current &&
         loadMoreRef.current &&
         !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
       )
@@ -297,8 +297,7 @@ export default <
       if (useIsScrolling) resetIsScrolling();
       resetOthers();
 
-      vStopRef.current = vStop;
-      scrollOffsetRef.current = scrollOffset;
+      prevVStopRef.current = vStop;
     },
     [
       getCalcData,
@@ -343,13 +342,13 @@ export default <
           easingFnRef.current(time) * (offset - prevOffset) + prevOffset;
 
         if (time < 1) {
-          scrollRafRef.current = requestAnimationFrame(scroll);
+          scrollToRafRef.current = requestAnimationFrame(scroll);
         } else if (cb) {
           cb();
         }
       };
 
-      scrollRafRef.current = requestAnimationFrame(scroll);
+      scrollToRafRef.current = requestAnimationFrame(scroll);
     },
     [easingFnRef, scrollDuration, scrollKey]
   );
@@ -452,8 +451,11 @@ export default <
 
     if (!outer) return () => null;
 
-    const scrollHandler = ({ target }: Event) =>
-      handleScroll((target as O)[scrollKey], true);
+    const scrollHandler = ({ target }: Event) => {
+      const scrollOffset = (target as O)[scrollKey];
+      handleScroll(scrollOffset, true);
+      scrollOffsetRef.current = scrollOffset;
+    };
 
     outer.addEventListener("scroll", scrollHandler, { passive: true });
 
@@ -462,9 +464,9 @@ export default <
     return () => {
       cancelResetIsScrolling();
       cancelResetOthers();
-      if (scrollRafRef.current) {
-        cancelAnimationFrame(scrollRafRef.current);
-        scrollRafRef.current = undefined;
+      if (scrollToRafRef.current) {
+        cancelAnimationFrame(scrollToRafRef.current);
+        scrollToRafRef.current = undefined;
       }
 
       outer.removeEventListener("scroll", scrollHandler);
