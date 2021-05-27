@@ -85,7 +85,7 @@ export default <
   const shouldCheckBsHighRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
-  const offsetRef = useRef(0);
+  const scrollOffsetRef = useRef(0);
   const vStopRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
@@ -129,7 +129,7 @@ export default <
   );
 
   const getCalcData = useCallback(
-    (offset: number) => {
+    (scrollOffset: number) => {
       const { current: msData } = msDataRef;
       let high = 0;
 
@@ -142,7 +142,7 @@ export default <
       const vStart = findNearestBinarySearch(
         0,
         high || msData.length,
-        offset,
+        scrollOffset,
         (idx) => msData[idx].start
       );
       let vStop = vStart;
@@ -150,7 +150,7 @@ export default <
 
       while (
         vStop < msData.length &&
-        currStart < offset + outerRectRef.current[sizeKey]
+        currStart < scrollOffset + outerRectRef.current[sizeKey]
       ) {
         vStop += 1;
         currStart += msData[vStop]?.size || 0;
@@ -173,7 +173,7 @@ export default <
 
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    () => handleScroll(offsetRef.current),
+    () => handleScroll(scrollOffsetRef.current),
     DEBOUNCE_INTERVAL
   );
 
@@ -187,7 +187,7 @@ export default <
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
-    (offset: number, isScrolling = false) => {
+    (scrollOffset: number, isScrolling = false) => {
       if (!innerRef.current) return;
 
       if (
@@ -199,7 +199,7 @@ export default <
           startIndex: 0,
           stopIndex: loadMoreThreshold - 1,
           loadIndex: 0,
-          scrollOffset: offset,
+          scrollOffset,
           userScroll: userScrollRef.current,
         });
 
@@ -211,7 +211,7 @@ export default <
       }
 
       const { oStart, oStop, vStart, vStop, margin, innerSize } =
-        getCalcData(offset);
+        getCalcData(scrollOffset);
 
       innerRef.current.style[marginKey] = `${margin}px`;
       innerRef.current.style[sizeKey] = `${innerSize}px`;
@@ -247,7 +247,7 @@ export default <
               ) {
                 msDataRef.current[msData.length - 1].end += measuredSize - size;
                 msDataRef.current[i] = getMeasure(i, measuredSize);
-                handleScroll(offset, isScrolling);
+                handleScroll(scrollOffset, isScrolling);
               }
 
               rosRef.current.get(target)?.disconnect();
@@ -273,8 +273,8 @@ export default <
           overscanStopIndex: oStop,
           visibleStartIndex: vStart,
           visibleStopIndex: vStop,
-          scrollOffset: offset,
-          scrollForward: offset > offsetRef.current,
+          scrollOffset,
+          scrollForward: scrollOffset > scrollOffsetRef.current,
           userScroll: userScrollRef.current,
         });
 
@@ -290,15 +290,15 @@ export default <
           startIndex,
           stopIndex: startIndex + loadMoreThreshold - 1,
           loadIndex,
-          scrollOffset: offset,
+          scrollOffset,
           userScroll: userScrollRef.current,
         });
 
-      vStopRef.current = vStop;
-      offsetRef.current = offset;
-
       if (useIsScrolling) resetIsScrolling();
       resetOthers();
+
+      vStopRef.current = vStop;
+      scrollOffsetRef.current = scrollOffset;
     },
     [
       getCalcData,
@@ -320,10 +320,10 @@ export default <
     (val, cb) => {
       if (!outerRef.current) return;
 
+      const { current: prevOffset } = scrollOffsetRef;
       const { offset, smooth }: ScrollToOptions = isNumber(val)
         ? { offset: val }
         : val;
-      const prevOffset = offsetRef.current;
 
       if (!isNumber(offset) || offset === prevOffset) return;
 
@@ -370,10 +370,15 @@ export default <
       if (!ms) return;
 
       const { start, end, size } = ms;
+      let { current: scrollOffset } = scrollOffsetRef;
       const outerSize = outerRectRef.current[sizeKey];
-      let { current: offset } = offsetRef;
 
-      if (autoCorrect && offset <= start && offset + outerSize >= end && cb) {
+      if (
+        autoCorrect &&
+        scrollOffset <= start &&
+        scrollOffset + outerSize >= end &&
+        cb
+      ) {
         cb();
         return;
       }
@@ -382,28 +387,28 @@ export default <
 
       switch (align) {
         case Align.start:
-          offset = start;
+          scrollOffset = start;
           break;
         case Align.center:
-          offset = start - outerSize / 2 + size / 2;
+          scrollOffset = start - outerSize / 2 + size / 2;
           break;
         case Align.end:
-          offset = endPos;
+          scrollOffset = endPos;
           break;
         default:
-          if (offset >= start) {
-            offset = start;
-          } else if (offset + outerSize <= end) {
-            offset = endPos;
+          if (scrollOffset >= start) {
+            scrollOffset = start;
+          } else if (scrollOffset + outerSize <= end) {
+            scrollOffset = endPos;
           }
       }
 
-      scrollTo({ offset, smooth }, () => {
+      scrollTo({ offset: scrollOffset, smooth }, () => {
         if (!autoCorrect) {
           if (cb) cb();
         } else if (
           autoCorrectTimesRef.current <= AUTO_CORRECT_LIMIT &&
-          (offset >= start || offset + outerSize <= end)
+          (scrollOffset >= start || scrollOffset + outerSize <= end)
         ) {
           setTimeout(() => scrollToItem(val, cb));
           autoCorrectTimesRef.current += 1;
@@ -427,7 +432,7 @@ export default <
       for (let i = 0; i < itemCount; i += 1)
         msDataRef.current[i] = getMeasure(i, getItemSize(i));
 
-      handleScroll(offsetRef.current);
+      handleScroll(scrollOffsetRef.current);
 
       const { current: msData } = msDataRef;
       const ratio =
@@ -435,7 +440,7 @@ export default <
         prevMsData.length &&
         msData[msData.length - 1].end / prevMsData[prevMsData.length - 1].end;
 
-      if (ratio) scrollTo(offsetRef.current * ratio);
+      if (ratio) scrollTo(scrollOffsetRef.current * ratio);
     },
     [getItemSize, getMeasure, handleScroll, itemCount, scrollTo]
   );
