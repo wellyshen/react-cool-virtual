@@ -82,6 +82,7 @@ export default <
     getInitItems(ssrItemCount, keyExtractor)
   );
   const hasLoadMoreOnMountRef = useRef(false);
+  const useMeasureRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const offsetRef = useRef(0);
@@ -130,16 +131,17 @@ export default <
   const getCalcData = useCallback(
     (offset: number) => {
       const { current: measures } = measuresRef;
-      let edge = 0;
+      let high = 0;
 
-      for (let i = 1; i < measures.length; i += 1) {
-        if (measures[i - 1].start >= measures[i].start) break;
-        edge += 1;
-      }
+      if (useMeasureRef.current)
+        for (let i = 1; i < measures.length; i += 1) {
+          if (measures[i - 1].start >= measures[i].start) break;
+          high += 1;
+        }
 
       const vStart = findNearestBinarySearch(
         0,
-        edge,
+        high || measures.length,
         offset,
         (idx) => measures[idx].start
       );
@@ -214,8 +216,8 @@ export default <
       const nextItems: Item[] = [];
 
       for (let i = oStart; i <= oStop; i += 1) {
-        const { current: measure } = measuresRef;
-        const { key, start, size } = measure[i];
+        const { current: measures } = measuresRef;
+        const { key, start, size } = measures[i];
 
         nextItems.push({
           key,
@@ -231,11 +233,16 @@ export default <
             new ResizeObserver(([{ borderBoxSize, target }], ro) => {
               const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
 
+              if (!measuredSize) {
+                ro.disconnect();
+                return;
+              }
+
               if (
-                (measuredSize && measuredSize !== size) ||
-                (measure[i - 1] && measure[i - 1].end !== start)
+                measuredSize !== size ||
+                (measures[i - 1] && measures[i - 1].end !== start)
               ) {
-                measuresRef.current[measure.length - 1].end +=
+                measuresRef.current[measures.length - 1].end +=
                   measuredSize - size;
                 measuresRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(offset, isScrolling);
@@ -243,6 +250,8 @@ export default <
 
               rosRef.current.get(target)?.disconnect();
               rosRef.current.set(target, ro);
+
+              useMeasureRef.current = true;
             }).observe(el);
           },
         });
