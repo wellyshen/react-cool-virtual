@@ -9,6 +9,7 @@ import {
   LoadMore,
   Measure,
   OnScroll,
+  OnResize,
   Options,
   Return,
   ScrollEasingFunction,
@@ -73,10 +74,11 @@ export default <
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
   keyExtractor,
-  onScroll,
   loadMoreThreshold = 15,
   isItemLoaded,
   loadMore,
+  onScroll,
+  onResize,
 }: Options): Return<O, I> => {
   const [items, setItems] = useState<Item[]>(() =>
     getInitItems(ssrItemCount, keyExtractor)
@@ -96,9 +98,10 @@ export default <
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
   const keyExtractorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
-  const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
   const loadMoreRef = useLatest<LoadMore | undefined>(loadMore);
+  const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
+  const onResizeRef = useLatest<OnResize | undefined>(onResize);
   const sizeKey = !horizontal ? "height" : "width";
   const itemSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
@@ -430,6 +433,8 @@ export default <
         msDataRef.current[i] = getMeasure(i, getItemSize(i));
 
       handleScroll(scrollOffsetRef.current);
+
+      if (onResizeRef.current) onResizeRef.current(rect);
 
       const { current: msData } = msDataRef;
       const ratio =
