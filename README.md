@@ -31,7 +31,7 @@
 - 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
 - 🚚 Built-ins [load more callback](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and alignment.
-- 🛹 Out of the box [smooth scrolling](#TBC) and be able to customize it.
+- 🛹 Out of the box [smooth scrolling](#TBC) and the effect is DIY-able.
 - ⛳ Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
 - 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
