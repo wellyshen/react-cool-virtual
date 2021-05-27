@@ -255,7 +255,6 @@ export default <
               const prevEnd = msData[i - 1]?.end || 0;
 
               if (measuredSize !== size || start !== prevEnd) {
-                msDataRef.current[msData.length - 1].end += measuredSize - size;
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(scrollOffset, isScrolling);
               }
