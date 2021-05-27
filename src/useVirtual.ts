@@ -234,7 +234,7 @@ export default <
 
             // eslint-disable-next-line compat/compat
             new ResizeObserver(([{ borderBoxSize, target }], ro) => {
-              const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
+              const measuredSize = borderBoxSize[0][itemSizeKey];
 
               if (!measuredSize) {
                 ro.disconnect();
@@ -370,7 +370,7 @@ export default <
       if (!ms) return;
 
       const { start, end, size } = ms;
-      const { [sizeKey]: outerSize } = outerRectRef.current;
+      const outerSize = outerRectRef.current[sizeKey];
       let { current: offset } = offsetRef;
 
       if (autoCorrect && offset <= start && offset + outerSize >= end && cb) {
