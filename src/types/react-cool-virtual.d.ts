@@ -45,6 +45,15 @@ declare module "react-cool-virtual" {
     (event: OnScrollEvent): void;
   }
 
+  export interface OnResizeEvent {
+    width: number;
+    height: number;
+  }
+
+  export interface OnResize {
+    (event: OnResizeEvent): void;
+  }
+
   export interface MeasureRef {
     (el: HTMLElement | null): void;
   }
@@ -99,6 +108,7 @@ declare module "react-cool-virtual" {
     isItemLoaded?: IsItemLoaded;
     loadMore?: LoadMore;
     onScroll?: OnScroll;
+    onResize?: OnResize;
   }
 
   export interface Return<

@@ -48,6 +48,10 @@ export interface OnScroll {
   }): void;
 }
 
+export interface OnResize {
+  (event: { width: number; height: number }): void;
+}
+
 export interface Item {
   readonly key?: string;
   readonly index: number;
@@ -99,6 +103,7 @@ export interface Options {
   isItemLoaded?: IsItemLoaded;
   loadMore?: LoadMore;
   onScroll?: OnScroll;
+  onResize?: OnResize;
 }
 
 export interface Return<O, I> {
