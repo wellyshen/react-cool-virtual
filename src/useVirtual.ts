@@ -82,7 +82,7 @@ export default <
     getInitItems(ssrItemCount, keyExtractor)
   );
   const hasLoadMoreOnMountRef = useRef(false);
-  const useMeasureRef = useRef(false);
+  const shouldCheckBsHighRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const offsetRef = useRef(0);
@@ -133,7 +133,7 @@ export default <
       const { current: measures } = measuresRef;
       let high = 0;
 
-      if (useMeasureRef.current)
+      if (shouldCheckBsHighRef.current)
         for (let i = 1; i < measures.length; i += 1) {
           if (measures[i - 1].start >= measures[i].start) break;
           high += 1;
@@ -254,7 +254,7 @@ export default <
               rosRef.current.get(target)?.disconnect();
               rosRef.current.set(target, ro);
 
-              useMeasureRef.current = true;
+              shouldCheckBsHighRef.current = true;
             }).observe(el);
           },
         });
