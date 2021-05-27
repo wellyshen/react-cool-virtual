@@ -1,3 +1,63 @@
+/* import { useState } from "react";
+import useVirtual from "react-cool-virtual";
+import { v4 as uuidv4 } from "uuid";
+
+import "normalize.css";
+import styles from "./styles.module.scss";
+
+const sleep = (time: number) =>
+  // eslint-disable-next-line compat/compat
+  new Promise((resolve) => setTimeout(resolve, time));
+
+const getMockData = (count: number, min = 25) =>
+  // eslint-disable-next-line no-plusplus
+  new Array(count).fill({}).map((_, idx) => ({
+    text: idx,
+    size: min + Math.round(Math.random() * 100),
+  }));
+
+const mockData = getMockData(50);
+
+export default (): JSX.Element => {
+  const [sz, setSz] = useState(50);
+  const { outerRef, innerRef, items } = useVirtual<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    itemCount: mockData.length,
+    // overscanCount: 0,
+  });
+
+  return (
+    <div className={styles.app}>
+      <div className={styles.outer} ref={outerRef}>
+        <div ref={innerRef}>
+          {items.map(({ index, size, measureRef }) => (
+            <div
+              key={index}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              // style={{ height: `${index === 1 ? sz : mockData[index].size}px` }}
+              style={{ height: `${index === 1 ? sz : size}px` }}
+              // style={{ height: `${index % 2 ? mockData[index].size : 50}px` }}
+              // style={{ height: `${mockData[index].size}px` }}
+              // style={{ height: `${25}px` }}
+              ref={measureRef}
+            >
+              {mockData[index].text}
+            </div>
+          ))}
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
+      >
+        Resize
+      </button>
+    </div>
+  );
+}; */
+
 import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
@@ -16,8 +76,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(10000);
-const colWidths = getMockData(10000, 75);
+const rowHeights = getMockData(1000000);
+const colWidths = getMockData(1000000, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -93,56 +153,3 @@ export default (): JSX.Element => {
     </div>
   );
 };
-
-/* import { useState } from "react";
-import useVirtual from "react-cool-virtual";
-import { v4 as uuidv4 } from "uuid";
-
-import "normalize.css";
-import styles from "./styles.module.scss";
-
-const sleep = (time: number) =>
-  // eslint-disable-next-line compat/compat
-  new Promise((resolve) => setTimeout(resolve, time));
-
-const getMockData = (count: number, min = 25) =>
-  // eslint-disable-next-line no-plusplus
-  new Array(count).fill({}).map((_, idx) => ({
-    text: uuidv4(),
-    size: min + Math.round(Math.random() * 100),
-  }));
-
-export default (): JSX.Element => {
-  const [sz, setSz] = useState(50);
-  const { outerRef, innerRef, items } = useVirtual<
-    HTMLDivElement,
-    HTMLDivElement
-  >({
-    itemCount: 10,
-  });
-
-  return (
-    <div className={styles.app}>
-      <div className={styles.outer} ref={outerRef}>
-        <div style={{ position: "relative" }} ref={innerRef}>
-          {items.map(({ index, size, isScrolling, measureRef }) => (
-            <div
-              key={index}
-              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ height: `${index === 1 ? sz : size}px` }}
-              ref={measureRef}
-            >
-              {index}
-            </div>
-          ))}
-        </div>
-      </div>
-      <button
-        type="button"
-        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
-      >
-        Resize
-      </button>
-    </div>
-  );
-}; */
