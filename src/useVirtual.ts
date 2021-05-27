@@ -146,12 +146,15 @@ export default <
         (idx) => measures[idx].start
       );
       let vStop = vStart;
+      let currStart = measures[vStop].start;
 
       while (
         vStop < measures.length &&
-        measures[vStop].start < offset + outerRectRef.current[sizeKey]
-      )
+        currStart < offset + outerRectRef.current[sizeKey]
+      ) {
         vStop += 1;
+        currStart += measures[vStop]?.size || 0;
+      }
 
       const oStart = Math.max(vStart - overscanCount, 0);
       const margin = measures[oStart].start;
