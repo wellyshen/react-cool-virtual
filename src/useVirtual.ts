@@ -82,14 +82,15 @@ export default <
     getInitItems(ssrItemCount, keyExtractor)
   );
   const hasLoadMoreOnMountRef = useRef(false);
+  const shouldCheckBsHighRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
-  const offsetRef = useRef(0);
+  const scrollOffsetRef = useRef(0);
   const vStopRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
-  const measuresRef = useRef<Measure[]>([]);
+  const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
@@ -113,53 +114,56 @@ export default <
     [itemSizeRef]
   );
 
-  const getMeasures = useCallback(
-    ({ idx = 0, skipCache = false } = {}) => {
-      const { current: measures } = measuresRef;
+  const getMeasure = useCallback(
+    (idx: number, size: number) => {
+      const start = msDataRef.current[idx - 1]?.end || 0;
+      const ms: Measure = { idx, start, end: start + size, size };
 
-      for (let i = idx; i < itemCount; i += 1) {
-        const start = measures[i - 1] ? measures[i - 1].end : 0;
-        const size =
-          !skipCache && measures[i] ? measures[i].size : getItemSize(i);
-        const measure: Measure = { idx: i, start, end: start + size, size };
+      if (keyExtractorRef.current) ms.key = keyExtractorRef.current(idx);
 
-        if (keyExtractorRef.current) measure.key = keyExtractorRef.current(i);
-
-        measures[i] = measure;
-      }
-
-      return measures;
+      return ms;
     },
-    [getItemSize, itemCount, keyExtractorRef]
+    [keyExtractorRef]
   );
 
   const getCalcData = useCallback(
-    (offset: number) => {
-      const { current: measures } = measuresRef;
+    (scrollOffset: number) => {
+      const { current: msData } = msDataRef;
+      let high = 0;
+
+      if (shouldCheckBsHighRef.current)
+        for (let i = 1; i < msData.length; i += 1) {
+          if (msData[i - 1].start >= msData[i].start) break;
+          high += 1;
+        }
+
       const vStart = findNearestBinarySearch(
         0,
-        measures.length,
-        offset,
-        (idx) => measures[idx].start
+        high || msData.length,
+        scrollOffset,
+        (idx) => msData[idx].start
       );
       let vStop = vStart;
+      let currStart = msData[vStop].start;
 
       while (
-        vStop < measures.length &&
-        measures[vStop].start < offset + outerRectRef.current[sizeKey]
-      )
+        vStop < msData.length &&
+        currStart < scrollOffset + outerRectRef.current[sizeKey]
+      ) {
         vStop += 1;
+        currStart += msData[vStop]?.size || 0;
+      }
 
       const oStart = Math.max(vStart - overscanCount, 0);
-      const margin = measures[oStart].start;
+      const margin = msData[oStart].start;
 
       return {
         oStart,
-        oStop: Math.min(vStop + overscanCount, measures.length) - 1,
+        oStop: Math.min(vStop + overscanCount, msData.length) - 1,
         vStart,
         vStop: vStop - 1,
         margin,
-        innerSize: measures[measures.length - 1].end - margin,
+        innerSize: msData[msData.length - 1].end - margin,
       };
     },
     [overscanCount, sizeKey]
@@ -167,21 +171,21 @@ export default <
 
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    () => handleScroll(offsetRef.current),
+    () => handleScroll(scrollOffsetRef.current),
     DEBOUNCE_INTERVAL
   );
 
   const [resetOthers, cancelResetOthers] = useDebounce(() => {
     userScrollRef.current = true;
 
-    const len = rosRef.current.size - measuresRef.current.length;
+    const len = rosRef.current.size - msDataRef.current.length;
     const iter = rosRef.current[Symbol.iterator]();
     for (let i = 0; i < len; i += 1)
       rosRef.current.delete(iter.next().value[0]);
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
-    (offset: number, isScrolling = false) => {
+    (scrollOffset: number, isScrolling = false) => {
       if (!innerRef.current) return;
 
       if (
@@ -193,7 +197,7 @@ export default <
           startIndex: 0,
           stopIndex: loadMoreThreshold - 1,
           loadIndex: 0,
-          scrollOffset: offset,
+          scrollOffset,
           userScroll: userScrollRef.current,
         });
 
@@ -205,7 +209,7 @@ export default <
       }
 
       const { oStart, oStop, vStart, vStop, margin, innerSize } =
-        getCalcData(offset);
+        getCalcData(scrollOffset);
 
       innerRef.current.style[marginKey] = `${margin}px`;
       innerRef.current.style[sizeKey] = `${innerSize}px`;
@@ -213,7 +217,8 @@ export default <
       const nextItems: Item[] = [];
 
       for (let i = oStart; i <= oStop; i += 1) {
-        const { key, start, size } = measuresRef.current[i];
+        const { current: msData } = msDataRef;
+        const { key, start, size } = msData[i];
 
         nextItems.push({
           key,
@@ -227,16 +232,25 @@ export default <
 
             // eslint-disable-next-line compat/compat
             new ResizeObserver(([{ borderBoxSize, target }], ro) => {
-              const { [itemSizeKey]: measuredSize } = borderBoxSize[0];
+              const measuredSize = borderBoxSize[0][itemSizeKey];
 
-              if (measuredSize && measuredSize !== size) {
-                measuresRef.current[i].size = measuredSize;
-                measuresRef.current = getMeasures({ idx: i });
-                handleScroll(offset, isScrolling);
+              if (!measuredSize) {
+                ro.disconnect();
+                return;
+              }
+
+              const prevEnd = msData[i - 1]?.end || 0;
+
+              if (measuredSize !== size || start !== prevEnd) {
+                msDataRef.current[msData.length - 1].end += measuredSize - size;
+                msDataRef.current[i] = getMeasure(i, measuredSize);
+                handleScroll(scrollOffset, isScrolling);
               }
 
               rosRef.current.get(target)?.disconnect();
               rosRef.current.set(target, ro);
+
+              shouldCheckBsHighRef.current = true;
             }).observe(el);
           },
         });
@@ -256,8 +270,8 @@ export default <
           overscanStopIndex: oStop,
           visibleStartIndex: vStart,
           visibleStopIndex: vStop,
-          scrollOffset: offset,
-          scrollForward: offset > offsetRef.current,
+          scrollOffset,
+          scrollForward: scrollOffset > scrollOffsetRef.current,
           userScroll: userScrollRef.current,
         });
 
@@ -273,19 +287,19 @@ export default <
           startIndex,
           stopIndex: startIndex + loadMoreThreshold - 1,
           loadIndex,
-          scrollOffset: offset,
+          scrollOffset,
           userScroll: userScrollRef.current,
         });
 
-      vStopRef.current = vStop;
-      offsetRef.current = offset;
-
       if (useIsScrolling) resetIsScrolling();
       resetOthers();
+
+      vStopRef.current = vStop;
+      scrollOffsetRef.current = scrollOffset;
     },
     [
       getCalcData,
-      getMeasures,
+      getMeasure,
       itemCount,
       itemSizeKey,
       loadMoreRef,
@@ -303,10 +317,10 @@ export default <
     (val, cb) => {
       if (!outerRef.current) return;
 
+      const { current: prevOffset } = scrollOffsetRef;
       const { offset, smooth }: ScrollToOptions = isNumber(val)
         ? { offset: val }
         : val;
-      const prevOffset = offsetRef.current;
 
       if (!isNumber(offset) || offset === prevOffset) return;
 
@@ -348,16 +362,20 @@ export default <
 
       if (!isNumber(index)) return;
 
-      const measure =
-        measuresRef.current[Math.max(0, Math.min(index, itemCount - 1))];
+      const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
 
-      if (!measure) return;
+      if (!ms) return;
 
-      const { start, end, size } = measure;
-      const { [sizeKey]: outerSize } = outerRectRef.current;
-      let { current: offset } = offsetRef;
+      const { start, end, size } = ms;
+      let { current: scrollOffset } = scrollOffsetRef;
+      const outerSize = outerRectRef.current[sizeKey];
 
-      if (autoCorrect && offset <= start && offset + outerSize >= end && cb) {
+      if (
+        autoCorrect &&
+        scrollOffset <= start &&
+        scrollOffset + outerSize >= end &&
+        cb
+      ) {
         cb();
         return;
       }
@@ -366,28 +384,28 @@ export default <
 
       switch (align) {
         case Align.start:
-          offset = start;
+          scrollOffset = start;
           break;
         case Align.center:
-          offset = start - outerSize / 2 + size / 2;
+          scrollOffset = start - outerSize / 2 + size / 2;
           break;
         case Align.end:
-          offset = endPos;
+          scrollOffset = endPos;
           break;
         default:
-          if (offset >= start) {
-            offset = start;
-          } else if (offset + outerSize <= end) {
-            offset = endPos;
+          if (scrollOffset >= start) {
+            scrollOffset = start;
+          } else if (scrollOffset + outerSize <= end) {
+            scrollOffset = endPos;
           }
       }
 
-      scrollTo({ offset, smooth }, () => {
+      scrollTo({ offset: scrollOffset, smooth }, () => {
         if (!autoCorrect) {
           if (cb) cb();
         } else if (
           autoCorrectTimesRef.current <= AUTO_CORRECT_LIMIT &&
-          (offset >= start || offset + outerSize <= end)
+          (scrollOffset >= start || scrollOffset + outerSize <= end)
         ) {
           setTimeout(() => scrollToItem(val, cb));
           autoCorrectTimesRef.current += 1;
@@ -404,21 +422,24 @@ export default <
     outerRef,
     (rect) => {
       const isSameWidth = outerRectRef.current.width === rect.width;
-      const { current: prevMeasures } = measuresRef;
+      const { current: prevMsData } = msDataRef;
 
       outerRectRef.current = rect;
-      measuresRef.current = getMeasures({ skipCache: true });
-      handleScroll(offsetRef.current);
 
+      for (let i = 0; i < itemCount; i += 1)
+        msDataRef.current[i] = getMeasure(i, getItemSize(i));
+
+      handleScroll(scrollOffsetRef.current);
+
+      const { current: msData } = msDataRef;
       const ratio =
         !isSameWidth &&
-        prevMeasures.length &&
-        measuresRef.current[measuresRef.current.length - 1].end /
-          prevMeasures[prevMeasures.length - 1].end;
+        prevMsData.length &&
+        msData[msData.length - 1].end / prevMsData[prevMsData.length - 1].end;
 
-      if (ratio) scrollTo(offsetRef.current * ratio);
+      if (ratio) scrollTo(scrollOffsetRef.current * ratio);
     },
-    [itemCount, getMeasures, handleScroll, scrollTo]
+    [getItemSize, getMeasure, handleScroll, itemCount, scrollTo]
   );
 
   useIsoLayoutEffect(() => {
