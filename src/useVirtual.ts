@@ -116,9 +116,7 @@ export default <
 
   const getMeasure = useCallback(
     (idx: number, size: number) => {
-      const start = msDataRef.current[idx - 1]
-        ? msDataRef.current[idx - 1].end
-        : 0;
+      const start = msDataRef.current[idx - 1]?.end || 0;
       const ms: Measure = { idx, start, end: start + size, size };
 
       if (keyExtractorRef.current) ms.key = keyExtractorRef.current(idx);
@@ -241,10 +239,9 @@ export default <
                 return;
               }
 
-              if (
-                measuredSize !== size ||
-                (msData[i - 1] && msData[i - 1].end !== start)
-              ) {
+              const prevEnd = msData[i - 1]?.end || 0;
+
+              if (measuredSize !== size || start !== prevEnd) {
                 msDataRef.current[msData.length - 1].end += measuredSize - size;
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(scrollOffset, isScrolling);
