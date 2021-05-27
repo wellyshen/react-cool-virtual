@@ -134,11 +134,21 @@ export default <
       const { current: msData } = msDataRef;
       let high = 0;
 
-      if (shouldCheckBsHighRef.current)
+      if (shouldCheckBsHighRef.current) {
         for (let i = 1; i < msData.length; i += 1) {
-          if (msData[i - 1].start >= msData[i].start) break;
-          high += 1;
+          if (msData[i - 1].start >= msData[i].start) {
+            high = i;
+            break;
+          }
+          if (
+            msData[msData.length - i - 1].start >=
+            msData[msData.length - i].start
+          ) {
+            high = msData.length - i;
+            break;
+          }
         }
+      }
 
       const vStart = findNearestBinarySearch(
         0,

@@ -25,7 +25,6 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    // overscanCount: 0,
   });
 
   return (
@@ -37,10 +36,10 @@ export default (): JSX.Element => {
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
               // style={{ height: `${index === 1 ? sz : mockData[index].size}px` }}
-              style={{ height: `${index === 1 ? sz : size}px` }}
+              // style={{ height: `${index === 1 ? sz : size}px` }}
               // style={{ height: `${index % 2 ? mockData[index].size : 50}px` }}
               // style={{ height: `${mockData[index].size}px` }}
-              // style={{ height: `${25}px` }}
+              style={{ height: `${100}px` }}
               ref={measureRef}
             >
               {mockData[index].text}
@@ -76,8 +75,8 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const rowHeights = getMockData(1000000);
-const colWidths = getMockData(1000000, 75);
+const rowHeights = getMockData(50);
+const colWidths = getMockData(50, 75);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
@@ -86,6 +85,7 @@ export default (): JSX.Element => {
   });
   const col = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: colWidths.length,
+    itemSize: 100,
     horizontal: true,
   });
 
@@ -122,6 +122,10 @@ export default (): JSX.Element => {
                   }`}
                   style={{
                     position: "absolute",
+                    top: "0",
+                    left: "0",
+                    // height: `${rowItem.size}px`,
+                    // width: `${colItem.size}px`,
                     height: `${rowHeights[rowItem.index].size}px`,
                     width: `${colWidths[colItem.index].size}px`,
                     // height: `${
