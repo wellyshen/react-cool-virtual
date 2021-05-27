@@ -1,4 +1,4 @@
-/* import { useState } from "react";
+import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,7 +16,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(50);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(50);
@@ -39,7 +39,7 @@ export default (): JSX.Element => {
               // style={{ height: `${index === 1 ? sz : size}px` }}
               // style={{ height: `${index % 2 ? mockData[index].size : 50}px` }}
               // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${100}px` }}
+              style={{ height: `${50}px` }}
               ref={measureRef}
             >
               {mockData[index].text}
@@ -55,9 +55,9 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-}; */
+};
 
-import { Fragment, useState } from "react";
+/* import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -156,4 +156,4 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-};
+}; */
