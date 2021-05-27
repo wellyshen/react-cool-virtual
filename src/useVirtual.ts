@@ -90,7 +90,7 @@ export default <
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
-  const measuresRef = useRef<Measure[]>([]);
+  const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollRafRef = useRef<number>();
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
@@ -116,56 +116,56 @@ export default <
 
   const getMeasure = useCallback(
     (idx: number, size: number) => {
-      const start = measuresRef.current[idx - 1]
-        ? measuresRef.current[idx - 1].end
+      const start = msDataRef.current[idx - 1]
+        ? msDataRef.current[idx - 1].end
         : 0;
-      const measure: Measure = { idx, start, end: start + size, size };
+      const ms: Measure = { idx, start, end: start + size, size };
 
-      if (keyExtractorRef.current) measure.key = keyExtractorRef.current(idx);
+      if (keyExtractorRef.current) ms.key = keyExtractorRef.current(idx);
 
-      return measure;
+      return ms;
     },
     [keyExtractorRef]
   );
 
   const getCalcData = useCallback(
     (offset: number) => {
-      const { current: measures } = measuresRef;
+      const { current: msData } = msDataRef;
       let high = 0;
 
       if (shouldCheckBsHighRef.current)
-        for (let i = 1; i < measures.length; i += 1) {
-          if (measures[i - 1].start >= measures[i].start) break;
+        for (let i = 1; i < msData.length; i += 1) {
+          if (msData[i - 1].start >= msData[i].start) break;
           high += 1;
         }
 
       const vStart = findNearestBinarySearch(
         0,
-        high || measures.length,
+        high || msData.length,
         offset,
-        (idx) => measures[idx].start
+        (idx) => msData[idx].start
       );
       let vStop = vStart;
-      let currStart = measures[vStop].start;
+      let currStart = msData[vStop].start;
 
       while (
-        vStop < measures.length &&
+        vStop < msData.length &&
         currStart < offset + outerRectRef.current[sizeKey]
       ) {
         vStop += 1;
-        currStart += measures[vStop]?.size || 0;
+        currStart += msData[vStop]?.size || 0;
       }
 
       const oStart = Math.max(vStart - overscanCount, 0);
-      const margin = measures[oStart].start;
+      const margin = msData[oStart].start;
 
       return {
         oStart,
-        oStop: Math.min(vStop + overscanCount, measures.length) - 1,
+        oStop: Math.min(vStop + overscanCount, msData.length) - 1,
         vStart,
         vStop: vStop - 1,
         margin,
-        innerSize: measures[measures.length - 1].end - margin,
+        innerSize: msData[msData.length - 1].end - margin,
       };
     },
     [overscanCount, sizeKey]
@@ -180,7 +180,7 @@ export default <
   const [resetOthers, cancelResetOthers] = useDebounce(() => {
     userScrollRef.current = true;
 
-    const len = rosRef.current.size - measuresRef.current.length;
+    const len = rosRef.current.size - msDataRef.current.length;
     const iter = rosRef.current[Symbol.iterator]();
     for (let i = 0; i < len; i += 1)
       rosRef.current.delete(iter.next().value[0]);
@@ -219,8 +219,8 @@ export default <
       const nextItems: Item[] = [];
 
       for (let i = oStart; i <= oStop; i += 1) {
-        const { current: measures } = measuresRef;
-        const { key, start, size } = measures[i];
+        const { current: msData } = msDataRef;
+        const { key, start, size } = msData[i];
 
         nextItems.push({
           key,
@@ -243,11 +243,10 @@ export default <
 
               if (
                 measuredSize !== size ||
-                (measures[i - 1] && measures[i - 1].end !== start)
+                (msData[i - 1] && msData[i - 1].end !== start)
               ) {
-                measuresRef.current[measures.length - 1].end +=
-                  measuredSize - size;
-                measuresRef.current[i] = getMeasure(i, measuredSize);
+                msDataRef.current[msData.length - 1].end += measuredSize - size;
+                msDataRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(offset, isScrolling);
               }
 
@@ -366,12 +365,11 @@ export default <
 
       if (!isNumber(index)) return;
 
-      const measure =
-        measuresRef.current[Math.max(0, Math.min(index, itemCount - 1))];
+      const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
 
-      if (!measure) return;
+      if (!ms) return;
 
-      const { start, end, size } = measure;
+      const { start, end, size } = ms;
       const { [sizeKey]: outerSize } = outerRectRef.current;
       let { current: offset } = offsetRef;
 
@@ -422,20 +420,20 @@ export default <
     outerRef,
     (rect) => {
       const isSameWidth = outerRectRef.current.width === rect.width;
-      const { current: prevMeasures } = measuresRef;
+      const { current: prevMsData } = msDataRef;
 
       outerRectRef.current = rect;
 
       for (let i = 0; i < itemCount; i += 1)
-        measuresRef.current[i] = getMeasure(i, getItemSize(i));
+        msDataRef.current[i] = getMeasure(i, getItemSize(i));
 
       handleScroll(offsetRef.current);
 
+      const { current: msData } = msDataRef;
       const ratio =
         !isSameWidth &&
-        prevMeasures.length &&
-        measuresRef.current[measuresRef.current.length - 1].end /
-          prevMeasures[prevMeasures.length - 1].end;
+        prevMsData.length &&
+        msData[msData.length - 1].end / prevMsData[prevMsData.length - 1].end;
 
       if (ratio) scrollTo(offsetRef.current * ratio);
     },
