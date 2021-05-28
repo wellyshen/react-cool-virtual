@@ -7,6 +7,12 @@ declare module "react-cool-virtual" {
 
   export type ItemSize = number | ItemSizeFunction;
 
+  export interface UseIsScrollingFunction {
+    (speed: number): boolean;
+  }
+
+  export type UseIsScrolling = boolean | UseIsScrollingFunction;
+
   export interface ScrollEasingFunction {
     (time: number): number;
   }
@@ -19,13 +25,13 @@ declare module "react-cool-virtual" {
     (index: number): boolean;
   }
 
-  export type LoadMoreEvent = {
+  export interface LoadMoreEvent {
     startIndex: number;
     stopIndex: number;
     loadIndex: number;
     readonly scrollOffset: number;
     readonly userScroll: boolean;
-  };
+  }
 
   export interface LoadMore {
     (event: LoadMoreEvent): void;
@@ -100,7 +106,7 @@ declare module "react-cool-virtual" {
     itemSize?: ItemSize;
     horizontal?: boolean;
     overscanCount?: number;
-    useIsScrolling?: boolean;
+    useIsScrolling?: UseIsScrolling;
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
     keyExtractor?: KeyExtractor;
