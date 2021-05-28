@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.17
+
+### Patch Changes
+
+- [`bf7d25b`](https://github.com/wellyshen/react-cool-virtual/commit/bf7d25be40d2a6551a7741a710fb99da743dd3e1) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: correct the high of bindary-search for finding the item index from scroll
+
 ## 0.0.16
 
 ### Patch Changes
