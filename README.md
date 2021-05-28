@@ -30,7 +30,7 @@
 - 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#responsive-web-design-rwd) for better UX.
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
-- 🖱 Imperative [scroll-to controls](#scroll-to-offsetindex) for offset, indices, and alignment.
+- 🖱 Imperative [scroll-to controls](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
 - ⛳ Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
@@ -263,7 +263,7 @@ const List = () => {
 
 Coming soon...
 
-### Scroll to Offset/Indices
+### Scroll to Offset/Items
 
 Coming soon...
 
