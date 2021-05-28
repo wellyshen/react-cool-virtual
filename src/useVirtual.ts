@@ -147,7 +147,7 @@ export default <
       } else {
         vStart = findNearestBinarySearch(
           0,
-          msData.length,
+          msData.length - 1,
           scrollOffset,
           (idx) => msData[idx].start
         );
