@@ -1,13 +1,28 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 
+import { useState, forwardRef } from "react";
 import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const Row = ({ rowHeights }) => {
+const Item = forwardRef(({ children, height, ...rest }, ref) => {
+  const [h, setH] = useState(height);
+
+  return (
+    <div
+      {...rest}
+      style={{ height: `${h}px` }}
+      ref={ref}
+      onClick={() => setH((prevH) => (prevH === 50 ? 100 : 50))}
+    >
+      {children}
+    </div>
+  );
+});
+
+const Row = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: rowHeights.length,
-    itemSize: (idx) => rowHeights[idx]
+    itemCount: 50
   });
 
   return (
@@ -17,14 +32,15 @@ const Row = ({ rowHeights }) => {
       ref={outerRef}
     >
       <div ref={innerRef}>
-        {items.map(({ index, size }) => (
-          <div
+        {items.map(({ index, size, measureRef }) => (
+          <Item
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ height: `${size}px` }}
+            height={size}
+            ref={measureRef}
           >
-            ♻️ {index}
-          </div>
+            👋🏻 Click Me
+          </Item>
         ))}
       </div>
     </div>

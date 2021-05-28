@@ -1,14 +1,30 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 
+import { useState, forwardRef } from "react";
 import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const Column = ({ colWidths }) => {
+const Item = forwardRef(({ children, width, ...rest }, ref) => {
+  const [w, setW] = useState(width);
+
+  return (
+    <div
+      {...rest}
+      style={{ minWidth: `${w}px`, minHeight: "75px" }}
+      ref={ref}
+      onClick={() => setW((prevH) => (prevH === 100 ? 150 : 100))}
+    >
+      {children}
+    </div>
+  );
+});
+
+const Column = () => {
   const { outerRef, innerRef, items } = useVirtual({
     horizontal: true,
-    itemCount: colWidths.length,
-    itemSize: (idx) => colWidths[idx]
+    itemCount: 50,
+    itemSize: 100
   });
 
   return (
@@ -18,14 +34,15 @@ const Column = ({ colWidths }) => {
       ref={outerRef}
     >
       <div ref={innerRef} style={{ display: "flex" }}>
-        {items.map(({ index, size }) => (
-          <div
+        {items.map(({ index, size, measureRef }) => (
+          <Item
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ minWidth: `${size}px`, height: "75px" }}
+            width={size}
+            ref={measureRef}
           >
-            ♻️ {index}
-          </div>
+            👋🏻 Click Me
+          </Item>
         ))}
       </div>
     </div>

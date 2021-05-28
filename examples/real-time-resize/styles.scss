@@ -17,6 +17,8 @@ body {
   justify-content: center;
   align-items: center;
   background: #fff;
+  cursor: pointer;
+  user-select: none;
 
   &.dark {
     background: #e5e5e5;
