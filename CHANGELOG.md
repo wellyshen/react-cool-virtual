@@ -1,5 +1,13 @@
 # react-cool-virtual
 
+## 0.0.16
+
+### Patch Changes
+
+- [#60](https://github.com/wellyshen/react-cool-virtual/pull/60) [`c25f06d`](https://github.com/wellyshen/react-cool-virtual/commit/c25f06d68c6398511222aa3ee046de8351a6a9f6) Thanks [@wellyshen](https://github.com/wellyshen)! - feat: support enable/disable `isScrolling` property of items by speed
+
+* [#58](https://github.com/wellyshen/react-cool-virtual/pull/58) [`a594ab7`](https://github.com/wellyshen/react-cool-virtual/commit/a594ab7568c5e67578b917f28c6d1e418c472e62) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: performance improvement
+
 ## 0.0.15
 
 ### Patch Changes
