@@ -83,8 +83,8 @@ export default <
   const [items, setItems] = useState<Item[]>(() =>
     getInitItems(ssrItemCount, keyExtractor)
   );
+  const hasDynamicSizeRef = useRef(false);
   const hasLoadMoreOnMountRef = useRef(false);
-  const shouldCheckBsHighRef = useRef(false);
   const autoCorrectTimesRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
@@ -132,30 +132,24 @@ export default <
   const getCalcData = useCallback(
     (scrollOffset: number) => {
       const { current: msData } = msDataRef;
-      let high = 0;
+      let vStart = 0;
 
-      if (shouldCheckBsHighRef.current) {
-        for (let i = 1; i < msData.length; i += 1) {
-          if (msData[i - 1].start >= msData[i].start) {
-            high = i;
-            break;
-          }
-          if (
-            msData[msData.length - i - 1].start >=
-            msData[msData.length - i].start
-          ) {
-            high = msData.length - i;
-            break;
-          }
-        }
+      if (hasDynamicSizeRef.current) {
+        while (
+          vStart < msData.length &&
+          msData[vStart].start < (msData[vStart + 1]?.start || 0) &&
+          msData[vStart].start < scrollOffset
+        )
+          vStart += 1;
+      } else {
+        vStart = findNearestBinarySearch(
+          0,
+          msData.length,
+          scrollOffset,
+          (idx) => msData[idx].start
+        );
       }
 
-      const vStart = findNearestBinarySearch(
-        0,
-        high || msData.length,
-        scrollOffset,
-        (idx) => msData[idx].start
-      );
       let vStop = vStart;
       let currStart = msData[vStop].start;
 
@@ -257,12 +251,12 @@ export default <
               if (measuredSize !== size || start !== prevEnd) {
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(scrollOffset, isScrolling);
+
+                hasDynamicSizeRef.current = true;
               }
 
               rosRef.current.get(target)?.disconnect();
               rosRef.current.set(target, ro);
-
-              shouldCheckBsHighRef.current = true;
             }).observe(el);
           },
         });
