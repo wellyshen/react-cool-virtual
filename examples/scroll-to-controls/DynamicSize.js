@@ -16,10 +16,7 @@ const DynamicSize = () => {
 
   return (
     <>
-      {/* When working with dyanmic size, we need turn on the auto */}
-      <button onClick={() => scrollToItem({ index: 750, autoCorrect: true })}>
-        Scroll to 750th
-      </button>
+      <button onClick={() => scrollToItem(750)}>Scroll to 750th</button>
       <div
         className="outer"
         style={{ width: "300px", height: "300px", overflow: "auto" }}
