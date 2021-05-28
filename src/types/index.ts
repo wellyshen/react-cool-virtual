@@ -12,6 +12,8 @@ export interface Measure {
 // External
 export type SsrItemCount = number | [number, number];
 
+export type UseIsScrolling = boolean | ((speed: number) => boolean);
+
 export type ItemSize = number | ((index: number, width: number) => number);
 
 export interface ScrollEasingFunction {
@@ -95,7 +97,7 @@ export interface Options {
   itemSize?: ItemSize;
   horizontal?: boolean;
   overscanCount?: number;
-  useIsScrolling?: boolean;
+  useIsScrolling?: UseIsScrolling;
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
   keyExtractor?: KeyExtractor;

@@ -18,6 +18,7 @@ import {
   ScrollToItem,
   ScrollToItemOptions,
   SsrItemCount,
+  UseIsScrolling,
 } from "./types";
 import {
   easeInOutCubic,
@@ -95,11 +96,13 @@ export default <
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
+  const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
+  const loadMoreRef = useLatest<LoadMore | undefined>(loadMore);
   const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
   const keyExtractorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
   const itemSizeRef = useLatest<ItemSize>(itemSize);
-  const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
-  const loadMoreRef = useLatest<LoadMore | undefined>(loadMore);
+  const useIsScrollingRef =
+    useLatest<UseIsScrolling | undefined>(useIsScrolling);
   const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
   const onResizeRef = useLatest<OnResize | undefined>(onResize);
   const sizeKey = !horizontal ? "height" : "width";
@@ -192,12 +195,12 @@ export default <
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
-    (scrollOffset: number, isScrolling = false) => {
+    (scrollOffset: number, isScrolling?: boolean) => {
       if (!innerRef.current) return;
 
       if (
-        !hasLoadMoreOnMountRef.current &&
         loadMoreRef.current &&
+        !hasLoadMoreOnMountRef.current &&
         !(isItemLoadedRef.current && isItemLoadedRef.current(0))
       )
         loadMoreRef.current({
@@ -233,7 +236,7 @@ export default <
           start: start - margin,
           size,
           width: outerRectRef.current.width,
-          isScrolling: useIsScrolling ? isScrolling : undefined,
+          isScrolling: isScrolling || undefined,
           measureRef: (el) => {
             if (!el) return;
 
@@ -285,8 +288,8 @@ export default <
       const startIndex = loadIndex * loadMoreThreshold;
 
       if (
-        vStop !== prevVStopRef.current &&
         loadMoreRef.current &&
+        vStop !== prevVStopRef.current &&
         !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
       )
         loadMoreRef.current({
@@ -297,10 +300,10 @@ export default <
           userScroll: userScrollRef.current,
         });
 
-      if (useIsScrolling) resetIsScrolling();
-      resetOthers();
-
       prevVStopRef.current = vStop;
+
+      resetIsScrolling();
+      resetOthers();
     },
     [
       getCalcData,
@@ -314,7 +317,6 @@ export default <
       resetIsScrolling,
       resetOthers,
       sizeKey,
-      useIsScrolling,
     ]
   );
 
@@ -456,7 +458,13 @@ export default <
 
     const scrollHandler = ({ target }: Event) => {
       const scrollOffset = (target as O)[scrollKey];
-      handleScroll(scrollOffset, true);
+      let { current: isScrolling } = useIsScrollingRef;
+      isScrolling =
+        typeof isScrolling === "function"
+          ? isScrolling(Math.abs(scrollOffset - scrollOffsetRef.current))
+          : isScrolling;
+
+      handleScroll(scrollOffset, isScrolling);
       scrollOffsetRef.current = scrollOffset;
     };
 
