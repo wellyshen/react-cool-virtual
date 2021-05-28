@@ -25,26 +25,30 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    // itemSize: 100,
+    itemSize: 100,
+    useIsScrolling: (speed) => speed > 50,
   });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div ref={innerRef}>
-          {items.map(({ index, size, measureRef }) => (
-            <div
-              key={index}
-              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ height: `${index === 25 ? 100 : 50}px` }}
-              // style={{ height: `${index === 50 ? sz : size}px` }}
-              // style={{ height: `${mockData[index].size}px` }}
-              // style={{ height: `${50}px` }}
-              ref={measureRef}
-            >
-              {mockData[index].text}
-            </div>
-          ))}
+          {items.map(({ index, isScrolling, size, measureRef }) => {
+            console.log("LOG ===> ", isScrolling);
+            return (
+              <div
+                key={index}
+                className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+                // style={{ height: `${index === 25 ? 100 : 50}px` }}
+                // style={{ height: `${index === 50 ? sz : size}px` }}
+                // style={{ height: `${mockData[index].size}px` }}
+                style={{ height: `${size}px` }}
+                // ref={measureRef}
+              >
+                {isScrolling ? "Scrolling..." : mockData[index].text}
+              </div>
+            );
+          })}
         </div>
       </div>
       <button
