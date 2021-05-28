@@ -10,6 +10,11 @@ const getSizes = (min) =>
 
 const App = () => (
   <div className="app">
+    <p>
+      💡 CodeSandbox might be caching the wrong version of React Cool Virtual.
+      You can use a specific version to see the examples.
+    </p>
+    <br />
     <h4>Row</h4>
     <Row rowHeights={getSizes(35)} />
     <br />
