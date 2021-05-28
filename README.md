@@ -28,12 +28,12 @@
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few setups](#basic-usage).
 - 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
-- 🖥 Supports [RWD (responsive web design)](#TBC) for better UX.
-- 🚚 Built-ins [load more callback](#TBC) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
-- 🖱 Imperative [scroll-to controls](#TBC) for offset, index, and alignment.
-- 🛹 Out of the box [smooth scrolling](#TBC) and the effect is DIY-able.
+- 🖥 Supports [RWD (responsive web design)](#responsive-web-design-rwd) for better UX.
+- 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
+- 🖱 Imperative [scroll-to controls](#scroll-to-offsetindex) for offset, index, and alignment.
+- 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
 - ⛳ Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
-- 🗄️ Supports [server-side rendering](#TBC) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
+- 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 Tiny size ([~ 2.7kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
@@ -258,6 +258,26 @@ const List = () => {
   );
 };
 ```
+
+### Responsive Web Design (RWD)
+
+Coming soon...
+
+### Scroll to Offset/Index
+
+Coming soon...
+
+### Infinite Scroll
+
+Coming soon...
+
+### Smooth Scrolling
+
+Coming soon...
+
+### Server-side Rendering (SSR)
+
+Coming soon...
 
 ## Performance Optimization
 
