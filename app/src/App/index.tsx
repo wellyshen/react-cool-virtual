@@ -1,4 +1,4 @@
-/* import { useState } from "react";
+import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -25,7 +25,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    itemSize: 100,
+    // itemSize: 100,
   });
 
   return (
@@ -36,10 +36,10 @@ export default (): JSX.Element => {
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              // style={{ height: `${index === 1 ? sz : mockData[index].size}px` }}
+              style={{ height: `${index === 25 ? 100 : 50}px` }}
               // style={{ height: `${index === 50 ? sz : size}px` }}
               // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${50}px` }}
+              // style={{ height: `${50}px` }}
               ref={measureRef}
             >
               {mockData[index].text}
@@ -55,9 +55,9 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-}; */
+};
 
-import { Fragment, useState } from "react";
+/* import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -156,4 +156,4 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-};
+}; */
