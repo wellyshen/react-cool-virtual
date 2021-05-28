@@ -129,7 +129,6 @@ const List = () => {
 
   return (
     <div
-      className="outer"
       style={{ width: "300px", height: "300px", overflow: "auto" }}
       ref={outerRef}
     >
@@ -162,7 +161,6 @@ const List = () => {
 
   return (
     <div
-      className="outer"
       style={{ width: "300px", height: "300px", overflow: "auto" }}
       ref={outerRef}
     >
@@ -195,7 +193,6 @@ const List = () => {
 
   return (
     <div
-      className="outer"
       style={{ width: "300px", height: "300px", overflow: "auto" }}
       ref={outerRef}
     >
@@ -218,8 +215,48 @@ const List = () => {
 
 This example demonstrates how to create a real-time resize row (e.g. expand/collapse). For column or grid, please refer to CodeSandbox.
 
+[![Edit RCV - Real-time Resize](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-real-time-resize-fixvr?fontsize=14&hidenavigation=1&theme=dark)
+
 ```js
-// Coming soon...
+import { useState, forwardRef } from "react";
+import useVirtual from "react-cool-virtual";
+
+const Item = forwardRef(({ children, height, ...rest }, ref) => {
+  const [h, setH] = useState(height);
+
+  return (
+    <div
+      {...rest}
+      style={{ height: `${h}px` }}
+      ref={ref}
+      onClick={() => setH((prevH) => (prevH === 50 ? 100 : 50))}
+    >
+      {children}
+    </div>
+  );
+});
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 50,
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size, measureRef }) => (
+          // Use the `measureRef` to measure the item size
+          <Item key={index} height={size} ref={measureRef}>
+            👋🏻 Click Me
+          </Item>
+        ))}
+      </div>
+    </div>
+  );
+};
 ```
 
 ## Performance Optimization
