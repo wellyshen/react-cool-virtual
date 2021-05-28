@@ -2,9 +2,8 @@
 
 import { render } from "react-dom";
 
-import Row from "./Row";
-import Column from "./Column";
-import Grid from "./Grid";
+import FixedSize from "./FixedSize";
+import DynamicSize from "./DynamicSize";
 import "./styles.scss";
 
 const App = () => (
@@ -14,16 +13,12 @@ const App = () => (
       You can manually specify to the latest version to see the examples.
     </p>
     <br />
-    <h4>Row</h4>
-    <Row />
+    <h4>Fixed Size</h4>
+    <FixedSize />
     <br />
     <br />
-    <h4>Column</h4>
-    <Column />
-    <br />
-    <br />
-    <h4>Grid</h4>
-    <Grid />
+    <h4>Dynamic Size</h4>
+    <DynamicSize />
     <br />
   </div>
 );
