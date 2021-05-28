@@ -5,15 +5,15 @@ export default (
   getVal: (idx: number) => number
 ): number => {
   while (low <= high) {
-    const middle = ((low + high) / 2) | 0;
-    const val = getVal(middle);
+    const mid = ((low + high) / 2) | 0;
+    const val = getVal(mid);
 
     if (offset < val) {
-      high = middle - 1;
+      high = mid - 1;
     } else if (offset > val) {
-      low = middle + 1;
+      low = mid + 1;
     } else {
-      return middle;
+      return mid;
     }
   }
 
