@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.19
+
+### Patch Changes
+
+- [#66](https://github.com/wellyshen/react-cool-virtual/pull/66) [`31aad14`](https://github.com/wellyshen/react-cool-virtual/commit/31aad14a92fabdcf030acf850ad582108f8cdd48) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: improve the performance of using `scrollToItem` method with non-dynamic-size items
+
 ## 0.0.18
 
 ### Patch Changes
