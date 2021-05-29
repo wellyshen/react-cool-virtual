@@ -16,7 +16,7 @@ const DynamicSize = () => {
 
   return (
     <>
-      <button onClick={() => scrollToItem(750)}>Scroll to 750th</button>
+      <button onClick={() => scrollToItem(500)}>Scroll to 500th</button>
       <div
         className="outer"
         style={{ width: "300px", height: "300px", overflow: "auto" }}

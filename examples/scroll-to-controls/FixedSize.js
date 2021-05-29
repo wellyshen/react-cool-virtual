@@ -14,8 +14,8 @@ const FixedSize = () => {
   return (
     <>
       <button onClick={() => scrollTo(15000)}>Scroll to 15000px</button>
-      <button onClick={() => scrollToItem({ index: 750, align })}>
-        Scroll to 750th
+      <button onClick={() => scrollToItem({ index: 500, align })}>
+        Scroll to 500th
       </button>
       <select onChange={({ target }) => setAlign(target.value)}>
         <option value="auto">Auto</option>
