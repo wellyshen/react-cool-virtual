@@ -275,14 +275,14 @@ const { scrollTo, scrollToItem } = useVirtual();
 const scrollToOffset = () => {
   // Scroll to 500px
   scrollTo(500, () => {
-    // ☎️ Do whatever you want through the callback
+    // 🤙🏼 Do whatever you want through the callback
   });
 };
 
 const scrollToItem = () => {
   // Scroll to the 500th item
   scrollToItem(500, () => {
-    // ☎️ Do whatever you want through the callback
+    // 🤙🏼 Do whatever you want through the callback
   });
 
   // Control the alignment of the item with the `align` option
