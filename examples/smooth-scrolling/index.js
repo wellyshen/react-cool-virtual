@@ -2,8 +2,8 @@
 
 import { render } from "react-dom";
 
-import FixedSize from "./FixedSize";
-import DynamicSize from "./DynamicSize";
+import BuiltIn from "./BuiltIn";
+import Customized from "./Customized";
 import "./styles.scss";
 
 const App = () => (
@@ -13,13 +13,12 @@ const App = () => (
       You can manually specify to the latest version to see the examples.
     </p>
     <br />
-    <h4>Fixed Size</h4>
-    <FixedSize />
+    <h4>Built-in (easeInOutCubic)</h4>
+    <BuiltIn />
     <br />
     <br />
-    <h4>Dynamic Size</h4>
-    <DynamicSize />
-    <br />
+    <h4>Customized (easeInOutBack)</h4>
+    <Customized />
   </div>
 );
 

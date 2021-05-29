@@ -4,31 +4,34 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const getSizes = (min) =>
-  new Array(1000).fill().map(() => min + Math.round(Math.random() * 100));
-
-const heights = getSizes(35);
-
-const DynamicSize = () => {
+const Customized = () => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
-    itemCount: heights.length
+    itemCount: 10000
   });
 
   return (
     <>
-      <button onClick={() => scrollToItem(500)}>Scroll to 500th</button>
+      <button
+        onClick={() =>
+          scrollToItem({
+            index: Math.floor(Math.random() * 10000),
+            smooth: true // Turn on smoothing scrolling feature
+          })
+        }
+      >
+        Scroll to...
+      </button>
       <div
         className="outer"
         style={{ width: "300px", height: "300px", overflow: "auto" }}
         ref={outerRef}
       >
         <div ref={innerRef}>
-          {items.map(({ index, measureRef }) => (
+          {items.map(({ index, size }) => (
             <div
               key={index}
               className={`item ${index % 2 ? "dark" : ""}`}
-              style={{ height: `${heights[index]}px` }}
-              ref={measureRef}
+              style={{ height: `${size}px` }}
             >
               ♻️ {index}
             </div>
@@ -39,4 +42,4 @@ const DynamicSize = () => {
   );
 };
 
-export default DynamicSize;
+export default Customized;
