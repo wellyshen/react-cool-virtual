@@ -42,6 +42,8 @@
     "performance",
     "ssr",
     "server-side-rendering",
+    "dx",
+    "ux",
     "typescript"
   ],
   "author": "Welly Shen <hivoid19@gmail.com> (https://github.com/wellyshen)",
