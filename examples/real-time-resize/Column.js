@@ -5,7 +5,7 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const Item = forwardRef(({ children, width, ...rest }, ref) => {
+const AccordionItem = forwardRef(({ children, width, ...rest }, ref) => {
   const [w, setW] = useState(width);
 
   return (
@@ -35,14 +35,14 @@ const Column = () => {
     >
       <div ref={innerRef} style={{ display: "flex" }}>
         {items.map(({ index, size, measureRef }) => (
-          <Item
+          <AccordionItem
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
             width={size}
             ref={measureRef}
           >
             👋🏻 Click Me
-          </Item>
+          </AccordionItem>
         ))}
       </div>
     </div>
