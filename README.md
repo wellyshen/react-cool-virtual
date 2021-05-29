@@ -213,7 +213,7 @@ const List = () => {
 
 ### Real-time Resize
 
-This example demonstrates how to create a real-time resize row (e.g. expand/collapse). For column or grid, please refer to CodeSandbox.
+This example demonstrates how to create a real-time resize row (e.g. accordion, collapse etc.). For column or grid, please refer to CodeSandbox.
 
 [![Edit RCV - Real-time Resize](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-real-time-resize-fixvr?fontsize=14&hidenavigation=1&theme=dark)
 
@@ -249,9 +249,9 @@ const List = () => {
       <div ref={innerRef}>
         {items.map(({ index, size, measureRef }) => (
           // Use the `measureRef` to measure the item size
-          <Item key={index} height={size} ref={measureRef}>
+          <AccordionItem key={index} height={size} ref={measureRef}>
             👋🏻 Click Me
-          </Item>
+          </AccordionItem>
         ))}
       </div>
     </div>
