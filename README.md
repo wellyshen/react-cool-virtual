@@ -1,4 +1,4 @@
-<h4 align="center"><code><strong>🚧 Work in progress, most APIs are done. Welcome to give it a try but not production ready yet.</strong></code></h4>
+<h4 align="center"><code><strong>🚧 Work in progress, most APIs are done. Try it but not production ready yet.</strong></code></h4>
 
 <h1 align="center">
   <br />
