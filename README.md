@@ -293,7 +293,41 @@ const scrollToItem = () => {
 
 ### Smooth Scrolling
 
-Coming soon...
+React Cool Virtual provides the smooth scrolling feature out of the box, all you need to do is turn the `smooth` option on.
+
+[![Edit RCV - Smooth Scrolling](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-smooth-scrolling-noy4d?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+const { scrollTo, scrollToItem } = useVirtual();
+
+// Smoothly scroll to 500px
+const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
+
+// Smoothly scroll to the 500th item
+const scrollToItem = () => scrollToItem({ index: 500, smooth: true });
+```
+
+The default easing effect is [easeInOutCubic](https://easings.net/#easeInOutCubic), and the duration is 500 milliseconds. You can easily customize your own effect as follows:
+
+```js
+const { scrollTo } = useVirtual({
+  // In 500 milliseconds
+  scrollDuration: 500,
+  // Using "easeInOutBack" effect, see: https://easings.net/#easeInOutBack
+  scrollEasingFunction: (t) => {
+    const c1 = 1.70158;
+    const c2 = c1 * 1.525;
+
+    return t < 0.5
+      ? (Math.pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
+      : (Math.pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2;
+  },
+});
+
+const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
+```
+
+> 💡 For more cool easing effects, please [check it out](https://easings.net).
 
 ### Infinite Scroll
 
