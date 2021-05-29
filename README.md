@@ -178,7 +178,7 @@ const List = () => {
 
 ### Dynamic Size
 
-This example demonstrates how to create a dynamic size row. For column or grid, please refer to CodeSandbox.
+This example demonstrates how to create a dynamic (unknown) size row. For column or grid, please refer to CodeSandbox.
 
 [![Edit RCV - Dynamic Size](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-dynamic-size-0wurg?fontsize=14&hidenavigation=1&theme=dark)
 
@@ -311,9 +311,10 @@ The default easing effect is [easeInOutCubic](https://easings.net/#easeInOutCubi
 
 ```js
 const { scrollTo } = useVirtual({
-  // In 500 milliseconds
+  // For 500 milliseconds (default = 500ms)
   scrollDuration: 500,
-  // Using "easeInOutBack" effect, see: https://easings.net/#easeInOutBack
+  // Using "easeInOutBack" effect (default = easeInOutCubic)
+  // See: https://easings.net/#easeInOutBack
   scrollEasingFunction: (t) => {
     const c1 = 1.70158;
     const c2 = c1 * 1.525;
