@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.18
+
+### Patch Changes
+
+- [#63](https://github.com/wellyshen/react-cool-virtual/pull/63) [`01ca818`](https://github.com/wellyshen/react-cool-virtual/commit/01ca81813d0a664254e12e14814daab244615a88) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `scrollToItem` method not working with dynamic size
+
 ## 0.0.17
 
 ### Patch Changes
