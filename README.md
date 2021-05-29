@@ -1,4 +1,4 @@
-<h4 align="center"><code><strong>🚧 Work in progress, don't use it now.</strong></code></h4>
+<h4 align="center"><code><strong>🚧 Work in progress, don't use it on production.</strong></code></h4>
 
 <h1 align="center">
   <br />
