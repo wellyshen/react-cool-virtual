@@ -53,7 +53,7 @@ Frequently viewed docs:
 - [API](#api)
 - [Performance Optimization](#performance-optimization)
 - [Working in TypeScript](#working-in-typescript)
-- [Sharing A `Ref`](#how-to-share-a-ref)
+- [Sharing A Ref](#how-to-share-a-ref)
 - [Polyfill](#resizeobserver-polyfill)
 
 ## Getting Started
