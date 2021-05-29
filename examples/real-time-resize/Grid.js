@@ -7,7 +7,7 @@ import "./styles.scss";
 
 let clickedItems = {};
 
-const Item = forwardRef(
+const AccordionItem = forwardRef(
   (
     {
       children,
@@ -83,7 +83,7 @@ const Grid = () => {
         {row.items.map((rowItem) => (
           <Fragment key={rowItem.index}>
             {col.items.map((colItem) => (
-              <Item
+              <AccordionItem
                 key={colItem.index}
                 className={`item ${
                   rowItem.index % 2
@@ -117,7 +117,7 @@ const Grid = () => {
                 }
               >
                 👋🏻 Click Me
-              </Item>
+              </AccordionItem>
             ))}
           </Fragment>
         ))}
