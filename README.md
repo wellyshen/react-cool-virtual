@@ -44,6 +44,18 @@ When rendering a large set of data (e.g. list, table etc.) in React, we all face
 
 React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 🤯.
 
+## Docs
+
+Frequently viewed docs:
+
+- [Getting Started](#getting-started)
+- [Examples](#examples)
+- [API](#api)
+- [Performance Optimization](#performance-optimization)
+- [Working in TypeScript](#working-in-typescript)
+- [Sharing A `Ref`](#how-to-share-a-ref)
+- [Polyfill](#resizeobserver-polyfill)
+
 ## Getting Started
 
 To use React Cool Virtual, you must use `react@16.8.0` or greater which includes hooks.
