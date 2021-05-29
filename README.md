@@ -265,13 +265,37 @@ Coming soon...
 
 ### Scroll to Offset/Items
 
+You can imperatively scroll to offset or items as follows:
+
+[![Edit RCV - Scroll-to Controls](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-scroll-to-controls-v5b3i?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+const { scrollTo, scrollToItem } = useVirtual();
+
+const scrollToOffset = () => {
+  // Scroll to 500px
+  scrollTo(500, () => {
+    // ☎️ Do whatever you want through the callback
+  });
+};
+
+const scrollToItem = () => {
+  // Scroll to the 500th item
+  scrollToItem(500, () => {
+    // ☎️ Do whatever you want through the callback
+  });
+
+  // Control the alignment of the item with the `align` option
+  // Available values: "auto" (default) | "start" | "center" | "end"
+  scrollToItem({ index: 500, align: "center" });
+};
+```
+
+### Smooth Scrolling
+
 Coming soon...
 
 ### Infinite Scroll
-
-Coming soon...
-
-### Smooth Scrolling
 
 Coming soon...
 
