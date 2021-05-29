@@ -98,7 +98,7 @@ const List = () => {
         {items.map(({ index, size }) => (
           // You can set the item's height with the `size` property
           <div key={index} style={{ height: `${size}px` }}>
-            Row {index}
+            ⭐️ {index}
           </div>
         ))}
       </div>
@@ -135,7 +135,7 @@ const List = () => {
       <div ref={innerRef}>
         {items.map(({ index, size }) => (
           <div key={index} style={{ height: `${size}px` }}>
-            ♻️ {index}
+            ⭐️ {index}
           </div>
         ))}
       </div>
@@ -167,7 +167,7 @@ const List = () => {
       <div ref={innerRef}>
         {items.map(({ index, size }) => (
           <div key={index} style={{ height: `${size}px` }}>
-            ♻️ {index}
+            ⭐️ {index}
           </div>
         ))}
       </div>
