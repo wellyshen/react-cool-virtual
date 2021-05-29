@@ -20,12 +20,13 @@ const mockData = getMockData(50);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(50);
-  const { outerRef, innerRef, items } = useVirtual<
+  const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemCount: mockData.length,
     // itemSize: 100,
+    // overscanCount: 0,
   });
 
   return (
@@ -49,9 +50,13 @@ export default (): JSX.Element => {
       </div>
       <button
         type="button"
-        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
+        onClick={() =>
+          scrollToItem({ index: 500, smooth: false }, () =>
+            console.log("LOG ===> Done")
+          )
+        }
       >
-        Resize
+        Scroll To...
       </button>
     </div>
   );
