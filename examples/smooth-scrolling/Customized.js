@@ -7,9 +7,10 @@ import "./styles.scss";
 const BuiltIn = () => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
     itemCount: 10000,
-    // In 500 milliseconds
+    // For 500 milliseconds (default = 500ms)
     scrollDuration: 500,
-    // Using "easeInOutBack" effect, see: https://easings.net/#easeInOutBack
+    // Using "easeInOutBack" effect (default = easeInOutCubic)
+    // See: https://easings.net/#easeInOutBack
     scrollEasingFunction: (t) => {
       const c1 = 1.70158;
       const c2 = c1 * 1.525;
