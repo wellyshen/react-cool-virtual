@@ -33,8 +33,8 @@ import {
 } from "./utils";
 
 const DEFAULT_ITEM_SIZE = 50;
-const DEBOUNCE_INTERVAL = 200;
-const AUTO_CORRECT_LIMIT = 10;
+const DEBOUNCE_INTERVAL = 150;
+const MAX_CORRECT_SCROLL_COUNT = 10;
 
 const getInitItems = (
   ssrItemCount?: SsrItemCount,
@@ -86,7 +86,8 @@ export default <
   );
   const hasDynamicSizeRef = useRef(false);
   const hasLoadMoreOnMountRef = useRef(false);
-  const autoCorrectTimesRef = useRef(0);
+  const isScrollToItemRef = useRef(false);
+  const correctScrollCountRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
   const prevVStopRef = useRef<number>();
@@ -137,7 +138,7 @@ export default <
       const { current: msData } = msDataRef;
       let vStart = 0;
 
-      if (hasDynamicSizeRef.current) {
+      if (hasDynamicSizeRef.current && !isScrollToItemRef.current) {
         while (
           vStart < msData.length &&
           msData[vStart].start < (msData[vStart + 1]?.start || 0) &&
@@ -186,6 +187,7 @@ export default <
   );
 
   const [resetOthers, cancelResetOthers] = useDebounce(() => {
+    isScrollToItemRef.current = false;
     userScrollRef.current = true;
 
     const len = rosRef.current.size - msDataRef.current.length;
@@ -364,10 +366,15 @@ export default <
         index,
         align = Align.auto,
         smooth,
-        autoCorrect,
       }: ScrollToItemOptions = isNumber(val) ? { index: val } : val;
 
       if (!isNumber(index)) return;
+
+      isScrollToItemRef.current = true;
+
+      if (hasDynamicSizeRef.current)
+        for (let i = 0; i < msDataRef.current.length; i += 1)
+          msDataRef.current[i] = getMeasure(i, msDataRef.current[i].size);
 
       const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
 
@@ -378,14 +385,12 @@ export default <
       const outerSize = outerRectRef.current[sizeKey];
 
       if (
-        autoCorrect &&
+        hasDynamicSizeRef.current &&
         scrollOffset <= start &&
         scrollOffset + outerSize >= end &&
         cb
-      ) {
+      )
         cb();
-        return;
-      }
 
       const endPos = start - outerSize + size;
 
@@ -408,21 +413,21 @@ export default <
       }
 
       scrollTo({ offset: scrollOffset, smooth }, () => {
-        if (!autoCorrect) {
+        if (!hasDynamicSizeRef.current) {
           if (cb) cb();
         } else if (
-          autoCorrectTimesRef.current <= AUTO_CORRECT_LIMIT &&
+          correctScrollCountRef.current <= MAX_CORRECT_SCROLL_COUNT &&
           (scrollOffset >= start || scrollOffset + outerSize <= end)
         ) {
           setTimeout(() => scrollToItem(val, cb));
-          autoCorrectTimesRef.current += 1;
+          correctScrollCountRef.current += 1;
         } else {
           if (cb) cb();
-          autoCorrectTimesRef.current = 0;
+          correctScrollCountRef.current = 0;
         }
       });
     },
-    [itemCount, scrollTo, sizeKey]
+    [getMeasure, itemCount, scrollTo, sizeKey]
   );
 
   useResizeEffect<O>(
