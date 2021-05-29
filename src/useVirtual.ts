@@ -85,8 +85,8 @@ export default <
     getInitItems(ssrItemCount, keyExtractor)
   );
   const hasDynamicSizeRef = useRef(false);
-  const hasLoadMoreOnMountRef = useRef(false);
   const isScrollToItemRef = useRef(false);
+  const hasLoadMoreOnMountRef = useRef(false);
   const correctScrollCountRef = useRef(0);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
