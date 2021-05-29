@@ -250,7 +250,7 @@ const List = () => {
         {items.map(({ index, size, measureRef }) => (
           // Use the `measureRef` to measure the item size
           <AccordionItem key={index} height={size} ref={measureRef}>
-            👋🏻 Click Me
+            🪗 Click Me
           </AccordionItem>
         ))}
       </div>
