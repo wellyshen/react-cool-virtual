@@ -302,7 +302,7 @@ export default <
     isScrollToItemRef.current = false;
     userScrollRef.current = true;
 
-    const len = rosRef.current.size - msDataRef.current.length;
+    const len = rosRef.current.size - items.length;
     const iter = rosRef.current[Symbol.iterator]();
     for (let i = 0; i < len; i += 1)
       rosRef.current.delete(iter.next().value[0]);
