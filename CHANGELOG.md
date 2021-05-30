@@ -1,5 +1,13 @@
 # react-cool-virtual
 
+## 0.0.21
+
+### Patch Changes
+
+- [#72](https://github.com/wellyshen/react-cool-virtual/pull/72) [`97882ac`](https://github.com/wellyshen/react-cool-virtual/commit/97882ac9bac267bf0ce9e0d917bbaff7adab9995) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: RWD not working
+
+* [`eaf35c9`](https://github.com/wellyshen/react-cool-virtual/commit/eaf35c9bf5c4cc9ee9d98b39a2e63cfcd47625fa) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: limit the cache number of resize observers with the length of items
+
 ## 0.0.20
 
 ### Patch Changes
