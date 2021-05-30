@@ -2,9 +2,8 @@
 
 import { render } from "react-dom";
 
-import Row from "./Row";
-import Column from "./Column";
-import Grid from "./Grid";
+import Skeleton from "./Skeleton";
+import General from "./General";
 import "./styles.scss";
 
 const App = () => (
@@ -14,16 +13,12 @@ const App = () => (
       You can manually specify to the latest version to see the examples.
     </p>
     <br />
-    <h4>Row</h4>
-    <Row />
+    <h4>Skeleton</h4>
+    <Skeleton />
     <br />
     <br />
-    <h4>Column</h4>
-    <Column />
-    <br />
-    <br />
-    <h4>Grid</h4>
-    <Grid />
+    <h4>General</h4>
+    <General />
     <br />
   </div>
 );

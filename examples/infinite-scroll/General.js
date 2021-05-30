@@ -4,7 +4,7 @@ import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
-const Row = () => {
+const General = () => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: 1000
   });
@@ -30,4 +30,4 @@ const Row = () => {
   );
 };
 
-export default Row;
+export default General;
