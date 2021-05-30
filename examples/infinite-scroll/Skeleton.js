@@ -41,7 +41,7 @@ const Skeleton = () => {
         setComments((prevComments) => [...prevComments, ...comments]);
       } catch (err) {
         // If there's an error leave the state as `false`
-        // the callback will be invoked in the next time
+        // so the callback will be invoked in the next time
         isItemLoadedArr[loadIndex] = false;
       }
     }
