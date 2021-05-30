@@ -133,6 +133,20 @@ export default <
     [keyExtractorRef]
   );
 
+  const measureItems = useCallback(
+    (useCache = true) => {
+      for (let i = 0; i < itemCount; i += 1) {
+        msDataRef.current[i] = getMeasure(
+          i,
+          useCache && msDataRef.current[i]
+            ? msDataRef.current[i].size
+            : getItemSize(i)
+        );
+      }
+    },
+    [getItemSize, getMeasure, itemCount]
+  );
+
   const getCalcData = useCallback(
     (scrollOffset: number) => {
       const { current: msData } = msDataRef;
@@ -372,9 +386,7 @@ export default <
 
       isScrollToItemRef.current = true;
 
-      if (hasDynamicSizeRef.current)
-        for (let i = 0; i < msDataRef.current.length; i += 1)
-          msDataRef.current[i] = getMeasure(i, msDataRef.current[i].size);
+      if (hasDynamicSizeRef.current) measureItems();
 
       const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
 
@@ -427,7 +439,7 @@ export default <
         }
       });
     },
-    [getMeasure, itemCount, scrollTo, sizeKey]
+    [itemCount, measureItems, scrollTo, sizeKey]
   );
 
   useResizeEffect<O>(
@@ -437,10 +449,7 @@ export default <
       const { current: prevMsData } = msDataRef;
 
       outerRectRef.current = rect;
-
-      for (let i = 0; i < itemCount; i += 1)
-        msDataRef.current[i] = getMeasure(i, getItemSize(i));
-
+      measureItems(false);
       handleScroll(scrollOffsetRef.current);
 
       if (onResizeRef.current) onResizeRef.current(rect);
@@ -453,7 +462,7 @@ export default <
 
       if (ratio) scrollTo(scrollOffsetRef.current * ratio);
     },
-    [getItemSize, getMeasure, handleScroll, itemCount, scrollTo]
+    [itemCount, handleScroll, measureItems, onResizeRef, scrollTo]
   );
 
   useIsoLayoutEffect(() => {
