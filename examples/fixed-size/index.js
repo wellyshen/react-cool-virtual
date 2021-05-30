@@ -25,6 +25,7 @@ const App = () => (
     <h4>Grid</h4>
     <Grid />
     <br />
+    <br />
   </div>
 );
 
