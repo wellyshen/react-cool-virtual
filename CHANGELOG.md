@@ -1,5 +1,17 @@
 # react-cool-virtual
 
+## 0.0.19
+
+### Patch Changes
+
+- [#68](https://github.com/wellyshen/react-cool-virtual/pull/68) [`ecbbfc9`](https://github.com/wellyshen/react-cool-virtual/commit/ecbbfc91131934ccecd11551036a1bdbb1144d03) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: load more callback not working
+
+* [`78dfd4d`](https://github.com/wellyshen/react-cool-virtual/commit/78dfd4dc7094910da8ddc2adbe4956be0e5526bd) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor: extract common `measureItems` method
+
+- [`8defe38`](https://github.com/wellyshen/react-cool-virtual/commit/8defe3819bef5d124a92e79151b4d17ab3557a8f) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor(types): remove unnecessary type generics
+
+* [`bcc59cf`](https://github.com/wellyshen/react-cool-virtual/commit/bcc59cfea997977480f72270b379657f6391dff6) Thanks [@wellyshen](https://github.com/wellyshen)! - Chore: update keywords
+
 ## 0.0.18
 
 ### Patch Changes
