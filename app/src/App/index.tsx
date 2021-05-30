@@ -16,7 +16,7 @@ export default (): JSX.Element => {
     itemCount: 500,
     itemSize: 112,
     loadMoreThreshold: 5,
-    isItemLoaded: (idx) => itemLoadedArr[idx],
+    isItemLoaded: (loadIndex) => itemLoadedArr[loadIndex],
     loadMore: async ({ loadIndex }) => {
       itemLoadedArr[loadIndex] = true;
 
