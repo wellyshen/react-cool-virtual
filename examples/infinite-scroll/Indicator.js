@@ -72,7 +72,7 @@ const Indicator = () => {
                   style={{ padding: "16px", minHeight: "100px" }}
                   ref={measureRef} // Used to measure the unknown item size
                 >
-                  {comments[index]?.body || "⏳ Loading..."}
+                  {comments[index].body}
                 </div>
                 {shouldShowLoading && <Loading />}
               </Fragment>
