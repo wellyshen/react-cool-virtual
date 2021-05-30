@@ -3,22 +3,15 @@ import { useCallback, useRef, useState } from "react";
 import {
   Align,
   Item,
-  IsItemLoaded,
-  ItemSize,
   KeyExtractor,
-  LoadMore,
   Measure,
-  OnScroll,
-  OnResize,
   Options,
   Return,
-  ScrollEasingFunction,
   ScrollTo,
   ScrollToOptions,
   ScrollToItem,
   ScrollToItemOptions,
   SsrItemCount,
-  UseIsScrolling,
 } from "./types";
 import {
   easeInOutCubic,
@@ -97,15 +90,14 @@ export default <
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
-  const isItemLoadedRef = useRef<IsItemLoaded | undefined>(isItemLoaded);
-  const loadMoreRef = useLatest<LoadMore | undefined>(loadMore);
-  const easingFnRef = useLatest<ScrollEasingFunction>(scrollEasingFunction);
-  const keyExtractorRef = useLatest<KeyExtractor | undefined>(keyExtractor);
-  const itemSizeRef = useLatest<ItemSize>(itemSize);
-  const useIsScrollingRef =
-    useLatest<UseIsScrolling | undefined>(useIsScrolling);
-  const onScrollRef = useLatest<OnScroll | undefined>(onScroll);
-  const onResizeRef = useLatest<OnResize | undefined>(onResize);
+  const isItemLoadedRef = useRef(isItemLoaded);
+  const loadMoreRef = useLatest(loadMore);
+  const easingFnRef = useLatest(scrollEasingFunction);
+  const keyExtractorRef = useLatest(keyExtractor);
+  const itemSizeRef = useLatest(itemSize);
+  const useIsScrollingRef = useLatest(useIsScrolling);
+  const onScrollRef = useLatest(onScroll);
+  const onResizeRef = useLatest(onResize);
   const sizeKey = !horizontal ? "height" : "width";
   const itemSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";

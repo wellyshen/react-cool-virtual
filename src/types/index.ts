@@ -12,11 +12,11 @@ export interface Measure {
 // External
 export type SsrItemCount = number | [number, number];
 
-export type UseIsScrolling = boolean | ((speed: number) => boolean);
+type UseIsScrolling = boolean | ((speed: number) => boolean);
 
-export type ItemSize = number | ((index: number, width: number) => number);
+type ItemSize = number | ((index: number, width: number) => number);
 
-export interface ScrollEasingFunction {
+interface ScrollEasingFunction {
   (time: number): number;
 }
 
@@ -24,11 +24,11 @@ export interface KeyExtractor {
   (index: number): string;
 }
 
-export interface IsItemLoaded {
+interface IsItemLoaded {
   (index: number): boolean;
 }
 
-export interface LoadMore {
+interface LoadMore {
   (event: {
     startIndex: number;
     stopIndex: number;
@@ -38,7 +38,7 @@ export interface LoadMore {
   }): void;
 }
 
-export interface OnScroll {
+interface OnScroll {
   (event: {
     overscanStartIndex: number;
     overscanStopIndex: number;
@@ -50,7 +50,7 @@ export interface OnScroll {
   }): void;
 }
 
-export interface OnResize {
+interface OnResize {
   (event: { width: number; height: number }): void;
 }
 
