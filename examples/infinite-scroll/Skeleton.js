@@ -11,7 +11,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const isItemLoadedArr = [];
 
 const Skeleton = () => {
-  const [commentData, setCommentData] = useState([]);
+  const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: 500,
     // Estimated item size (with padding)
@@ -19,13 +19,13 @@ const Skeleton = () => {
     // Starts to pre-fetch data when the user scrolls within every 5 items
     // e.g. 1-5, 6-10 and so on (default = 15)
     loadMoreThreshold: 5,
-    // Provide the item loaded state to tell the hook
+    // Provide the loaded state for a batch items to tell the hook
     // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
-    // The callback is invoked when there're more data need to be loaded
+    // The callback will be invoked when more data needs to be loaded
     loadMore: async ({ loadIndex }) => {
-      // Set the state of a 5 batch items as `true`
-      // to disable the callback from being invoked next time
+      // Set the state of a batch items as `true`
+      // to avoid the callback from being invoked repeatedly
       isItemLoadedArr[loadIndex] = true;
 
       try {
@@ -38,9 +38,10 @@ const Skeleton = () => {
           }`
         );
 
-        setCommentData((prevComments) => [...prevComments, ...comments]);
+        setComments((prevComments) => [...prevComments, ...comments]);
       } catch (err) {
-        // If there's an error set the state as `false`, let the hook retry for us
+        // If there's an error leave the state as `false`
+        // the callback will be invoked in the next time
         isItemLoadedArr[loadIndex] = false;
       }
     }
@@ -58,9 +59,9 @@ const Skeleton = () => {
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
             style={{ padding: "16px", minHeight: "112px" }}
-            ref={measureRef} // Measure the unknown item size
+            ref={measureRef} // Used to measure the unknown item size
           >
-            {commentData[index]?.body || "⏳ Loading..."}
+            {comments[index]?.body || "⏳ Loading..."}
           </div>
         ))}
       </div>
