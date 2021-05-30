@@ -11,19 +11,12 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const itemLoadedArr: any[] = [];
 
-let count = 0;
-
 // @ts-expect-error
 const loadData = async ({ loadIndex }, setComments) => {
   itemLoadedArr[loadIndex] = true;
 
   try {
     await sleep(2500);
-
-    if (!count) {
-      count += 1;
-      throw new Error("Test");
-    }
 
     const { data: comments } = await axios(
       `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
@@ -32,8 +25,6 @@ const loadData = async ({ loadIndex }, setComments) => {
     // @ts-expect-error
     setComments((prevComments) => [...prevComments, ...comments]);
   } catch (err) {
-    console.log("LOG ===> ", err);
-
     itemLoadedArr[loadIndex] = false;
     loadData({ loadIndex }, setComments);
   }
@@ -46,7 +37,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: 500,
-    itemSize: 112,
+    // itemSize: 50,
     loadMoreThreshold: 5,
     isItemLoaded: (loadIndex) => itemLoadedArr[loadIndex],
     loadMore: (options) => loadData(options, setComments),
@@ -60,11 +51,11 @@ export default (): JSX.Element => {
         ref={outerRef}
       >
         <div ref={innerRef}>
-          {items.map(({ index, measureRef }) => (
+          {items.map(({ index, size, measureRef }) => (
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ padding: "16px", minHeight: "112px" }}
+              style={{ padding: "16px", minHeight: "50px" }}
               ref={measureRef}
             >
               {comments[index]?.body || "⏳ Loading..."}
