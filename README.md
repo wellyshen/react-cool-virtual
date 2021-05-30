@@ -40,7 +40,7 @@
 
 ## Why?
 
-When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that provide well-defineded way of using but increase a lot of bundle size. However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution that is flexible and `headless` but applying styles for using it can be verbose. Furthermore, it lacks some of the [useful features](#features).
+When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that provide well-defineded way of using but increase a lot of bundle size. However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution that is flexible and `headless` but applying styles for using it can be verbose. Furthermore, it lacks many of the [useful features](#features).
 
 React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 🤯.
 
@@ -273,7 +273,43 @@ const List = () => {
 
 ### Responsive Web Design (RWD)
 
-Coming soon...
+This example demonstrates how to create a list with RWD to provide a better UX for the user.
+
+[![Edit RCV - RWD](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-rwd-x6lvc?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import useVirtual from "react-cool-virtual";
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 1000,
+    // Use the outer's width (2nd parameter) to adjust the item's size
+    itemSize: (_, width) => (width > 400 ? 50 : 100),
+    // The event will be triggered on outer's size is being changed
+    onResize: (rect) => console.log("Outer's rect: ", rect),
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "400px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {/* We can also access the outer's width here */}
+        {items.map(({ index, size, width }) => (
+          <div
+            key={index}
+            className={`item ${index % 2 ? "dark" : ""}`}
+            style={{ height: `${size}px` }}
+          >
+            📏 {width}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
 
 ### Scroll to Offset/Items
 
