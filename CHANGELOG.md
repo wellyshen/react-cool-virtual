@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.20
+
+### Patch Changes
+
+- [#69](https://github.com/wellyshen/react-cool-virtual/pull/69) [`3201739`](https://github.com/wellyshen/react-cool-virtual/commit/32017392ea07309b9951eacbd91fdcfa9c66c6ed) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: infinite scroll causes dynamic size item jumping
+
 ## 0.0.19
 
 ### Patch Changes
