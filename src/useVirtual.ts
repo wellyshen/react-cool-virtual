@@ -203,7 +203,7 @@ export default <
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
-    (scrollOffset: number, isScrolling?: boolean) => {
+    (scrollOffset: number, isScrolling?: boolean, uxScrolling?: boolean) => {
       if (!innerRef.current) return;
 
       if (
@@ -244,7 +244,7 @@ export default <
           start: start - margin,
           size,
           width: outerRectRef.current.width,
-          isScrolling: isScrolling || undefined,
+          isScrolling: uxScrolling || undefined,
           measureRef: (el) => {
             if (!el) return;
 
@@ -310,7 +310,7 @@ export default <
 
       prevVStopRef.current = vStop;
 
-      resetIsScrolling();
+      if (uxScrolling) resetIsScrolling();
       resetOthers();
     },
     [
@@ -464,13 +464,13 @@ export default <
 
     const scrollHandler = ({ target }: Event) => {
       const scrollOffset = (target as O)[scrollKey];
-      let { current: isScrolling } = useIsScrollingRef;
-      isScrolling =
-        typeof isScrolling === "function"
-          ? isScrolling(Math.abs(scrollOffset - scrollOffsetRef.current))
-          : isScrolling;
+      let { current: uxScrolling } = useIsScrollingRef;
+      uxScrolling =
+        typeof uxScrolling === "function"
+          ? uxScrolling(Math.abs(scrollOffset - scrollOffsetRef.current))
+          : uxScrolling;
 
-      handleScroll(scrollOffset, isScrolling);
+      handleScroll(scrollOffset, true, uxScrolling);
       scrollOffsetRef.current = scrollOffset;
     };
 
@@ -491,7 +491,13 @@ export default <
       ros.forEach((ro) => ro.disconnect());
       ros.clear();
     };
-  }, [cancelResetIsScrolling, cancelResetOthers, handleScroll, scrollKey]);
+  }, [
+    cancelResetIsScrolling,
+    cancelResetOthers,
+    handleScroll,
+    scrollKey,
+    useIsScrollingRef,
+  ]);
 
   return { outerRef, innerRef, items, scrollTo, scrollToItem };
 };

@@ -1,164 +1,59 @@
 import { useState } from "react";
 import useVirtual from "react-cool-virtual";
-import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 import "normalize.css";
 import styles from "./styles.module.scss";
 
-const sleep = (time: number) =>
-  // eslint-disable-next-line compat/compat
-  new Promise((resolve) => setTimeout(resolve, time));
-
-const getMockData = (count: number, min = 25) =>
-  // eslint-disable-next-line no-plusplus
-  new Array(count).fill({}).map((_, idx) => ({
-    text: idx,
-    size: min + Math.round(Math.random() * 100),
-  }));
-
-const mockData = getMockData(50);
+const itemLoadedArr: any[] = [];
 
 export default (): JSX.Element => {
-  const [sz, setSz] = useState(50);
-  const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
+  const [commentData, setCommentData] = useState<any[]>([]);
+  const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount: mockData.length,
-    // itemSize: 100,
-    // overscanCount: 0,
-  });
+    itemCount: 500,
+    itemSize: 112,
+    loadMoreThreshold: 5,
+    isItemLoaded: (idx) => itemLoadedArr[idx],
+    loadMore: async ({ loadIndex }) => {
+      itemLoadedArr[loadIndex] = true;
 
-  return (
-    <div className={styles.app}>
-      <div className={styles.outer} ref={outerRef}>
-        <div ref={innerRef}>
-          {items.map(({ index, size, measureRef }) => (
-            <div
-              key={index}
-              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              // style={{ height: `${index === 25 ? 100 : 50}px` }}
-              // style={{ height: `${index === 50 ? sz : size}px` }}
-              // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${100}px` }}
-              ref={measureRef}
-            >
-              {index}
-            </div>
-          ))}
-        </div>
-      </div>
-      <button
-        type="button"
-        onClick={() =>
-          scrollToItem({ index: 500, smooth: false }, () =>
-            console.log("LOG ===> Done")
-          )
-        }
-      >
-        Scroll To...
-      </button>
-    </div>
-  );
-};
+      try {
+        const { data } = await axios(
+          `https://jsonplaceholder.typicode.com/comments?postId=${
+            loadIndex + 1
+          }`
+        );
 
-/* import { Fragment, useState } from "react";
-import useVirtual from "react-cool-virtual";
-import { v4 as uuidv4 } from "uuid";
-
-import "normalize.css";
-import styles from "./styles.module.scss";
-
-const sleep = (time: number) =>
-  // eslint-disable-next-line compat/compat
-  new Promise((resolve) => setTimeout(resolve, time));
-
-const getMockData = (count: number, min = 25) =>
-  // eslint-disable-next-line no-plusplus
-  new Array(count).fill({}).map((_, idx) => ({
-    text: uuidv4(),
-    size: min + Math.round(Math.random() * 100),
-  }));
-
-const rowHeights = getMockData(1000000);
-const colWidths = getMockData(1000000, 75);
-
-export default (): JSX.Element => {
-  const [sz, setSz] = useState(25);
-  const row = useVirtual<HTMLDivElement, HTMLDivElement>({
-    itemCount: rowHeights.length,
-  });
-  const col = useVirtual<HTMLDivElement, HTMLDivElement>({
-    itemCount: colWidths.length,
-    itemSize: 100,
-    horizontal: true,
+        setCommentData((prevData) => [...prevData, ...data]);
+      } catch (err) {
+        itemLoadedArr[loadIndex] = false;
+      }
+    },
   });
 
   return (
     <div className={styles.app}>
       <div
         className={styles.outer}
-        ref={(el) => {
-          row.outerRef.current = el;
-          col.outerRef.current = el;
-        }}
+        style={{ width: "300px", height: "300px", overflow: "auto" }}
+        ref={outerRef}
       >
-        <div
-          style={{ position: "relative" }}
-          ref={(el) => {
-            row.innerRef.current = el;
-            col.innerRef.current = el;
-          }}
-        >
-          {row.items.map((rowItem) => (
-            <Fragment key={rowItem.index}>
-              {col.items.map((colItem) => (
-                <div
-                  key={colItem.index}
-                  className={`${styles.item} ${
-                    // eslint-disable-next-line no-nested-ternary
-                    rowItem.index % 2
-                      ? colItem.index % 2
-                        ? styles.dark
-                        : ""
-                      : !(colItem.index % 2)
-                      ? styles.dark
-                      : ""
-                  }`}
-                  style={{
-                    position: "absolute",
-                    top: "0",
-                    left: "0",
-                    // height: `${rowItem.size}px`,
-                    // width: `${colItem.size}px`,
-                    height: `${rowHeights[rowItem.index].size}px`,
-                    width: `${colWidths[colItem.index].size}px`,
-                    // height: `${
-                    //   rowItem.index ? rowHeights[rowItem.index].size : sz
-                    // }px`,
-                    // width: `${
-                    //   colItem.index ? colWidths[colItem.index].size : sz
-                    // }px`,
-                    transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
-                  }}
-                  ref={(el) => {
-                    rowItem.measureRef(el);
-                    colItem.measureRef(el);
-                  }}
-                >
-                  {rowItem.index}, {colItem.index}
-                </div>
-              ))}
-            </Fragment>
+        <div ref={innerRef}>
+          {items.map(({ index, measureRef }) => (
+            <div
+              key={index}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              style={{ padding: "16px", minHeight: "112px" }}
+              ref={measureRef}
+            >
+              {commentData[index]?.body || "⏳ Loading..."}
+            </div>
           ))}
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => setSz((prev) => (prev === 25 ? 250 : 25))}
-      >
-        Resize
-      </button>
     </div>
   );
-}; */
+};
