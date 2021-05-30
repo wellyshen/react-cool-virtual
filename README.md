@@ -396,9 +396,7 @@ const loadData = async ({ loadIndex }, setComments) => {
   isItemLoadedArr[loadIndex] = true;
 
   try {
-    const { data: comments } = await axios(
-      `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
-    );
+    const { data: comments } = await axios(`/comments?postId=${loadIndex + 1}`);
 
     setComments((prevComments) => [...prevComments, ...comments]);
   } catch (err) {
@@ -459,9 +457,7 @@ const loadData = async ({ loadIndex }, setComments) => {
   isItemLoadedArr[loadIndex] = true;
 
   try {
-    const { data: comments } = await axios(
-      `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
-    );
+    const { data: comments } = await axios(`/comments?postId=${loadIndex + 1}`);
 
     setComments((prevComments) => [...prevComments, ...comments]);
   } catch (err) {
