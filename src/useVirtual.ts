@@ -127,14 +127,13 @@ export default <
 
   const measureItems = useCallback(
     (useCache = true) => {
-      for (let i = 0; i < itemCount; i += 1) {
+      for (let i = 0; i < itemCount; i += 1)
         msDataRef.current[i] = getMeasure(
           i,
           useCache && msDataRef.current[i]
             ? msDataRef.current[i].size
             : getItemSize(i)
         );
-      }
     },
     [getItemSize, getMeasure, itemCount]
   );
@@ -442,7 +441,8 @@ export default <
     outerRef,
     (rect) => {
       const isSameWidth = outerRectRef.current.width === rect.width;
-      const { current: prevMsData } = msDataRef;
+      const prevTotalSize =
+        msDataRef.current[msDataRef.current.length - 1]?.end || 0;
 
       outerRectRef.current = rect;
       measureItems(false);
@@ -450,11 +450,8 @@ export default <
 
       if (onResizeRef.current) onResizeRef.current(rect);
 
-      const { current: msData } = msDataRef;
-      const ratio =
-        !isSameWidth &&
-        prevMsData.length &&
-        msData[msData.length - 1].end / prevMsData[prevMsData.length - 1].end;
+      const totalSize = msDataRef.current[msDataRef.current.length - 1].end;
+      const ratio = !isSameWidth && totalSize / prevTotalSize;
 
       if (ratio) scrollTo(scrollOffsetRef.current * ratio);
     },
