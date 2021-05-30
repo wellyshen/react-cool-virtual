@@ -376,11 +376,11 @@ const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
 
 ### Infinite Scroll
 
-It's possible to make a complicated infinite scroll logic simple by just using a hook, no kidding. Let's see it!
+It's possible to make a complicated infinite scroll logic simple by just using a hook, no kidding! Let's see how does it work.
 
 [![Edit RCV - Infinite Scroll](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-infinite-scroll-3y351?fontsize=14&hidenavigation=1&theme=dark)
 
-#### Loading Data with [Skeleton Screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a)
+#### Working with [Skeleton Screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a)
 
 ```js
 import { useState } from "react";
@@ -443,7 +443,7 @@ const List = () => {
 };
 ```
 
-#### Loading Data with A Loading Indicator
+#### Working with A Loading Spinner
 
 Coming soon...
 
