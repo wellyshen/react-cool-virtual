@@ -297,11 +297,7 @@ const List = () => {
       <div ref={innerRef}>
         {/* We can also access the outer's width here */}
         {items.map(({ index, size, width }) => (
-          <div
-            key={index}
-            className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ height: `${size}px` }}
-          >
+          <div key={index} style={{ height: `${size}px` }}>
             📏 {width}
           </div>
         ))}

@@ -9,7 +9,9 @@ const App = () => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: 1000,
     // Use the outer's width (2nd parameter) to adjust the item's size
-    itemSize: (_, width) => (width > 400 ? 50 : 100)
+    itemSize: (_, width) => (width > 400 ? 50 : 100),
+    // The event will be triggered on outer's size is being changed
+    onResize: (rect) => console.log("Outer's rect: ", rect)
   });
 
   return (
