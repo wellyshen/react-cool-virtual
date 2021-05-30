@@ -36,7 +36,7 @@ const loadData = async ({ loadIndex }, setComments) => {
 
 const Loading = () => <div className="item">⏳ Loading...</div>;
 
-const General = () => {
+const Indicator = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
     // // Provide the number of comments
@@ -86,4 +86,4 @@ const General = () => {
   );
 };
 
-export default General;
+export default Indicator;

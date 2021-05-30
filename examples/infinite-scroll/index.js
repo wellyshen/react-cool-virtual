@@ -3,7 +3,7 @@
 import { render } from "react-dom";
 
 import Skeleton from "./Skeleton";
-import General from "./General";
+import Indicator from "./Indicator";
 import "./styles.scss";
 
 const App = () => (
@@ -17,8 +17,8 @@ const App = () => (
     <Skeleton />
     <br />
     <br />
-    <h4>General</h4>
-    <General />
+    <h4>Indicator</h4>
+    <Indicator />
     <br />
   </div>
 );
