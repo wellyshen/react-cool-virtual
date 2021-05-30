@@ -39,6 +39,7 @@ const Loading = () => <div className="item">⏳ Loading...</div>;
 const General = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
+    // // Provide the number of comments
     itemCount: comments.length,
     // Estimated item size (with padding)
     itemSize: 100,
