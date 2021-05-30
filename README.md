@@ -443,7 +443,7 @@ const List = () => {
 };
 ```
 
-#### Working with A Loading Spinner
+#### Working with A Loading Indicator
 
 Coming soon...
 
