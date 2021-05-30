@@ -19,6 +19,8 @@ const App = () => (
     <br />
     <h4>Customized (easeInOutBack)</h4>
     <Customized />
+    <br />
+    <br />
   </div>
 );
 
