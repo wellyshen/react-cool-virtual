@@ -186,148 +186,6 @@ export default <
     [overscanCount, sizeKey]
   );
 
-  const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    () => handleScroll(scrollOffsetRef.current),
-    DEBOUNCE_INTERVAL
-  );
-
-  const [resetOthers, cancelResetOthers] = useDebounce(() => {
-    isScrollToItemRef.current = false;
-    userScrollRef.current = true;
-
-    const len = rosRef.current.size - msDataRef.current.length;
-    const iter = rosRef.current[Symbol.iterator]();
-    for (let i = 0; i < len; i += 1)
-      rosRef.current.delete(iter.next().value[0]);
-  }, DEBOUNCE_INTERVAL);
-
-  const handleScroll = useCallback(
-    (scrollOffset: number, isScrolling?: boolean, uxScrolling?: boolean) => {
-      if (!innerRef.current) return;
-
-      if (
-        loadMoreRef.current &&
-        !hasLoadMoreOnMountRef.current &&
-        !(isItemLoadedRef.current && isItemLoadedRef.current(0))
-      )
-        loadMoreRef.current({
-          startIndex: 0,
-          stopIndex: loadMoreThreshold - 1,
-          loadIndex: 0,
-          scrollOffset,
-          userScroll: userScrollRef.current,
-        });
-
-      hasLoadMoreOnMountRef.current = true;
-
-      if (!itemCount) {
-        setItems([]);
-        return;
-      }
-
-      const { oStart, oStop, vStart, vStop, margin, innerSize } =
-        getCalcData(scrollOffset);
-
-      innerRef.current.style[marginKey] = `${margin}px`;
-      innerRef.current.style[sizeKey] = `${innerSize}px`;
-
-      const nextItems: Item[] = [];
-
-      for (let i = oStart; i <= oStop; i += 1) {
-        const { current: msData } = msDataRef;
-        const { key, start, size } = msData[i];
-
-        nextItems.push({
-          key,
-          index: i,
-          start: start - margin,
-          size,
-          width: outerRectRef.current.width,
-          isScrolling: uxScrolling || undefined,
-          measureRef: (el) => {
-            if (!el) return;
-
-            // eslint-disable-next-line compat/compat
-            new ResizeObserver(([{ borderBoxSize, target }], ro) => {
-              const measuredSize = borderBoxSize[0][itemSizeKey];
-
-              if (!measuredSize) {
-                ro.disconnect();
-                return;
-              }
-
-              const prevEnd = msData[i - 1]?.end || 0;
-
-              if (measuredSize !== size || start !== prevEnd) {
-                msDataRef.current[i] = getMeasure(i, measuredSize);
-                handleScroll(scrollOffset, isScrolling);
-
-                hasDynamicSizeRef.current = true;
-              }
-
-              rosRef.current.get(target)?.disconnect();
-              rosRef.current.set(target, ro);
-            }).observe(el);
-          },
-        });
-      }
-
-      setItems((prevItems) =>
-        shouldUpdate(prevItems, nextItems, { measureRef: true })
-          ? nextItems
-          : prevItems
-      );
-
-      if (!isScrolling) return;
-
-      if (onScrollRef.current)
-        onScrollRef.current({
-          overscanStartIndex: oStart,
-          overscanStopIndex: oStop,
-          visibleStartIndex: vStart,
-          visibleStopIndex: vStop,
-          scrollOffset,
-          scrollForward: scrollOffset > scrollOffsetRef.current,
-          userScroll: userScrollRef.current,
-        });
-
-      const loadIndex = Math.floor((vStop + 1) / loadMoreThreshold);
-      const startIndex = loadIndex * loadMoreThreshold;
-
-      if (
-        loadMoreRef.current &&
-        vStop !== prevVStopRef.current &&
-        !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
-      )
-        loadMoreRef.current({
-          startIndex,
-          stopIndex: startIndex + loadMoreThreshold - 1,
-          loadIndex,
-          scrollOffset,
-          userScroll: userScrollRef.current,
-        });
-
-      prevVStopRef.current = vStop;
-
-      if (uxScrolling) resetIsScrolling();
-      resetOthers();
-    },
-    [
-      getCalcData,
-      getMeasure,
-      itemCount,
-      itemSizeKey,
-      loadMoreRef,
-      loadMoreThreshold,
-      marginKey,
-      onScrollRef,
-      resetIsScrolling,
-      resetOthers,
-      sizeKey,
-    ]
-  );
-
   const scrollTo = useCallback<ScrollTo>(
     (val, cb) => {
       if (!outerRef.current) return;
@@ -432,6 +290,152 @@ export default <
       });
     },
     [itemCount, measureItems, scrollTo, sizeKey]
+  );
+
+  const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    () => handleScroll(scrollOffsetRef.current),
+    DEBOUNCE_INTERVAL
+  );
+
+  const [resetOthers, cancelResetOthers] = useDebounce(() => {
+    isScrollToItemRef.current = false;
+    userScrollRef.current = true;
+
+    const len = rosRef.current.size - msDataRef.current.length;
+    const iter = rosRef.current[Symbol.iterator]();
+    for (let i = 0; i < len; i += 1)
+      rosRef.current.delete(iter.next().value[0]);
+  }, DEBOUNCE_INTERVAL);
+
+  const handleScroll = useCallback(
+    (scrollOffset: number, isScrolling?: boolean, uxScrolling?: boolean) => {
+      if (!innerRef.current) return;
+
+      if (
+        loadMoreRef.current &&
+        !hasLoadMoreOnMountRef.current &&
+        !(isItemLoadedRef.current && isItemLoadedRef.current(0))
+      )
+        loadMoreRef.current({
+          startIndex: 0,
+          stopIndex: loadMoreThreshold - 1,
+          loadIndex: 0,
+          scrollOffset,
+          userScroll: userScrollRef.current,
+        });
+
+      hasLoadMoreOnMountRef.current = true;
+
+      if (!itemCount) {
+        setItems([]);
+        return;
+      }
+
+      const { oStart, oStop, vStart, vStop, margin, innerSize } =
+        getCalcData(scrollOffset);
+
+      innerRef.current.style[marginKey] = `${margin}px`;
+      innerRef.current.style[sizeKey] = `${innerSize}px`;
+
+      const nextItems: Item[] = [];
+
+      for (let i = oStart; i <= oStop; i += 1) {
+        const { current: msData } = msDataRef;
+        const { key, start, size } = msData[i];
+
+        nextItems.push({
+          key,
+          index: i,
+          start: start - margin,
+          size,
+          width: outerRectRef.current.width,
+          isScrolling: uxScrolling || undefined,
+          measureRef: (el) => {
+            if (!el) return;
+
+            // eslint-disable-next-line compat/compat
+            new ResizeObserver(([{ borderBoxSize, target }], ro) => {
+              const measuredSize = borderBoxSize[0][itemSizeKey];
+
+              if (!measuredSize) {
+                ro.disconnect();
+                return;
+              }
+
+              const prevEnd = msData[i - 1]?.end || 0;
+
+              if (measuredSize !== size || start !== prevEnd) {
+                if (start < scrollOffset)
+                  scrollTo(scrollOffset + measuredSize - size);
+
+                msDataRef.current[i] = getMeasure(i, measuredSize);
+                handleScroll(scrollOffset, isScrolling);
+
+                hasDynamicSizeRef.current = true;
+              }
+
+              rosRef.current.get(target)?.disconnect();
+              rosRef.current.set(target, ro);
+            }).observe(el);
+          },
+        });
+      }
+
+      setItems((prevItems) =>
+        shouldUpdate(prevItems, nextItems, { measureRef: true })
+          ? nextItems
+          : prevItems
+      );
+
+      if (!isScrolling) return;
+
+      if (onScrollRef.current)
+        onScrollRef.current({
+          overscanStartIndex: oStart,
+          overscanStopIndex: oStop,
+          visibleStartIndex: vStart,
+          visibleStopIndex: vStop,
+          scrollOffset,
+          scrollForward: scrollOffset > scrollOffsetRef.current,
+          userScroll: userScrollRef.current,
+        });
+
+      const loadIndex = Math.floor((vStop + 1) / loadMoreThreshold);
+      const startIndex = loadIndex * loadMoreThreshold;
+
+      if (
+        loadMoreRef.current &&
+        vStop !== prevVStopRef.current &&
+        !(isItemLoadedRef.current && isItemLoadedRef.current(loadIndex))
+      )
+        loadMoreRef.current({
+          startIndex,
+          stopIndex: startIndex + loadMoreThreshold - 1,
+          loadIndex,
+          scrollOffset,
+          userScroll: userScrollRef.current,
+        });
+
+      prevVStopRef.current = vStop;
+
+      if (uxScrolling) resetIsScrolling();
+      resetOthers();
+    },
+    [
+      getCalcData,
+      getMeasure,
+      itemCount,
+      itemSizeKey,
+      loadMoreRef,
+      loadMoreThreshold,
+      marginKey,
+      onScrollRef,
+      resetIsScrolling,
+      resetOthers,
+      scrollTo,
+      sizeKey,
+    ]
   );
 
   useResizeEffect<O>(
