@@ -20,6 +20,7 @@ const App = () => (
     <h4>Dynamic Size</h4>
     <DynamicSize />
     <br />
+    <br />
   </div>
 );
 
