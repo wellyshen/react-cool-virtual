@@ -39,7 +39,7 @@ const App = () => {
           ))}
         </div>
       </div>
-      <br />
+      <small>(Move the handler to to see what happens)</small>
       <br />
     </div>
   );
