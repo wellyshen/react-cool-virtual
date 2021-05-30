@@ -378,6 +378,10 @@ const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
 
 Coming soon...
 
+### Dealing with Dynamic Items
+
+Coming soon...
+
 ### Server-side Rendering (SSR)
 
 Coming soon...
