@@ -386,6 +386,8 @@ import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import axios from "axios";
 
+const TOTAL_COMMENTS = 500;
+const BATCH_COMMENTS = 5;
 const isItemLoadedArr = [];
 
 const loadData = async ({ loadIndex }, setComments) => {
@@ -410,11 +412,11 @@ const loadData = async ({ loadIndex }, setComments) => {
 const List = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 500,
+    itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
-    itemSize: 112,
+    itemSize: 100,
     // Starts to pre-fetch data when the user scrolls within every 5 items, e.g. 1-5, 6-10 and so on (default = 15)
-    loadMoreThreshold: 5,
+    loadMoreThreshold: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     // The callback will be invoked when more data needs to be loaded
@@ -430,7 +432,7 @@ const List = () => {
         {items.map(({ index, measureRef }) => (
           <div
             key={index}
-            style={{ padding: "16px", minHeight: "112px" }}
+            style={{ padding: "16px", minHeight: "100px" }}
             ref={measureRef} // Used to measure the unknown item size
           >
             {comments[index]?.body || "⏳ Loading..."}
@@ -444,7 +446,73 @@ const List = () => {
 
 #### Working with A Loading Indicator
 
-Coming soon...
+```js
+import { Fragment, useState } from "react";
+import useVirtual from "react-cool-virtual";
+import axios from "axios";
+
+const TOTAL_COMMENTS = 500;
+const BATCH_COMMENTS = 5;
+const isItemLoadedArr = [];
+
+const loadData = async ({ loadIndex }, setComments) => {
+  isItemLoadedArr[loadIndex] = true;
+
+  try {
+    const { data: comments } = await axios(
+      `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
+    );
+
+    setComments((prevComments) => [...prevComments, ...comments]);
+  } catch (err) {
+    isItemLoadedArr[loadIndex] = false;
+    loadData({ loadIndex }, setComments);
+  }
+};
+
+const Loading = () => <div>⏳ Loading...</div>;
+
+const List = () => {
+  const [comments, setComments] = useState([]);
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: comments.length, // Provide the number of comments
+    itemSize: 100,
+    loadMoreThreshold: BATCH_COMMENTS,
+    isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
+    loadMore: (e) => loadData(e, setComments),
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.length ? (
+          items.map(({ index, measureRef }) => {
+            const len = comments.length;
+            const showLoading = index === len - 1 && len < TOTAL_COMMENTS;
+
+            return (
+              <Fragment key={index}>
+                <div
+                  style={{ padding: "16px", minHeight: "100px" }}
+                  ref={measureRef}
+                >
+                  {comments[index].body}
+                </div>
+                {showLoading && <Loading />}
+              </Fragment>
+            );
+          })
+        ) : (
+          <Loading />
+        )}
+      </div>
+    </div>
+  );
+};
+```
 
 ### Dealing with Dynamic Items
 
