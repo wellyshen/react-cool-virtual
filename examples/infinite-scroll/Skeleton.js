@@ -6,9 +6,11 @@ import axios from "axios";
 
 import "./styles.scss";
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
+const TOTAL_COMMENTS = 500;
+const BATCH_COMMENTS = 5;
 const isItemLoadedArr = [];
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const loadData = async ({ loadIndex }, setComments) => {
   // Set the state of a batch items as `true`
@@ -35,12 +37,12 @@ const loadData = async ({ loadIndex }, setComments) => {
 const Skeleton = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 500,
+    itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
-    itemSize: 112,
+    itemSize: 100,
     // Starts to pre-fetch data when the user scrolls within every 5 items
     // e.g. 1-5, 6-10 and so on (default = 15)
-    loadMoreThreshold: 5,
+    loadMoreThreshold: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook
     // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
@@ -55,11 +57,11 @@ const Skeleton = () => {
       ref={outerRef}
     >
       <div ref={innerRef}>
-        {items.map(({ index, measureRef }) => (
+        {items.map(({ index, size, measureRef }) => (
           <div
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ padding: "16px", minHeight: "112px" }}
+            style={{ padding: "16px", minHeight: "100px" }}
             ref={measureRef} // Used to measure the unknown item size
           >
             {comments[index]?.body || "⏳ Loading..."}
