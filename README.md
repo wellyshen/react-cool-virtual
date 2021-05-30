@@ -376,7 +376,7 @@ const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
 
 ### Infinite Scroll
 
-It's possible to make a complicated infinite scroll logic simple by just using a hook, no kidding! Let's see how does it work.
+It's possible to make a complicated infinite scroll logic simple by just using a hook, no kidding! Let's see how possible 🤔.
 
 [![Edit RCV - Infinite Scroll](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-infinite-scroll-3y351?fontsize=14&hidenavigation=1&theme=dark)
 
@@ -390,33 +390,33 @@ import axios from "axios";
 const isItemLoadedArr = [];
 
 const List = () => {
-  const [commentData, setCommentData] = useState([]);
+  const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: 500,
     // Estimated item size (with padding)
     itemSize: 112,
-    // Starts to pre-fetch data when the user scrolls within every 5 items
-    // e.g. 1-5, 6-10 and so on (default = 15)
+    // Starts to pre-fetch data when the user scrolls within every 5 items, e.g. 1-5, 6-10 and so on (default = 15)
     loadMoreThreshold: 5,
-    // Provide the item loaded state to tell the hook
-    // whether the `loadMore` should be triggered or not
+    // Provide the loaded state for a batch items to tell the hook whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
-    // The callback is invoked when there're more data need to be loaded
+    // The callback will be invoked when more data needs to be loaded
     loadMore: async ({ loadIndex }) => {
-      // Set the state of a 5 batch items as `true`
-      // to disable the callback from being invoked next time
+      // Set the state of a batch items as `true` to avoid the callback from being invoked repeatedly
       isItemLoadedArr[loadIndex] = true;
 
       try {
+        // Simulating a slow network
+        await sleep(2500);
+
         const { data: comments } = await axios(
           `https://jsonplaceholder.typicode.com/comments?postId=${
             loadIndex + 1
           }`
         );
 
-        setCommentData((prevComments) => [...prevComments, ...comments]);
+        setComments((prevComments) => [...prevComments, ...comments]);
       } catch (err) {
-        // If there's an error set the state as `false`, let the hook retry for us
+        // If there's an error, leave the state as `false` so the callback will be invoked in the next time
         isItemLoadedArr[loadIndex] = false;
       }
     },
@@ -432,9 +432,9 @@ const List = () => {
           <div
             key={index}
             style={{ padding: "16px", minHeight: "112px" }}
-            ref={measureRef} // Measure the unknown item size
+            ref={measureRef} // Used to measure the unknown item size
           >
-            {commentData[index]?.body || "⏳ Loading..."}
+            {comments[index]?.body || "⏳ Loading..."}
           </div>
         ))}
       </div>
