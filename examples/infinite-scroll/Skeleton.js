@@ -10,6 +10,28 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const isItemLoadedArr = [];
 
+const loadData = async ({ loadIndex }, setComments) => {
+  // Set the state of a batch items as `true`
+  // to avoid the callback from being invoked repeatedly
+  isItemLoadedArr[loadIndex] = true;
+
+  try {
+    // Simulating a slow network
+    await sleep(2500);
+
+    const { data: comments } = await axios(
+      `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
+    );
+
+    setComments((prevComments) => [...prevComments, ...comments]);
+  } catch (err) {
+    // If there's an error set the state back to `false`
+    isItemLoadedArr[loadIndex] = false;
+    // Then try again
+    loadData({ loadIndex }, setComments);
+  }
+};
+
 const Skeleton = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
@@ -23,28 +45,7 @@ const Skeleton = () => {
     // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     // The callback will be invoked when more data needs to be loaded
-    loadMore: async ({ loadIndex }) => {
-      // Set the state of a batch items as `true`
-      // to avoid the callback from being invoked repeatedly
-      isItemLoadedArr[loadIndex] = true;
-
-      try {
-        // Simulating a slow network
-        await sleep(2500);
-
-        const { data: comments } = await axios(
-          `https://jsonplaceholder.typicode.com/comments?postId=${
-            loadIndex + 1
-          }`
-        );
-
-        setComments((prevComments) => [...prevComments, ...comments]);
-      } catch (err) {
-        // If there's an error leave the state as `false`
-        // so the callback will be invoked in the next time
-        isItemLoadedArr[loadIndex] = false;
-      }
-    }
+    loadMore: (e) => loadData(e, setComments)
   });
 
   return (
