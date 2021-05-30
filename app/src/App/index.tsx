@@ -13,22 +13,19 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: 50,
+    itemSize: (_, width) => (width > 600 ? 100 : 50),
   });
 
   return (
     <div className={styles.app}>
-      <div
-        className={styles.outer}
-        style={{ width: "300px", height: "300px", overflow: "auto" }}
-        ref={outerRef}
-      >
+      <div className={styles.outer} ref={outerRef}>
         <div ref={innerRef}>
           {items.map(({ index, size, measureRef }) => (
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ height: `${index === 1 ? sz : size}px` }}
-              ref={measureRef}
+              style={{ height: `${size}px` }}
+              // ref={measureRef}
             >
               {index}
             </div>
