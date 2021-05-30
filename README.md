@@ -414,8 +414,6 @@ const App = () => {
 React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
 
 ```tsx
-import useVirtual from "react-cool-virtual";
-
 const App = () => {
   // 1st is the `outerRef`, 2nd is the `innerRef`
   const { outerRef, innerRef } = useVirtual<HTMLDivElement, HTMLDivElement>();
