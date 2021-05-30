@@ -34,7 +34,7 @@ const App = () => {
               className={`item ${index % 2 ? "dark" : ""}`}
               style={{ height: `${size}px` }}
             >
-              📏 {width}
+              ♻️ {index} ({width})
             </div>
           ))}
         </div>
