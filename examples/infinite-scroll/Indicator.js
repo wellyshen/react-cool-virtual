@@ -63,7 +63,7 @@ const Indicator = () => {
         {items.length ? (
           items.map(({ index, measureRef }) => {
             const len = comments.length;
-            const shouldShowLoading = index === len - 1 && len < TOTAL_COMMENTS;
+            const showLoading = index === len - 1 && len < TOTAL_COMMENTS;
 
             return (
               <Fragment key={index}>
@@ -74,7 +74,7 @@ const Indicator = () => {
                 >
                   {comments[index].body}
                 </div>
-                {shouldShowLoading && <Loading />}
+                {showLoading && <Loading />}
               </Fragment>
             );
           })
