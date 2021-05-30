@@ -298,7 +298,7 @@ const List = () => {
         {/* We can also access the outer's width here */}
         {items.map(({ index, size, width }) => (
           <div key={index} style={{ height: `${size}px` }}>
-            📏 {width}
+            ⭐️ {index} ({width})
           </div>
         ))}
       </div>
