@@ -42,7 +42,7 @@ const Indicator = () => {
     // // Provide the number of comments
     itemCount: comments.length,
     // Starts to pre-fetch data when the user scrolls within every 5 items
-    // e.g. 1-5, 6-10 and so on (default = 15)
+    // e.g. 1 - 5, 6 - 10 and so on (default = 15)
     loadMoreThreshold: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook
     // whether the `loadMore` should be triggered or not
