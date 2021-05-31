@@ -506,7 +506,31 @@ const List = () => {
 
 ### Dealing with Dynamic Items
 
-Coming soon...
+React requires [keys](https://reactjs.org/docs/lists-and-keys.html#keys) for array items. I'd recommend using an unique id as the key as possible as we can, especially when working with reordering, filtering etc. Refer to [this article](https://robinpokorny.medium.com/index-as-a-key-is-an-anti-pattern-e0349aece318) to learn more.
+
+```js
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual();
+
+  return (
+    <div
+      ref={outerRef}
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size }) => (
+          // Use IDs from your data as keys
+          <div key={someData[index].id} style={{ height: `${size}px` }}>
+            {someData[index].content}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+When working with dynamic items (e.g. reordering, filtering ect.).
 
 ### Server-side Rendering (SSR)
 
