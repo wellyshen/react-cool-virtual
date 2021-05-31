@@ -1,71 +1,57 @@
 /* eslint-disable compat/compat */
 
-import { useState } from "react";
+import { forwardRef, useState, memo, useMemo } from "react";
 import useVirtual from "react-cool-virtual";
 
 import styles from "./styles.module.scss";
 
+const getItems = (num: number) =>
+  new Array(num).fill({}).map((_, idx) => ({
+    txt: idx,
+    size: Math.floor(50 + Math.random() * 100),
+  }));
+
+const mockData = getItems(100);
+
+const Item = memo(
+  // eslint-disable-next-line react/prop-types
+  ({ index, size, ...rest }: any) => {
+    console.log("LOG ===> Re-render", index);
+
+    return (
+      <div {...rest} style={{ height: `${size}px` }}>
+        COOL
+      </div>
+    );
+  }
+);
+
 export default () => {
-  const [data, setData] = useState([
-    { id: 0, txt: "123" },
-    { id: 1, txt: "123" },
-    { id: 2, txt: "123" },
-    {
-      id: 3,
-      txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
-    },
-    {
-      id: 4,
-      txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
-    },
-    {
-      id: 5,
-      txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
-    },
-  ]);
+  const [sz, setSz] = useState(50);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
-  >({ itemCount: data.length });
+  >({ itemCount: mockData.length });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div ref={innerRef}>
           {items.map(({ index, measureRef }) => (
-            <div
-              key={data[index].id}
+            <Item
+              key={index}
+              index={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              ref={measureRef}
-            >
-              {data[index].txt}
-            </div>
+              size={50}
+            />
           ))}
         </div>
       </div>
       <button
         type="button"
-        onClick={() =>
-          setData([
-            {
-              id: 3,
-              txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
-            },
-            {
-              id: 4,
-              txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
-            },
-            {
-              id: 5,
-              txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
-            },
-            { id: 0, txt: "123" },
-            { id: 1, txt: "123" },
-            { id: 2, txt: "123" },
-          ])
-        }
+        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
       >
-        Set Items
+        Resize
       </button>
     </div>
   );
@@ -114,8 +100,8 @@ export default () => {
     HTMLDivElement
   >({
     // // Provide the number of comments
-    itemCount: comments.length,
-    // itemCount: 500,
+    // itemCount: comments.length,
+    itemCount: 500,
     // Estimated item size (with padding)
     // itemSize: 122,
     // Starts to pre-fetch data when the user scrolls within every 5 items
