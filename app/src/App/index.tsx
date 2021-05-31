@@ -1,6 +1,77 @@
 /* eslint-disable compat/compat */
 
-import { Fragment, useState } from "react";
+import { useState } from "react";
+import useVirtual from "react-cool-virtual";
+
+import styles from "./styles.module.scss";
+
+export default () => {
+  const [data, setData] = useState([
+    { id: 0, txt: "123" },
+    { id: 1, txt: "123" },
+    { id: 2, txt: "123" },
+    {
+      id: 3,
+      txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
+    },
+    {
+      id: 4,
+      txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
+    },
+    {
+      id: 5,
+      txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
+    },
+  ]);
+  const { outerRef, innerRef, items } = useVirtual<
+    HTMLDivElement,
+    HTMLDivElement
+  >({ itemCount: data.length });
+
+  return (
+    <div className={styles.app}>
+      <div className={styles.outer} ref={outerRef}>
+        <div ref={innerRef}>
+          {items.map(({ index, measureRef }) => (
+            <div
+              key={data[index].id}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              ref={measureRef}
+            >
+              {data[index].txt}
+            </div>
+          ))}
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() =>
+          setData([
+            {
+              id: 3,
+              txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
+            },
+            {
+              id: 4,
+              txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
+            },
+            {
+              id: 5,
+              txt: "123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123 123",
+            },
+            { id: 0, txt: "123" },
+            { id: 1, txt: "123" },
+            { id: 2, txt: "123" },
+          ])
+        }
+      >
+        Set Items
+      </button>
+    </div>
+  );
+};
+
+/* import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import axios from "axios";
 
@@ -86,4 +157,4 @@ export default () => {
       </div>
     </div>
   );
-};
+}; */

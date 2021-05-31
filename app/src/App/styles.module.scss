@@ -11,7 +11,7 @@ body {
 .outer {
   margin: 0 auto;
   width: 300px;
-  height: 500px;
+  height: 300px;
   border: 1px solid #000;
   margin-bottom: 1rem;
   overflow: auto;
@@ -26,6 +26,7 @@ body {
   justify-content: center;
   align-items: center;
   background: #fff;
+  padding: 1rem;
 
   &.dark {
     background: #ddd;
