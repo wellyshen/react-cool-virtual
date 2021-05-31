@@ -32,7 +32,7 @@
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to controls](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
-- ⛳ Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
+- ⛳ Provides `isScrolling` indicator to you for [performance optimization](#use-isscrolling-indicator) or other purposes.
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
@@ -565,7 +565,95 @@ const List = () => {
 
 ## Performance Optimization
 
-Coming soon...
+Items are re-rendered whenever the user scrolls. If your item is a **heavy data component**, there're two strategies for performance optimizing.
+
+### Use [React.memo](https://reactjs.org/docs/react-api.html#reactmemo)
+
+When working with **non-dynamic size**, we can extract the item to it's own component and wrap it with `React.memo`. It shallowly compares the current props and the next props to avoid unnecessary re-renders.
+
+```js
+import { memo } from "react";
+import useVirtual from "react-cool-virtual";
+
+const MemoizedItem = memo(({ height, ...rest }) => {
+  // Some many heavy computing here... 🤪
+
+  return (
+    <div {...rest} style={{ height: `${height}px` }}>
+      🐳 Am I heavy?
+    </div>
+  );
+});
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 1000,
+    itemSize: 75,
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size }) => (
+          <MemoizedItem key={index} height={size} />
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+### Use `isScrolling` Indicator
+
+If the above solution can't meet your case or you're working with **dynamic size**. React Cool Virtual supplies you an `isScrolling` indicator that allows you to replace the heavy component with a light one while the user is scrolling.
+
+```js
+import { forwardRef } from "react";
+import useVirtual from "react-cool-virtual";
+
+const HeavyItem = forwardRef((props, ref) => {
+  // Some many heavy computing here... 🤪
+
+  return (
+    <div {...props} ref={ref}>
+      🐳 Am I heavy?
+    </div>
+  );
+});
+
+const LightItem = (props) => <div {...props}>🦐 I believe I can fly...</div>;
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 1000,
+    useIsScrolling: true, // Just use it (default = false)
+    // or
+    useIsScrolling: (speed) => speed > 50, // Use it based on the scroll speed (more user friendly way)
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, isScrolling, measureRef }) =>
+          isScrolling ? (
+            <LightItem key={index} />
+          ) : (
+            <HeavyItem key={index} ref={measureRef} />
+          )
+        )}
+      </div>
+    </div>
+  );
+};
+```
+
+> 💡 Well... the `isScrolling` can also be used in many other ways, please use your imagination 🤗.
 
 ## How to Share A `ref`?
 
