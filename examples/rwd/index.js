@@ -17,8 +17,9 @@ const App = () => {
   return (
     <div className="app">
       <p>
-        💡 CodeSandbox might be caching the wrong version of React Cool Virtual.
-        You can manually specify to the latest version to see the examples.
+        💡 CodeSandbox might be <b>caching the wrong version</b> of React Cool
+        Virtual. You can <b>manually specify to the latest version</b> to see
+        the examples.
       </p>
       <br />
       <div
