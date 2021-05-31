@@ -59,7 +59,7 @@ const Skeleton = () => {
       <div ref={innerRef}>
         {items.map(({ index, measureRef }) => (
           <div
-            key={index}
+            key={comments[index]?.id || `fb-${index}`}
             className={`item ${index % 2 ? "dark" : ""}`}
             style={{ padding: "16px", minHeight: "122px" }}
             ref={measureRef} // Used to measure the unknown item size

@@ -64,7 +64,7 @@ const Indicator = () => {
             const showLoading = index === len - 1 && len < TOTAL_COMMENTS;
 
             return (
-              <Fragment key={index}>
+              <Fragment key={comments[index].id}>
                 <div
                   className={`item ${index % 2 ? "dark" : ""}`}
                   style={{ padding: "16px" }}
