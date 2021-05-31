@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.23
+
+### Patch Changes
+
+- [#80](https://github.com/wellyshen/react-cool-virtual/pull/80) [`48ab76f`](https://github.com/wellyshen/react-cool-virtual/commit/48ab76f782eb229acf58895970adce61b7017696) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: dynamic size scroll jumping
+
 ## 0.0.22
 
 ### Patch Changes
