@@ -99,7 +99,6 @@ export default <
   const onScrollRef = useLatest(onScroll);
   const onResizeRef = useLatest(onResize);
   const sizeKey = !horizontal ? "height" : "width";
-  const itemSizeKey = !horizontal ? "blockSize" : "inlineSize";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
   const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
 
@@ -354,8 +353,10 @@ export default <
             if (!el) return;
 
             // eslint-disable-next-line compat/compat
-            new ResizeObserver(([{ borderBoxSize, target }], ro) => {
-              const measuredSize = borderBoxSize[0][itemSizeKey];
+            new ResizeObserver(([{ target }], ro) => {
+              // NOTE: Use `borderBoxSize` when it's supported by Safari
+              // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
+              const measuredSize = target.getBoundingClientRect()[sizeKey];
 
               if (!measuredSize) {
                 ro.disconnect();
@@ -425,7 +426,6 @@ export default <
       getCalcData,
       getMeasure,
       itemCount,
-      itemSizeKey,
       loadMoreRef,
       loadMoreThreshold,
       marginKey,
