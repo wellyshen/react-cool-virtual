@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import {
   Align,
   Item,
+  ItemSize,
   Measure,
   Options,
   Return,
@@ -28,7 +29,7 @@ const DEFAULT_ITEM_SIZE = 50;
 const DEBOUNCE_INTERVAL = 150;
 const MAX_CORRECT_SCROLL_COUNT = 10;
 
-const getInitItems = (ssrItemCount?: SsrItemCount) => {
+const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
   if (!ssrItemCount) return [];
 
   const [idx, len] = isNumber(ssrItemCount)
@@ -40,8 +41,8 @@ const getInitItems = (ssrItemCount?: SsrItemCount) => {
     ssrItems[i] = {
       index: i,
       start: 0,
-      size: 0,
       width: 0,
+      size: isNumber(itemSize) ? itemSize : itemSize(i, 0),
       measureRef: () => null,
     };
 
@@ -66,7 +67,9 @@ export default <
   onScroll,
   onResize,
 }: Options): Return<O, I> => {
-  const [items, setItems] = useState<Item[]>(() => getInitItems(ssrItemCount));
+  const [items, setItems] = useState<Item[]>(() =>
+    getInitItems(itemSize, ssrItemCount)
+  );
   const hasDynamicSizeRef = useRef(false);
   const isScrollToItemRef = useRef(false);
   const hasLoadMoreOnMountRef = useRef(false);

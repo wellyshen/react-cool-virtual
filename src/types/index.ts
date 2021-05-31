@@ -13,7 +13,7 @@ export type SsrItemCount = number | [number, number];
 
 type UseIsScrolling = boolean | ((speed: number) => boolean);
 
-type ItemSize = number | ((index: number, width: number) => number);
+export type ItemSize = number | ((index: number, width: number) => number);
 
 interface ScrollEasingFunction {
   (time: number): number;

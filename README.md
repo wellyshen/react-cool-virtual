@@ -33,7 +33,7 @@
 - 🖱 Imperative [scroll-to controls](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
 - ⛳ Provides `isScrolling` indicator to you for [performance optimization](#performance-optimization) or other purposes.
-- 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for faster [FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better SEO.
+- 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 Tiny size ([~ 2.8kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
@@ -413,7 +413,7 @@ const List = () => {
     itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
     itemSize: 122,
-    // Starts to pre-fetch data when the user scrolls within every 5 items, e.g. 1-5, 6-10 and so on (default = 15)
+    // Starts to pre-fetch data when the user scrolls within every 5 items, e.g. 1 - 5, 6 - 10 and so on (default = 15)
     loadMoreThreshold: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
@@ -532,7 +532,36 @@ const List = () => {
 
 ### Server-side Rendering (SSR)
 
-Coming soon...
+Server-side rendering allows us to provide a fast [FP and FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering), it also benefits for [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#seo). React Cool Virtual supplies you a seamless DX between SSR and CSR. The
+
+```js
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 1000,
+    ssrItemCount: 30, // Renders 0th - 30th items on SSR
+    // or
+    ssrItemCount: [50, 80], // Renders 50th - 80th items on SSR
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {/* The items will be rendered both on SSR and CSR, depends on our settings */}
+        {items.map(({ index, size }) => (
+          <div key={someData[index].id} style={{ height: `${size}px` }}>
+            {someData[index].content}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+> 💡 Please note, when using the `ssrItemCount`, the initial items will be the SSR items but it has no impact to the UX. In addition, you might notice that some styles (i.e. width, start) of the SSR items are set to `0`. It's by design, because there's no way to get the outer's size on SSR. However, you can make up these styles based on environment if you need.
 
 ## Performance Optimization
 
