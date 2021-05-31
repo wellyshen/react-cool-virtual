@@ -1,5 +1,21 @@
 # react-cool-virtual
 
+## 0.0.22
+
+### Patch Changes
+
+- [#79](https://github.com/wellyshen/react-cool-virtual/pull/79) [`1d3a212`](https://github.com/wellyshen/react-cool-virtual/commit/1d3a2129ada64bbda267d20c2a4aef4e53cd8514) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor: export item size for SSR items
+
+* [#73](https://github.com/wellyshen/react-cool-virtual/pull/73) [`2157b91`](https://github.com/wellyshen/react-cool-virtual/commit/2157b915817068699af94f2cc24cbe763cf0cadb) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: resize-observer broken on Safari
+
+- [#76](https://github.com/wellyshen/react-cool-virtual/pull/76) [`7d99d03`](https://github.com/wellyshen/react-cool-virtual/commit/7d99d03f83b647bbe3c9e0e67d46dfeefa6e7fa1) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: real-time resize jumping
+
+* [#75](https://github.com/wellyshen/react-cool-virtual/pull/75) [`616507f`](https://github.com/wellyshen/react-cool-virtual/commit/616507fb9d4698a779f300e5244f1b2f84c1456b) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `isScrolling` flash bug
+
+- [#77](https://github.com/wellyshen/react-cool-virtual/pull/77) [`ff59175`](https://github.com/wellyshen/react-cool-virtual/commit/ff59175c10f2655c83ab91d1eb91e8b330699b82) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: cache measurements for better performance
+
+* [#78](https://github.com/wellyshen/react-cool-virtual/pull/78) [`669f6c2`](https://github.com/wellyshen/react-cool-virtual/commit/669f6c2eb6e9c083a7d6dcbc4368bd0df35a16f6) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor: remove `keyExtractor` option
+
 ## 0.0.21
 
 ### Patch Changes
