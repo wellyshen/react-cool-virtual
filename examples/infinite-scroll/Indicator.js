@@ -41,8 +41,6 @@ const Indicator = () => {
   const { outerRef, innerRef, items } = useVirtual({
     // // Provide the number of comments
     itemCount: comments.length,
-    // Estimated item size (with padding)
-    itemSize: 100,
     // Starts to pre-fetch data when the user scrolls within every 5 items
     // e.g. 1-5, 6-10 and so on (default = 15)
     loadMoreThreshold: BATCH_COMMENTS,
@@ -69,7 +67,7 @@ const Indicator = () => {
               <Fragment key={index}>
                 <div
                   className={`item ${index % 2 ? "dark" : ""}`}
-                  style={{ padding: "16px", minHeight: "100px" }}
+                  style={{ padding: "16px" }}
                   ref={measureRef} // Used to measure the unknown item size
                 >
                   {comments[index].body}
