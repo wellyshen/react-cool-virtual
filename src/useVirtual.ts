@@ -370,7 +370,7 @@ export default <
                   scrollTo(scrollOffset + measuredSize - size);
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
-                handleScroll(scrollOffset, isScrolling);
+                handleScroll(scrollOffset, isScrolling, uxScrolling);
 
                 hasDynamicSizeRef.current = true;
               }
