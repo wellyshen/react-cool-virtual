@@ -291,7 +291,7 @@ const List = () => {
 
   return (
     <div
-      style={{ width: "300px", height: "400px", overflow: "auto" }}
+      style={{ width: "100%", height: "400px", overflow: "auto" }}
       ref={outerRef}
     >
       <div ref={innerRef}>
