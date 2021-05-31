@@ -631,7 +631,7 @@ const List = () => {
     itemCount: 1000,
     useIsScrolling: true, // Just use it (default = false)
     // or
-    useIsScrolling: (speed) => speed > 50, // Use it based on the scroll speed (more user friendly way)
+    useIsScrolling: (speed) => speed > 50, // Use it based on the scroll speed (more user friendly)
   });
 
   return (
