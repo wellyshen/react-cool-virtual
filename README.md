@@ -530,8 +530,6 @@ const List = () => {
 };
 ```
 
-When working with dynamic items (e.g. reordering, filtering ect.).
-
 ### Server-side Rendering (SSR)
 
 Coming soon...
