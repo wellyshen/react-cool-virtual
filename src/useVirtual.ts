@@ -442,15 +442,15 @@ export default <
     (rect) => {
       const isSameWidth = outerRectRef.current.width === rect.width;
       const prevTotalSize =
-        msDataRef.current[msDataRef.current.length - 1]?.end || 0;
+        msDataRef.current[msDataRef.current.length - 1]?.end;
 
       outerRectRef.current = rect;
-      measureItems(false);
+      measureItems(isSameWidth);
       handleScroll(scrollOffsetRef.current);
 
       if (onResizeRef.current) onResizeRef.current(rect);
 
-      const totalSize = msDataRef.current[msDataRef.current.length - 1].end;
+      const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
       const ratio = !isSameWidth && totalSize / prevTotalSize;
 
       if (ratio) scrollTo(scrollOffsetRef.current * ratio);
