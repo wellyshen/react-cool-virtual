@@ -472,7 +472,6 @@ const List = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: comments.length, // Provide the number of comments
-    itemSize: 122,
     loadMoreThreshold: BATCH_COMMENTS,
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     loadMore: (e) => loadData(e, setComments),
@@ -491,12 +490,7 @@ const List = () => {
 
             return (
               <Fragment key={index}>
-                <div
-                  style={{ padding: "16px", minHeight: "122px" }}
-                  ref={measureRef}
-                >
-                  {comments[index].body}
-                </div>
+                <div ref={measureRef}>{comments[index].body}</div>
                 {showLoading && <Loading />}
               </Fragment>
             );
