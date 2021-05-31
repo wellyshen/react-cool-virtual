@@ -429,7 +429,7 @@ const List = () => {
       <div ref={innerRef}>
         {items.map(({ index, measureRef }) => (
           <div
-            key={index}
+            key={comments[index]?.id || `fb-${index}`}
             style={{ padding: "16px", minHeight: "122px" }}
             ref={measureRef} // Used to measure the unknown item size
           >
@@ -489,7 +489,7 @@ const List = () => {
             const showLoading = index === len - 1 && len < TOTAL_COMMENTS;
 
             return (
-              <Fragment key={index}>
+              <Fragment key={comments[index].id}>
                 <div ref={measureRef}>{comments[index].body}</div>
                 {showLoading && <Loading />}
               </Fragment>
