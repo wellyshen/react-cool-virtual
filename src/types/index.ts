@@ -2,7 +2,6 @@ import { MutableRefObject } from "react";
 
 // Internal
 export interface Measure {
-  key?: string;
   idx: number;
   start: number;
   end: number;
@@ -18,10 +17,6 @@ type ItemSize = number | ((index: number, width: number) => number);
 
 interface ScrollEasingFunction {
   (time: number): number;
-}
-
-export interface KeyExtractor {
-  (index: number): string;
 }
 
 interface IsItemLoaded {
@@ -55,7 +50,6 @@ interface OnResize {
 }
 
 export interface Item {
-  readonly key?: string;
   readonly index: number;
   readonly start: number;
   readonly size: number;
@@ -99,7 +93,6 @@ export interface Options {
   useIsScrolling?: UseIsScrolling;
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
-  keyExtractor?: KeyExtractor;
   loadMoreThreshold?: number;
   isItemLoaded?: IsItemLoaded;
   loadMore?: LoadMore;

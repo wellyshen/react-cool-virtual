@@ -3,7 +3,6 @@ import { useCallback, useRef, useState } from "react";
 import {
   Align,
   Item,
-  KeyExtractor,
   Measure,
   Options,
   Return,
@@ -29,28 +28,22 @@ const DEFAULT_ITEM_SIZE = 50;
 const DEBOUNCE_INTERVAL = 150;
 const MAX_CORRECT_SCROLL_COUNT = 10;
 
-const getInitItems = (
-  ssrItemCount?: SsrItemCount,
-  keyExtractor?: KeyExtractor
-) => {
-  if (ssrItemCount === undefined) return [];
+const getInitItems = (ssrItemCount?: SsrItemCount) => {
+  if (!ssrItemCount) return [];
 
   const [idx, len] = isNumber(ssrItemCount)
     ? [0, ssrItemCount - 1]
     : ssrItemCount;
   const ssrItems = [];
 
-  for (let i = idx; i <= len; i += 1) {
-    const ssrItem = {
+  for (let i = idx; i <= len; i += 1)
+    ssrItems[i] = {
       index: i,
       start: 0,
       size: 0,
       width: 0,
       measureRef: () => null,
     };
-    if (keyExtractor) (ssrItem as any).key = keyExtractor(i);
-    ssrItems.push(ssrItem);
-  }
 
   return ssrItems;
 };
@@ -67,16 +60,13 @@ export default <
   useIsScrolling,
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
-  keyExtractor,
   loadMoreThreshold = 15,
   isItemLoaded,
   loadMore,
   onScroll,
   onResize,
 }: Options): Return<O, I> => {
-  const [items, setItems] = useState<Item[]>(() =>
-    getInitItems(ssrItemCount, keyExtractor)
-  );
+  const [items, setItems] = useState<Item[]>(() => getInitItems(ssrItemCount));
   const hasDynamicSizeRef = useRef(false);
   const isScrollToItemRef = useRef(false);
   const hasLoadMoreOnMountRef = useRef(false);
@@ -93,7 +83,6 @@ export default <
   const isItemLoadedRef = useRef(isItemLoaded);
   const loadMoreRef = useLatest(loadMore);
   const easingFnRef = useLatest(scrollEasingFunction);
-  const keyExtractorRef = useLatest(keyExtractor);
   const itemSizeRef = useLatest(itemSize);
   const useIsScrollingRef = useLatest(useIsScrolling);
   const onScrollRef = useLatest(onScroll);
@@ -112,17 +101,10 @@ export default <
     [itemSizeRef]
   );
 
-  const getMeasure = useCallback(
-    (idx: number, size: number) => {
-      const start = msDataRef.current[idx - 1]?.end || 0;
-      const ms: Measure = { idx, start, end: start + size, size };
-
-      if (keyExtractorRef.current) ms.key = keyExtractorRef.current(idx);
-
-      return ms;
-    },
-    [keyExtractorRef]
-  );
+  const getMeasure = useCallback((idx: number, size: number): Measure => {
+    const start = msDataRef.current[idx - 1]?.end || 0;
+    return { idx, start, end: start + size, size };
+  }, []);
 
   const measureItems = useCallback(
     (useCache = true) => {
@@ -340,10 +322,9 @@ export default <
 
       for (let i = oStart; i <= oStop; i += 1) {
         const { current: msData } = msDataRef;
-        const { key, start, size } = msData[i];
+        const { start, size } = msData[i];
 
         nextItems.push({
-          key,
           index: i,
           start: start - margin,
           size,

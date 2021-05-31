@@ -17,10 +17,6 @@ declare module "react-cool-virtual" {
     (time: number): number;
   }
 
-  export interface KeyExtractor {
-    (index: number): string;
-  }
-
   export interface IsItemLoaded {
     (index: number): boolean;
   }
@@ -65,7 +61,6 @@ declare module "react-cool-virtual" {
   }
 
   export interface Item {
-    readonly key?: string;
     readonly index: number;
     readonly start: number;
     readonly size: number;
@@ -108,7 +103,6 @@ declare module "react-cool-virtual" {
     useIsScrolling?: UseIsScrolling;
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
-    keyExtractor?: KeyExtractor;
     loadMoreThreshold?: number;
     isItemLoaded?: IsItemLoaded;
     loadMore?: LoadMore;
