@@ -20,6 +20,7 @@ const App = () => (
     <h4>Indicator</h4>
     <Indicator />
     <br />
+    <br />
   </div>
 );
 

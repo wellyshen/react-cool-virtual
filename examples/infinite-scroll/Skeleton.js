@@ -39,7 +39,7 @@ const Skeleton = () => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
-    itemSize: 100,
+    itemSize: 122,
     // Starts to pre-fetch data when the user scrolls within every 5 items
     // e.g. 1-5, 6-10 and so on (default = 15)
     loadMoreThreshold: BATCH_COMMENTS,
@@ -57,11 +57,11 @@ const Skeleton = () => {
       ref={outerRef}
     >
       <div ref={innerRef}>
-        {items.map(({ index, size, measureRef }) => (
+        {items.map(({ index, measureRef }) => (
           <div
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ padding: "16px", minHeight: "100px" }}
+            style={{ padding: "16px", minHeight: "122px" }}
             ref={measureRef} // Used to measure the unknown item size
           >
             {comments[index]?.body || "⏳ Loading..."}
