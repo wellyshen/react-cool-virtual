@@ -561,7 +561,7 @@ const List = () => {
 };
 ```
 
-> 💡 Please note, when using the `ssrItemCount`, the initial items will be the SSR items but it has no impact to the UX. In addition, you might notice that some styles (i.e. width, start) of the SSR items are set to `0`. It's by design, because there's no way to get the outer's size on SSR. However, you can make up these styles based on environment if you need.
+> 💡 Please note, when using the `ssrItemCount`, the initial items will be the SSR items but it has no impact to the UX. In addition, you might notice that some styles (i.e. width, start) of the SSR items are `0`. It's by design, because there's no way to know the outer's size on SSR. However, you can make up these styles based on the environments if you need.
 
 ## Performance Optimization
 
