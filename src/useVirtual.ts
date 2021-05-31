@@ -366,7 +366,7 @@ export default <
               const prevEnd = msData[i - 1]?.end || 0;
 
               if (measuredSize !== size || start !== prevEnd) {
-                if (start < scrollOffset)
+                if (isScrolling && start < scrollOffset)
                   scrollTo(scrollOffset + measuredSize - size);
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
