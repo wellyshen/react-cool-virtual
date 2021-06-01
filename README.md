@@ -820,13 +820,13 @@ Coming soon...
 
 ### scrollTo
 
-`(offset: number) => void | (options: Object) => void`
+`(offsetOrOptions: number | Object, callback?: () => void) => void`
 
 Coming soon...
 
 ### scrollToItem
 
-`(offset: number) => void | (options: Object) => void`
+`(indexOrOptions: number | Object, callback?: () => void) => void`
 
 Coming soon...
 
