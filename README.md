@@ -30,7 +30,7 @@
 - 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
 - 🖥 Supports [RWD (responsive web design)](#responsive-web-design-rwd) for better UX.
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
-- 🖱 Imperative [scroll-to controls](#scroll-to-offsetitems) for offset, items, and alignment.
+- 🖱 Imperative [scroll-to methods](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
 - ⛳ Provides `isScrolling` indicator to you for UI placeholders or [performance optimization](#use-isscrolling-indicator).
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
@@ -413,11 +413,13 @@ const List = () => {
     itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
     itemSize: 122,
-    // Starts to pre-fetch data when the user scrolls within every 5 items, e.g. 1 - 5, 6 - 10 and so on (default = 15)
+    // The number of items that you want to load/or pre-load, it will trigger the `loadMore` callback
+    // when the user scrolls within every items, e.g. 1 - 5, 6 - 10, and so on (default = 15)
     loadMoreCount: BATCH_COMMENTS,
-    // Provide the loaded state for a batch items to tell the hook whether the `loadMore` should be triggered or not
+    // Provide the loaded state of a batch items to the callback for telling the hook
+    // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
-    // The callback will be invoked when more data needs to be loaded
+    // We can fetch the data through the callback, it's invoked when more items need to be loaded
     loadMore: (e) => loadData(e, setComments),
   });
 
@@ -452,7 +454,7 @@ import axios from "axios";
 const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
 // We only have 50 (500 / 5) batches of items, so set the 51th (index = 50) batch as `true`
-// to avoid the `loadMore` callback from being invoked
+// to avoid the `loadMore` callback from being invoked, yep it's a trick 😉
 isItemLoadedArr[50] = true;
 
 const loadData = async ({ loadIndex }, setComments) => {
@@ -770,47 +772,77 @@ A function that allows us to customize the easing effect of [smooth scrolling](#
 
 `number`
 
-Coming soon...
+How many number of items that you want to load/or pre-load (default = 15), it's used for [infinite scroll](#infinite-scroll). A number 15 means the [loadMore](#loadmore) callback will be invoked when the user scrolls within every 15 items, e.g. 1 - 15, 16 - 30, and so on.
 
 ### isItemLoaded
 
 `(index: number) => boolean`
 
-Coming soon...
+A callback for us to provide the loaded state of a batch items, it's used for [infinite scroll](#infinite-scroll). It tells the hook whether the [loadMore](#loadmore) should be triggered or not.
 
 ### loadMore
 
 `(event: Object) => void`
 
-Coming soon...
+A callback for us to fetch (more) data, it's used for [infinite scroll](#infinite-scroll). It's invoked when more items need to be loaded, which based on the mechanism of [loadMoreCount](#loadmorecount) and [isItemLoaded](#isitemloaded).
+
+```js
+const props = useVirtual({
+  onScroll: ({
+    startIndex, // (number) The start index of the batch item
+    stopIndex, // (number) The stop index of the batch item
+    loadIndex, // (number) The index of a batch items (e.g. 1 - 15 as 0, 16 - 30 as 1, and so on)
+    scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
+    userScroll, // (boolean) Tells you the scrolling is through the user or not
+  }) => {
+    // Fetch data...
+  },
+});
+```
 
 ### onScroll
 
 `(event: Object) => void`
 
-Coming soon...
+This event will be triggered when scroll position is being changed by the user scrolls or [scrollTo](#scrollto)/[scrollToItem](#scrolltoitem) methods.
+
+```js
+const props = useVirtual({
+  onScroll: ({
+    overscanStartIndex, // (number) The start index of the overscan item
+    overscanStopIndex, // (number) The stop index of the overscan item
+    visibleStartIndex, // (number) The start index of the visible item
+    visibleStopIndex, // (number) The stop index of the visible item
+    scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
+    scrollForward, // (boolean) The scroll direction of up/down or left/right, depends on the `horizontal` option
+    userScroll, // (boolean) Tells you the scrolling is through the user or not
+  }) => {
+    // Do something...
+  },
+});
+```
 
 ### onResize
 
 `(event: Object) => void`
 
-Coming soon...
+This event will be triggered when the size of the outer container element changes.
 
 ## Props
 
-An `object` with the following methods:
+An `object` with the following properties:
 
 ### outerRef
 
 `React.useRef<HTMLElement>`
 
-Coming soon...
+A `ref` to attach to the outer container element.
 
 ### innerRef
 
 `React.useRef<HTMLElement>`
 
-Coming soon...
+A `ref` to attach to the inner container element.
 
 ### items
 
