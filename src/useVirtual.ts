@@ -61,7 +61,7 @@ export default <
   useIsScrolling,
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
-  loadMoreThreshold = 15,
+  loadMoreCount = 15,
   isItemLoaded,
   loadMore,
   onScroll,
@@ -303,7 +303,7 @@ export default <
       )
         loadMoreRef.current({
           startIndex: 0,
-          stopIndex: loadMoreThreshold - 1,
+          stopIndex: loadMoreCount - 1,
           loadIndex: 0,
           scrollOffset,
           userScroll: userScrollRef.current,
@@ -388,8 +388,8 @@ export default <
           userScroll: userScrollRef.current,
         });
 
-      const loadIndex = Math.floor((vStop + 1) / loadMoreThreshold);
-      const startIndex = loadIndex * loadMoreThreshold;
+      const loadIndex = Math.floor((vStop + 1) / loadMoreCount);
+      const startIndex = loadIndex * loadMoreCount;
 
       if (
         loadMoreRef.current &&
@@ -398,7 +398,7 @@ export default <
       )
         loadMoreRef.current({
           startIndex,
-          stopIndex: startIndex + loadMoreThreshold - 1,
+          stopIndex: startIndex + loadMoreCount - 1,
           loadIndex,
           scrollOffset,
           userScroll: userScrollRef.current,
@@ -413,8 +413,8 @@ export default <
       getCalcData,
       getMeasure,
       itemCount,
+      loadMoreCount,
       loadMoreRef,
-      loadMoreThreshold,
       marginKey,
       onScrollRef,
       resetIsScrolling,
