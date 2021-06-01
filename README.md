@@ -451,9 +451,9 @@ import axios from "axios";
 
 const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
-// We only have 10 (500 / 5) batches of items, so set the 11th (index = 10) batch as `true`
+// We only have 50 (500 / 5) batches of items, so set the 51th (index = 50) batch as `true`
 // to avoid the `loadMore` from being invoked
-isItemLoadedArr[10] = true;
+isItemLoadedArr[50] = true;
 
 const loadData = async ({ loadIndex }, setComments) => {
   isItemLoadedArr[loadIndex] = true;
@@ -487,8 +487,8 @@ const List = () => {
       <div ref={innerRef}>
         {items.length ? (
           items.map(({ index, measureRef }) => {
-            const len = comments.length;
-            const showLoading = index === len - 1 && len < TOTAL_COMMENTS;
+            const showLoading =
+              index === comments.length - 1 && comments.length < TOTAL_COMMENTS;
 
             return (
               <Fragment key={comments[index].id}>
