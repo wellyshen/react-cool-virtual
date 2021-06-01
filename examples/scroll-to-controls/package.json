@@ -1,7 +1,7 @@
 {
-  "name": "rcv-scroll-to-controls",
+  "name": "rcv-scroll-to-methods",
   "version": "0.0.0",
-  "description": "The scroll-to controls example of RCV.",
+  "description": "The scroll-to methods example of RCV.",
   "main": "index.js",
   "dependencies": {
     "react": "^17.0.2",
