@@ -93,7 +93,7 @@ export interface Options {
   useIsScrolling?: UseIsScrolling;
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
-  loadMoreThreshold?: number;
+  loadMoreCount?: number;
   isItemLoaded?: IsItemLoaded;
   loadMore?: LoadMore;
   onScroll?: OnScroll;
