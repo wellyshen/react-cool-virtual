@@ -46,7 +46,7 @@ const Skeleton = () => {
     // Provide the loaded state of a batch items to the callback for telling the hook
     // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
-    // The callback will be invoked when more items need to be loaded
+    // We can fetch the data through the callback, it's invoked when more items need to be loaded
     loadMore: (e) => loadData(e, setComments)
   });
 
