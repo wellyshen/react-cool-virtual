@@ -19,7 +19,7 @@ const Item = memo(
     console.log("LOG ===> Re-render", index);
 
     return (
-      <div {...rest} style={{ height: `${size}px` }}>
+      <div {...rest} style={{ height: `${size}px` }} tabIndex="0" role="button">
         COOL
       </div>
     );

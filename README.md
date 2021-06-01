@@ -32,7 +32,7 @@
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to controls](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
-- ⛳ Provides `isScrolling` indicator to you for [performance optimization](#use-isscrolling-indicator) or other purposes.
+- ⛳ Provides `isScrolling` indicator to you for UI placeholders or [performance optimization](#use-isscrolling-indicator).
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
@@ -700,6 +700,133 @@ const App = () => {
 💡 For more available types, please [check it out](src/types/react-cool-virtual.d.ts).
 
 ## API
+
+React Cool Virtual is a custom React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that supplies you with [all the features](#features) for building highly performant virtualized datasets easily 🚀. It takes `options` parameters and returns useful methods as follows.
+
+```js
+const props = useVirtual(options);
+```
+
+## Options
+
+An `object` with the following options:
+
+### itemCount (Required)
+
+`number`
+
+The total number of items. It can be an arbitrary number if actual number is unknown, see the [example](#working-with-a-loading-indicator) to learn more.
+
+### ssrItemCount
+
+`number | [number, number]`
+
+The number of items that are rendered on server-side, see the [example](#server-side-rendering-ssr) to learn more.
+
+### itemSize
+
+`number | (index: number, width: number) => number`
+
+The size of an item (default = 50). When working with **dynamic size**, it will be the default/or estimated size of the unmeasured items.
+
+- For `number` use case, please refer to the [fixed size](#fixed-size).
+- For `index` callback use case, please refer to the [variable size](#variable-size).
+- For `width` callback use case, please refer to the [RWD](#responsive-web-design-rwd).
+
+### horizontal
+
+`boolean`
+
+The layout/orientation of the list (default = false). When `true` means left/right scrolling, so the hook will use `width` as the [item size](#itemsize) and use the `left` as the [start](#TBC) offset.
+
+### overscanCount
+
+`number`
+
+The number of items to render behind and ahead of the visible area (default = 1). That can be used for two reasons:
+
+- To slightly reduce/prevent a flash of empty screen while the user is scrolling. Please note, too many can negatively impact performance.
+- To allow the tab key to focus on the next (invisible) item for better accessibility.
+
+### useIsScrolling
+
+`boolean`
+
+To enable/disable the [isScrolling](#TBC) indicator of an item (default = false). It's useful for UI placeholders or [performance optimization](#use-isscrolling-indicator) when the list is being scrolled. Please note, using it will result in an additional render after scrolling has stopped.
+
+### scrollDuration
+
+`number`
+
+The duration of [smooth scrolling](#smooth-scrolling), the unit is milliseconds (default = 500ms).
+
+### scrollEasingFunction
+
+`(time: number) => number`
+
+A function that allows us to customize the easing effect of [smooth scrolling](#smooth-scrolling) (default = [easeInOutCubic](https://easings.net/#easeInOutCubic)).
+
+### loadMoreThreshold
+
+`number`
+
+Coming soon...
+
+### isItemLoaded
+
+`(index: number) => boolean`
+
+Coming soon...
+
+### loadMore
+
+`(event: Object) => void`
+
+Coming soon...
+
+### onScroll
+
+`(event: Object) => void`
+
+Coming soon...
+
+### onResize
+
+`(event: Object) => void`
+
+Coming soon...
+
+## Props
+
+An `object` with the following methods:
+
+### outerRef
+
+`React.useRef<HTMLElement>`
+
+Coming soon...
+
+### innerRef
+
+`React.useRef<HTMLElement>`
+
+Coming soon...
+
+### items
+
+`Object[]`
+
+Coming soon...
+
+### scrollTo
+
+`(offset: number) => void | (options: Object) => void`
+
+Coming soon...
+
+### scrollToItem
+
+`(offset: number) => void | (options: Object) => void`
 
 Coming soon...
 
