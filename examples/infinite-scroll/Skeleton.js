@@ -14,7 +14,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const loadData = async ({ loadIndex }, setComments) => {
   // Set the state of a batch items as `true`
-  // to avoid the callback from being invoked repeatedly
+  // to avoid the callback from being called repeatedly
   isItemLoadedArr[loadIndex] = true;
 
   try {
@@ -41,12 +41,12 @@ const Skeleton = () => {
     // Estimated item size (with padding)
     itemSize: 122,
     // Starts to pre-fetch data when the user scrolls within every 5 items
-    // e.g. 1-5, 6-10 and so on (default = 15)
+    // e.g. 1 - 5, 6 - 10 and so on (default = 15)
     loadMoreThreshold: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook
-    // whether the `loadMore` should be triggered or not
+    // whether the `loadMore` should be called or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
-    // The callback will be invoked when more data needs to be loaded
+    // The callback will be called when more data needs to be loaded
     loadMore: (e) => loadData(e, setComments)
   });
 
