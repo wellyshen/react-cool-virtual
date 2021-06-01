@@ -10,14 +10,14 @@ const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
 const isItemLoadedArr = [];
 // We only have 10 (500 / 5) batches of items, so set the 11th (index = 10) batch as `true`
-// to avoid the `loadMore` from being called
+// to avoid the `loadMore` from being invoked
 isItemLoadedArr[10] = true;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const loadData = async ({ loadIndex }, setComments) => {
   // Set the state of a batch items as `true`
-  // to avoid the callback from being called repeatedly
+  // to avoid the callback from being invoked repeatedly
   isItemLoadedArr[loadIndex] = true;
 
   try {
@@ -48,9 +48,9 @@ const Indicator = () => {
     // e.g. 1 - 5, 6 - 10 and so on (default = 15)
     loadMoreThreshold: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook
-    // whether the `loadMore` should be called or not
+    // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
-    // The callback will be called when more data needs to be loaded
+    // The callback will be invoked when more data needs to be loaded
     loadMore: (e) => loadData(e, setComments)
   });
 
