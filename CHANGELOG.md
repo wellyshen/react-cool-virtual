@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.24
+
+### Patch Changes
+
+- [#86](https://github.com/wellyshen/react-cool-virtual/pull/86) [`3c55e86`](https://github.com/wellyshen/react-cool-virtual/commit/3c55e864595784b14b21df924bfd0621f068d08b) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor: rename `loadMoreThreshold` option to `loadMoreCount`
+
 ## 0.0.23
 
 ### Patch Changes
