@@ -40,8 +40,8 @@ const Skeleton = () => {
     itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
     itemSize: 122,
-    // Starts to pre-fetch data when the user scrolls within every 5 items
-    // e.g. 1 - 5, 6 - 10 and so on (default = 15)
+    // The number of items that you want to load/or pre-load, it will trigger the `loadMore` callback
+    // when the user scrolls within every items, e.g. 1 - 5, 6 - 10 and so on (default = 15)
     loadMoreCount: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook
     // whether the `loadMore` should be triggered or not
