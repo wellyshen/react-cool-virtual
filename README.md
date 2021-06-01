@@ -414,7 +414,7 @@ const List = () => {
     // Estimated item size (with padding)
     itemSize: 122,
     // Starts to pre-fetch data when the user scrolls within every 5 items, e.g. 1 - 5, 6 - 10 and so on (default = 15)
-    loadMoreThreshold: BATCH_COMMENTS,
+    loadMoreCount: BATCH_COMMENTS,
     // Provide the loaded state for a batch items to tell the hook whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     // The callback will be invoked when more data needs to be loaded
@@ -474,7 +474,7 @@ const List = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: comments.length, // Provide the number of comments
-    loadMoreThreshold: BATCH_COMMENTS,
+    loadMoreCount: BATCH_COMMENTS,
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     loadMore: (e) => loadData(e, setComments),
   });
@@ -766,7 +766,7 @@ The duration of [smooth scrolling](#smooth-scrolling), the unit is milliseconds 
 
 A function that allows us to customize the easing effect of [smooth scrolling](#smooth-scrolling) (default = [easeInOutCubic](https://easings.net/#easeInOutCubic)).
 
-### loadMoreThreshold
+### loadMoreCount
 
 `number`
 
