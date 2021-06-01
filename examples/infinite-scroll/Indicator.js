@@ -9,9 +9,9 @@ import "./styles.scss";
 const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
 const isItemLoadedArr = [];
-// We only have 10 (500 / 5) batches of items, so set the 11th (index = 10) batch as `true`
+// We only have 50 (500 / 5) batches of items, so set the 51th (index = 50) batch as `true`
 // to avoid the `loadMore` from being invoked
-isItemLoadedArr[10] = true;
+isItemLoadedArr[50] = true;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
