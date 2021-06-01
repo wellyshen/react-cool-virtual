@@ -452,7 +452,7 @@ import axios from "axios";
 const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
 // We only have 50 (500 / 5) batches of items, so set the 51th (index = 50) batch as `true`
-// to avoid the `loadMore` from being invoked
+// to avoid the `loadMore` callback from being invoked
 isItemLoadedArr[50] = true;
 
 const loadData = async ({ loadIndex }, setComments) => {
