@@ -791,7 +791,7 @@ const props = useVirtual({
   onScroll: ({
     startIndex, // (number) The start index of the batch item
     stopIndex, // (number) The stop index of the batch item
-    loadIndex, // (number) The index of a batch items (e.g. 1 - 15 as 0, 16 - 30 as 1, and so on)
+    loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as 0, 16 - 30 as 1, and so on)
     scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
     userScroll, // (boolean) Tells you the scrolling is through the user or not
   }) => {
