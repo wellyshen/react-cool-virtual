@@ -42,7 +42,7 @@ const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
       index: i,
       start: 0,
       width: 0,
-      size: isNumber(itemSize) ? itemSize : itemSize(i, 0),
+      size: isNumber(itemSize) ? itemSize : itemSize(i, 0) ?? DEFAULT_ITEM_SIZE,
       measureRef: () => null,
     };
 
@@ -97,10 +97,10 @@ export default <
 
   const getItemSize = useCallback(
     (idx: number) => {
-      let { current: size } = itemSizeRef;
-      size = isNumber(size) ? size : size(idx, outerRectRef.current.width);
-
-      return size ?? DEFAULT_ITEM_SIZE;
+      const { current: size } = itemSizeRef;
+      return isNumber(size)
+        ? size
+        : size(idx, outerRectRef.current.width) ?? DEFAULT_ITEM_SIZE;
     },
     [itemSizeRef]
   );
