@@ -1,5 +1,3 @@
-<h4 align="center"><code><strong>🚧 Work in progress, most APIs are done. Not production ready yet but soon!</strong></code></h4>
-
 <h1 align="center">
   <br />
   <br />
@@ -54,6 +52,7 @@ Frequently viewed docs:
 - [Performance Optimization](#performance-optimization)
 - [TypeScript](#working-in-typescript)
 - [Sharing A `ref`](#how-to-share-a-ref)
+- [Layout items](#layout-items)
 - [Polyfill](#resizeobserver-polyfill)
 
 ## Getting Started
@@ -317,21 +316,22 @@ You can imperatively scroll to offset or items as follows:
 const { scrollTo, scrollToItem } = useVirtual();
 
 const scrollToOffset = () => {
-  // Scroll to 500px
+  // Scrolls to 500px
   scrollTo(500, () => {
     // 🤙🏼 Do whatever you want through the callback
   });
 };
 
 const scrollToItem = () => {
-  // Scroll to the 500th item
+  // Scrolls to the 500th item
   scrollToItem(500, () => {
     // 🤙🏼 Do whatever you want through the callback
   });
 
-  // Control the alignment of the item with the `align` option
-  // Available values: "auto" (default) | "start" | "center" | "end"
-  scrollToItem({ index: 500, align: "center" });
+  // We can control the alignment of the item with the `align` option
+  // Acceptable values are: "auto" (default) | "start" | "center" | "end"
+  // Using "auto" will scroll the item into the view at the start or end, depending on which is closer
+  scrollToItem({ index: 10, align: "auto" });
 };
 ```
 
@@ -348,7 +348,7 @@ const { scrollTo, scrollToItem } = useVirtual();
 const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
 
 // Smoothly scroll to the 500th item
-const scrollToItem = () => scrollToItem({ index: 500, smooth: true });
+const scrollToItem = () => scrollToItem({ index: 10, smooth: true });
 ```
 
 The default easing effect is [easeInOutCubic](https://easings.net/#easeInOutCubic), and the duration is 500 milliseconds. You can easily customize your own effect as follows:
@@ -553,7 +553,7 @@ const List = () => {
       ref={outerRef}
     >
       <div ref={innerRef}>
-        {/* The items will be rendered both on SSR and CSR, depends on our settings */}
+        {/* The items will be rendered both on SSR and CSR, depending on our settings */}
         {items.map(({ index, size }) => (
           <div key={someData[index].id} style={{ height: `${size}px` }}>
             {someData[index].content}
@@ -682,6 +682,63 @@ const App = () => {
 };
 ```
 
+## Layout Items
+
+React Cool Virtual is designed to [simplify the styling and keep all the items in the document flow for rows/columns](#basic-usage). However, when working with grids, we need to layout the items in two-dimensional. For that reason, we also provide the [start](#items) property for you to achieve it.
+
+```js
+import { Fragment } from "react";
+import useVirtual from "react-cool-virtual";
+
+const Grid = () => {
+  const row = useVirtual({
+    itemCount: 1000,
+  });
+  const col = useVirtual({
+    horizontal: true,
+    itemCount: 1000,
+    itemSize: 100,
+  });
+
+  return (
+    <div
+      style={{ width: "400px", height: "400px", overflow: "auto" }}
+      ref={(el) => {
+        row.outerRef.current = el;
+        col.outerRef.current = el;
+      }}
+    >
+      <div
+        style={{ position: "relative" }}
+        ref={(el) => {
+          row.innerRef.current = el;
+          col.innerRef.current = el;
+        }}
+      >
+        {row.items.map((rowItem) => (
+          <Fragment key={rowItem.index}>
+            {col.items.map((colItem) => (
+              <div
+                key={colItem.index}
+                style={{
+                  position: "absolute",
+                  height: `${rowItem.size}px`,
+                  width: `${colItem.size}px`,
+                  // The `start` property can be used for positioning the items
+                  transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
+                }}
+              >
+                ⭐️ {rowItem.index}, {colItem.index}
+              </div>
+            ))}
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
 ## Working in TypeScript
 
 React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
@@ -792,7 +849,7 @@ const props = useVirtual({
     startIndex, // (number) The index of the first batch item
     stopIndex, // (number) The index of the last batch item
     loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
-    scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
+    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
     userScroll, // (boolean) Tells you the scrolling is through the user or not
   }) => {
     // Fetch data...
@@ -813,8 +870,8 @@ const props = useVirtual({
     overscanStopIndex, // (number) The index of the last overscan item
     visibleStartIndex, // (number) The index of the first visible item
     visibleStopIndex, // (number) The index of the last visible item
-    scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
-    scrollForward, // (boolean) The scroll direction of up/down or left/right, depends on the `horizontal` option
+    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
+    scrollForward, // (boolean) The scroll direction of up/down or left/right, depending on the `horizontal` option
     userScroll, // (boolean) Tells you the scrolling is through the user or not
   }) => {
     // Do something...
@@ -866,7 +923,7 @@ The virtualized items for rendering rows/columns. Each item is an `Object` that 
 | index       | number               | The index of the item.                                                                                          |
 | size        | number               | The fixed/variable/measured size of the item.                                                                   |
 | width       | number               | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
-| start       | number               | The starting position of the item. We might only need this when [working with a grid](#TBC).                    |
+| start       | number               | The starting position of the item. We might only need this when [working with a grid](#layout-items).           |
 | isScrolling | boolean \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
 | measureRef  | Function             | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
 
@@ -874,13 +931,43 @@ The virtualized items for rendering rows/columns. Each item is an `Object` that 
 
 `(offsetOrOptions: number | Object, callback?: () => void) => void`
 
-Coming soon...
+This method allows us to scroll to the specified offset from top/left, depending on the [horizontal](#horizontal) option.
+
+```js
+// Basic usage
+scrollTo(500);
+
+// Using options
+scrollTo({
+  offset: 500,
+  smooth: true, // Enable/disable smooth scrolling (default = false)
+});
+```
+
+> 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
 
 ### scrollToItem
 
 `(indexOrOptions: number | Object, callback?: () => void) => void`
 
-Coming soon...
+This method allows us to scroll to the specified item.
+
+```js
+// Basic usage
+scrollToItem(10);
+
+// Using options
+scrollTo({
+  index: 10,
+  // Control the alignment of the item, acceptable values are: "auto" (default) | "start" | "center" | "end"
+  // Using "auto" will scroll the item into the view at the start or end, depending on which is closer
+  align: "auto",
+  // Enable/disable smooth scrolling (default = false)
+  smooth: true,
+});
+```
+
+> 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
 
 ## ResizeObserver Polyfill
 
