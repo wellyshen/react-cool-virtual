@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/wellyshen/react-cool-virtual" title="React Cool Virtual"><img src="https://github.com/wellyshen/react-cool-virtual/blob/master/media/logo.svg" width="100%" alt="React Cool Virtual"></a>
+  <a href="https://github.com/wellyshen/react-cool-virtual" title="React Cool Virtual"><img src="https://github.com/wellyshen/react-cool-virtual/blob/master/media/logo.svg" alt="React Cool Virtual"></a>
 </p>
 
 <p align="center">A tiny React hook for rendering large datasets like a breeze.</p>
