@@ -788,9 +788,9 @@ The number of items that are rendered on server-side, see the [example](#server-
 
 The size of an item (default = 50). When working with **dynamic size**, it will be the default/or estimated size of the unmeasured items.
 
-- For `number` use case, please refer to the [fixed size](#fixed-size).
-- For `index` callback use case, please refer to the [variable size](#variable-size).
-- For `width` callback use case, please refer to the [RWD](#responsive-web-design-rwd).
+- For `number` use case, please refer to the [fixed size example](#fixed-size).
+- For `index` callback use case, please refer to the [variable size example](#variable-size).
+- For `width` callback use case, please refer to the [RWD example](#responsive-web-design-rwd).
 
 ### horizontal
 
