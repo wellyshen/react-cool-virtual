@@ -102,10 +102,10 @@ const List = () => {
 
   return (
     <div
-      ref={outerRef} // Set the scroll container with the `outerRef`
+      ref={outerRef} // Attach the `outerRef` to the scroll container
       style={{ width: "300px", height: "500px", overflow: "auto" }}
     >
-      {/* Set the inner element with the `innerRef` */}
+      {/* Attach the `innerRef` to the wrapper of the items */}
       <div ref={innerRef}>
         {items.map(({ index, size }) => (
           // You can set the item's height with the `size` property
@@ -285,8 +285,8 @@ const List = () => {
     itemCount: 1000,
     // Use the outer's width (2nd parameter) to adjust the item's size
     itemSize: (_, width) => (width > 400 ? 50 : 100),
-    // The event will be triggered on outer's size is being changed
-    onResize: (rect) => console.log("Outer's rect: ", rect),
+    // The event will be triggered on outer's size changes
+    onResize: (size) => console.log("Outer's size: ", size),
   });
 
   return (
@@ -569,7 +569,7 @@ const List = () => {
 
 ## Performance Optimization
 
-Items are re-rendered whenever the user scrolls. If your item is a **heavy data component**, there're two strategies for performance optimizing.
+Items are re-rendered whenever the user scrolls. If your item is a **heavy data component**, there're two strategies for performance optimization.
 
 ### Use [React.memo](https://reactjs.org/docs/react-api.html#reactmemo)
 
@@ -739,7 +739,7 @@ The size of an item (default = 50). When working with **dynamic size**, it will 
 
 `boolean`
 
-The layout/orientation of the list (default = false). When `true` means left/right scrolling, so the hook will use `width` as the [item size](#itemsize) and use the `left` as the [start](#TBC) offset.
+The layout/orientation of the list (default = false). When `true` means left/right scrolling, so the hook will use `width` as the [item size](#itemsize) and use the `left` as the [start](#items) position.
 
 ### overscanCount
 
@@ -754,7 +754,7 @@ The number of items to render behind and ahead of the visible area (default = 1)
 
 `boolean`
 
-To enable/disable the [isScrolling](#TBC) indicator of an item (default = false). It's useful for UI placeholders or [performance optimization](#use-isscrolling-indicator) when the list is being scrolled. Please note, using it will result in an additional render after scrolling has stopped.
+To enable/disable the [isScrolling](#items) indicator of an item (default = false). It's useful for UI placeholders or [performance optimization](#use-isscrolling-indicator) when the list is being scrolled. Please note, using it will result in an additional render after scrolling has stopped.
 
 ### scrollDuration
 
@@ -789,9 +789,9 @@ A callback for us to fetch (more) data, it's used for [infinite scroll](#infinit
 ```js
 const props = useVirtual({
   onScroll: ({
-    startIndex, // (number) The start index of the batch item
-    stopIndex, // (number) The stop index of the batch item
-    loadIndex, // (number) The index of a batch items (e.g. 1 - 15 as 0, 16 - 30 as 1, and so on)
+    startIndex, // (number) The index of the first batch item
+    stopIndex, // (number) The index of the last batch item
+    loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
     scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
     userScroll, // (boolean) Tells you the scrolling is through the user or not
   }) => {
@@ -809,10 +809,10 @@ This event will be triggered when scroll position is being changed by the user s
 ```js
 const props = useVirtual({
   onScroll: ({
-    overscanStartIndex, // (number) The start index of the overscan item
-    overscanStopIndex, // (number) The stop index of the overscan item
-    visibleStartIndex, // (number) The start index of the visible item
-    visibleStopIndex, // (number) The stop index of the visible item
+    overscanStartIndex, // (number) The index of the first overscan item
+    overscanStopIndex, // (number) The index of the last overscan item
+    visibleStartIndex, // (number) The index of the first visible item
+    visibleStopIndex, // (number) The index of the last visible item
     scrollOffset, // (number) The scroll offset from top/left, depends on the `horizontal` option
     scrollForward, // (boolean) The scroll direction of up/down or left/right, depends on the `horizontal` option
     userScroll, // (boolean) Tells you the scrolling is through the user or not
@@ -826,7 +826,18 @@ const props = useVirtual({
 
 `(event: Object) => void`
 
-This event will be triggered when the size of the outer container element changes.
+This event will be triggered when the size of the outer element changes.
+
+```js
+const props = useVirtual({
+  onResize: ({
+    width, // (number) The content width of the outer element
+    height, // (number) The content height of the outer element
+  }) => {
+    // Do something...
+  },
+});
+```
 
 ## Props
 
@@ -836,19 +847,28 @@ An `object` with the following properties:
 
 `React.useRef<HTMLElement>`
 
-A `ref` to attach to the outer container element.
+A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the outer element. We must [apply it](#basic-usage) for using this hook.
 
 ### innerRef
 
 `React.useRef<HTMLElement>`
 
-A `ref` to attach to the inner container element.
+A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the inner element. We must [apply it](#basic-usage) for using this hook.
 
 ### items
 
 `Object[]`
 
-Coming soon...
+The virtualized items for rendering rows/columns. Each item is an `Object` that contains the following properties:
+
+| Name        | Type                 | Description                                                                                                     |
+| ----------- | -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| index       | number               | The index of the item.                                                                                          |
+| size        | number               | The fixed/variable/measured size of the item.                                                                   |
+| width       | number               | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
+| start       | number               | The starting position of the item. We might only need this when [working with a grid](#TBC).                    |
+| isScrolling | boolean \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
+| measureRef  | Function             | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
 
 ### scrollTo
 
@@ -896,9 +916,9 @@ You could use dynamic imports to only load the file when the polyfill is require
 ## To Do...
 
 - [ ] Unit testing
-- [ ] Reverse scrolling
-- [ ] Infinite loop
 - [ ] `scrollBy` method
+- [ ] Infinite loop
+- [ ] Reverse scrolling
 
 ## Contributors ✨
 
