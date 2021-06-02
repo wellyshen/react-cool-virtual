@@ -1,13 +1,6 @@
-<h1 align="center">
-  <br />
-  <br />
-  ♻️
-  <br />
-  react-cool-virtual
-  <br />
-  <br />
-  <br />
-</h1>
+<p align="center">
+  <a href="https://github.com/wellyshen/react-cool-virtual" title="React Cool Virtual"><img src="https://github.com/wellyshen/react-cool-virtual/blob/master/media/logo.svg" width="320px" alt="React Cool Virtual"></a>
+</p>
 
 <p align="center">A tiny React hook for rendering large datasets like a breeze.</p>
 
