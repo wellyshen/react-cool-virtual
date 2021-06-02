@@ -50,9 +50,9 @@ Frequently viewed docs:
 - [Examples](#examples)
 - [API](#api)
 - [Performance Optimization](#performance-optimization)
-- [TypeScript](#working-in-typescript)
 - [Sharing A `ref`](#how-to-share-a-ref)
 - [Layout items](#layout-items)
+- [TypeScript](#working-in-typescript)
 - [Polyfill](#resizeobserver-polyfill)
 
 ## Getting Started
