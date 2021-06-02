@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.25
+
+### Patch Changes
+
+- [#88](https://github.com/wellyshen/react-cool-virtual/pull/88) [`b5d483d`](https://github.com/wellyshen/react-cool-virtual/commit/b5d483d9a151113b30dc08c64a583416a355d550) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: fallback tp default item size for SSR items
+
 ## 0.0.24
 
 ### Patch Changes
