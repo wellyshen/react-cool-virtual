@@ -529,7 +529,7 @@ const List = () => {
 
 ### Server-side Rendering (SSR)
 
-Server-side rendering allows us to provide a fast [FP and FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering), it also benefits for [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#seo). React Cool Virtual supplies you a seamless DX between SSR and CSR. The
+Server-side rendering allows us to provide a fast [FP and FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering), it also benefits for [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#seo). React Cool Virtual supplies you a seamless DX between SSR and CSR.
 
 ```js
 const List = () => {
