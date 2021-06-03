@@ -916,7 +916,7 @@ The virtualized items for rendering rows/columns. Each item is an `Object` that 
 | index       | number               | The index of the item.                                                                                          |
 | size        | number               | The fixed/variable/measured size of the item.                                                                   |
 | width       | number               | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
-| start       | number               | The starting position of the item. We might only need this when [working with a grid](#layout-items).           |
+| start       | number               | The starting position of the item. We might only need this when [working with grids](#layout-items).           |
 | isScrolling | boolean \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
 | measureRef  | Function             | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
 
