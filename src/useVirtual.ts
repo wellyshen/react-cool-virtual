@@ -232,11 +232,14 @@ export default <
 
       if (
         hasDynamicSizeRef.current &&
+        align === Align.auto &&
         scrollOffset <= start &&
         scrollOffset + outerSize >= end &&
         cb
-      )
+      ) {
         cb();
+        return;
+      }
 
       const endPos = start - outerSize + size;
 
