@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.27
+
+### Patch Changes
+
+- [#97](https://github.com/wellyshen/react-cool-virtual/pull/97) [`79ae7bd`](https://github.com/wellyshen/react-cool-virtual/commit/79ae7bdaa2a50a7bed85079f5f2cbd6bf08c75e0) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `scrollToItem` causes empty items when working with dynamic size
+
 ## 0.0.26
 
 ### Patch Changes
