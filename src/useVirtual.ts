@@ -265,7 +265,7 @@ export default <
           correctScrollCountRef.current <= MAX_CORRECT_SCROLL_COUNT &&
           (scrollOffset >= start || scrollOffset + outerSize <= end)
         ) {
-          setTimeout(() => scrollToItem(val, cb));
+          setTimeout(() => scrollToItem(index, cb));
           correctScrollCountRef.current += 1;
         } else {
           if (cb) cb();
