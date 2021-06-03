@@ -13,7 +13,7 @@ const getSizes = (min) =>
 const App = () => (
   <div className="app">
     <p>
-      💡 CodeSandbox might be <b>caching the wrong version</b> of React Cool
+      💡 CodeSandbox might be <b>caching the old version</b> of React Cool
       Virtual. You can <b>manually specify to the latest version</b> to see the
       examples.
     </p>
