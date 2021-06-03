@@ -225,7 +225,7 @@ This example demonstrates how to create a real-time resize row (e.g. accordion, 
 import { useState, forwardRef } from "react";
 import useVirtual from "react-cool-virtual";
 
-const Item = forwardRef(({ children, height, ...rest }, ref) => {
+const AccordionItem = forwardRef(({ children, height, ...rest }, ref) => {
   const [h, setH] = useState(height);
 
   return (
