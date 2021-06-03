@@ -177,7 +177,10 @@ export default <
         ? { offset: val }
         : val;
 
-      if (!isNumber(offset) || offset === prevOffset) return;
+      if (!isNumber(offset) || offset === prevOffset) {
+        if (cb) cb();
+        return;
+      }
 
       userScrollRef.current = false;
 
