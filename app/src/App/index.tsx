@@ -1,6 +1,5 @@
 /* eslint-disable compat/compat */
 
-import { forwardRef, useState, memo, useMemo } from "react";
 import useVirtual from "react-cool-virtual";
 
 import styles from "./styles.module.scss";
@@ -13,22 +12,8 @@ const getItems = (num: number) =>
 
 const mockData = getItems(100);
 
-const Item = memo(
-  // eslint-disable-next-line react/prop-types
-  ({ index, size, ...rest }: any) => {
-    console.log("LOG ===> Re-render", index);
-
-    return (
-      <div {...rest} style={{ height: `${size}px` }} tabIndex="0" role="button">
-        COOL
-      </div>
-    );
-  }
-);
-
 export default () => {
-  const [sz, setSz] = useState(50);
-  const { outerRef, innerRef, items } = useVirtual<
+  const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({ itemCount: mockData.length });
@@ -37,21 +22,36 @@ export default () => {
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div ref={innerRef}>
-          {items.map(({ index, measureRef }) => (
-            <Item
+          {items.map(({ index, size, measureRef }) => (
+            <div
               key={index}
-              index={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              size={50}
-            />
+              style={{ height: `${50}px` }}
+              // style={{ height: `${mockData[index].size}px` }}
+              ref={measureRef}
+            >
+              {index}
+            </div>
           ))}
         </div>
       </div>
       <button
         type="button"
-        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
+        onClick={() =>
+          scrollToItem({ index: 50, smooth: true, align: "auto" }, () =>
+            console.log("DONE!")
+          )
+        }
       >
-        Resize
+        Scroll To Item
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          scrollTo({ offset: 50, smooth: true }, () => console.log("DONE!"))
+        }
+      >
+        Scroll To Offset
       </button>
     </div>
   );
