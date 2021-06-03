@@ -573,7 +573,7 @@ import { memo } from "react";
 import useVirtual from "react-cool-virtual";
 
 const MemoizedItem = memo(({ height, ...rest }) => {
-  // Some many heavy computing here... 🤪
+  // A lot of heavy computing here... 🤪
 
   return (
     <div {...rest} style={{ height: `${height}px` }}>
@@ -612,7 +612,7 @@ import { forwardRef } from "react";
 import useVirtual from "react-cool-virtual";
 
 const HeavyItem = forwardRef((props, ref) => {
-  // Some many heavy computing here... 🤪
+  // A lot of heavy computing here... 🤪
 
   return (
     <div {...props} ref={ref}>
