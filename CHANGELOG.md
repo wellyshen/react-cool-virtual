@@ -1,5 +1,19 @@
 # react-cool-virtual
 
+## 0.0.26
+
+### Patch Changes
+
+- [#96](https://github.com/wellyshen/react-cool-virtual/pull/96) [`90e093c`](https://github.com/wellyshen/react-cool-virtual/commit/90e093c92459cdc6a79baa765eba0347bc1f56cf) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: the callback of `scrollTo` not called when scroll to the same position
+
+* [#91](https://github.com/wellyshen/react-cool-virtual/pull/91) [`f244c41`](https://github.com/wellyshen/react-cool-virtual/commit/f244c4150832bd196f5fb8309c6723278fe01cd0) Thanks [@wellyshen](https://github.com/wellyshen)! - perf: slightly performance improvement
+
+- [#95](https://github.com/wellyshen/react-cool-virtual/pull/95) [`ddc2846`](https://github.com/wellyshen/react-cool-virtual/commit/ddc2846676b4e2fe18eafc82eeb8fd668463e695) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: wrong the scroll position of `scrollToItem` when working with dynamic size
+
+* [#94](https://github.com/wellyshen/react-cool-virtual/pull/94) [`6a17acb`](https://github.com/wellyshen/react-cool-virtual/commit/6a17acbc9d258c1a96f419f82f8dfcf31b5abe64) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: pass correct args to `scrollToItem` method
+
+- [#93](https://github.com/wellyshen/react-cool-virtual/pull/93) [`0e187f9`](https://github.com/wellyshen/react-cool-virtual/commit/0e187f93a48011e14ad45dc8d0e50249e4d65e3a) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: the callback of `scrollToItem` is called twice
+
 ## 0.0.25
 
 ### Patch Changes
