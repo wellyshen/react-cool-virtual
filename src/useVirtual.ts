@@ -70,7 +70,6 @@ export default <
     getInitItems(itemSize, ssrItemCount)
   );
   const hasDynamicSizeRef = useRef(false);
-  const isScrollToItemRef = useRef(false);
   const hasLoadMoreOnMountRef = useRef(false);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
@@ -126,7 +125,7 @@ export default <
       const { current: msData } = msDataRef;
       let vStart = 0;
 
-      if (hasDynamicSizeRef.current && !isScrollToItemRef.current) {
+      if (hasDynamicSizeRef.current) {
         while (
           vStart < msData.length &&
           msData[vStart].start < (msData[vStart + 1]?.start || 0) &&
@@ -219,8 +218,6 @@ export default <
 
       if (!isNumber(index)) return;
 
-      isScrollToItemRef.current = true;
-
       if (hasDynamicSizeRef.current) measureItems();
 
       const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
@@ -243,9 +240,9 @@ export default <
           scrollOffset = endPos;
           break;
         default:
-          if (scrollOffset >= start) {
+          if (scrollOffset > start) {
             scrollOffset = start;
-          } else if (scrollOffset + outerSize <= end) {
+          } else if (scrollOffset + outerSize < end) {
             scrollOffset = endPos;
           }
       }
@@ -276,7 +273,6 @@ export default <
   );
 
   const [resetOthers, cancelResetOthers] = useDebounce(() => {
-    isScrollToItemRef.current = false;
     userScrollRef.current = true;
 
     const len = rosRef.current.size - items.length;
