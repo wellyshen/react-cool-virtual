@@ -7,13 +7,13 @@ import styles from "./styles.module.scss";
 const getItems = (num: number) =>
   new Array(num).fill({}).map((_, idx) => ({
     txt: idx,
-    size: Math.floor(50 + Math.random() * 100),
+    size: Math.floor(25 + Math.random() * 100),
   }));
 
 const mockData = getItems(100);
 
 export default () => {
-  const { outerRef, innerRef, items, scrollTo, scrollToItem } = useVirtual<
+  const { outerRef, innerRef, items, scrollToItem } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({ itemCount: mockData.length });
@@ -26,8 +26,8 @@ export default () => {
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ height: `${50}px` }}
-              // style={{ height: `${mockData[index].size}px` }}
+              // style={{ height: `${50}px` }}
+              style={{ height: `${mockData[index].size}px` }}
               ref={measureRef}
             >
               {index}
@@ -38,20 +38,12 @@ export default () => {
       <button
         type="button"
         onClick={() =>
-          scrollToItem({ index: 50, smooth: true, align: "auto" }, () =>
+          scrollToItem({ index: 50, smooth: false, align: "auto" }, () =>
             console.log("DONE!")
           )
         }
       >
         Scroll To Item
-      </button>
-      <button
-        type="button"
-        onClick={() =>
-          scrollTo({ offset: 50, smooth: true }, () => console.log("DONE!"))
-        }
-      >
-        Scroll To Offset
       </button>
     </div>
   );
