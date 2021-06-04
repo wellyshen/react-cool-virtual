@@ -421,13 +421,15 @@ export default <
         msDataRef.current[msDataRef.current.length - 1]?.end;
 
       outerRectRef.current = rect;
-      measureItems(isSameWidth);
+      measureItems(hasDynamicSizeRef.current || isSameWidth);
       handleScroll(scrollOffsetRef.current);
 
       if (onResizeRef.current) onResizeRef.current(rect);
 
+      if (hasDynamicSizeRef.current || isSameWidth) return;
+
       const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
-      const ratio = !isSameWidth && totalSize / prevTotalSize;
+      const ratio = totalSize / prevTotalSize;
 
       if (ratio) scrollTo(scrollOffsetRef.current * ratio);
     },
