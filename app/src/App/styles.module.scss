@@ -3,22 +3,21 @@ body {
 }
 
 .app {
-  margin-top: 3rem;
   text-align: center;
-  height: 100vh;
+  height: 90vh;
+
+  p {
+    color: #666;
+  }
 }
 
 .outer {
   margin: 0 auto;
-  width: 300px;
-  height: 500px;
-  border: 1px solid #000;
-  margin-bottom: 1rem;
+  width: 85%;
+  height: 90%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   overflow: auto;
-}
-
-.inner {
-  position: relative;
 }
 
 .item {
@@ -26,8 +25,10 @@ body {
   justify-content: center;
   align-items: center;
   background: #fff;
+  padding: 10px;
+  min-height: 120px;
 
   &.dark {
-    background: #ddd;
+    background: #e5e5e5;
   }
 }
