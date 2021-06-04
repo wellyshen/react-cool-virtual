@@ -1,4 +1,4 @@
-import { MutableRefObject } from "react";
+import { MutableRefObject, RefCallback } from "react";
 
 // Internal
 export interface Measure {
@@ -55,7 +55,7 @@ export interface Item {
   readonly size: number;
   readonly width: number;
   readonly isScrolling?: boolean;
-  measureRef: (el: HTMLElement | null) => void;
+  measureRef: RefCallback<HTMLElement>;
 }
 
 export interface ScrollToOptions {
