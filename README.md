@@ -299,6 +299,8 @@ const List = () => {
 };
 ```
 
+> 💡 If the item size is specified through the function of `itemSize`, please ensure there's no the [measureRef](#items) on the item element. Otherwise, the hook will use the measured (cached) size for the item. When working with RWD, we can only use either of the two.
+
 ### Scroll to Offset/Items
 
 You can imperatively scroll to offset or items as follows:
