@@ -911,7 +911,7 @@ A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the i
 
 `Object[]`
 
-The virtualized items for rendering rows/columns. Each item is an `Object` that contains the following properties:
+The virtualized items for rendering rows/columns. Each item is an `object` that contains the following properties:
 
 | Name        | Type                 | Description                                                                                                     |
 | ----------- | -------------------- | --------------------------------------------------------------------------------------------------------------- |
