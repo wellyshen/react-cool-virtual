@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.0.28
+
+### Patch Changes
+
+- [#102](https://github.com/wellyshen/react-cool-virtual/pull/102) [`b8445d8`](https://github.com/wellyshen/react-cool-virtual/commit/b8445d8a9998a092101494c931a1cfb8b4d29b0b) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: dynamic size not working properly when working with RWD
+
 ## 0.0.27
 
 ### Patch Changes
