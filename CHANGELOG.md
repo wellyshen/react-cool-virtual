@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.1.1
+
+### Patch Changes
+
+- [#105](https://github.com/wellyshen/react-cool-virtual/pull/105) [`27c124e`](https://github.com/wellyshen/react-cool-virtual/commit/27c124e1ba108565624994c33ec35eba1a44ad97) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor(types): use `RefCallback` as the type of `measureRef`
+
 ## 0.0.28
 
 ### Patch Changes
