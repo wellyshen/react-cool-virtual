@@ -1,5 +1,5 @@
 declare module "react-cool-virtual" {
-  import { MutableRefObject } from "react";
+  import { MutableRefObject, RefCallback } from "react";
 
   export interface ItemSizeFunction {
     (index: number, width: number): number;
@@ -56,9 +56,7 @@ declare module "react-cool-virtual" {
     (event: OnResizeEvent): void;
   }
 
-  export interface MeasureRef {
-    (el: HTMLElement | null): void;
-  }
+  export type MeasureRef = RefCallback<HTMLElement>;
 
   export interface Item {
     readonly index: number;
