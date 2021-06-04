@@ -305,7 +305,7 @@ const List = () => {
 
 You can imperatively scroll to offset or items as follows:
 
-[![Edit RCV - Scroll-to Controls](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-scroll-to-controls-v5b3i?fontsize=14&hidenavigation=1&theme=dark)
+[![Edit RCV - Scroll-to Methods](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-scroll-to-methods-cs9x9?fontsize=14&hidenavigation=1&theme=dark)
 
 ```js
 const { scrollTo, scrollToItem } = useVirtual();
