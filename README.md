@@ -998,9 +998,8 @@ You could use dynamic imports to only load the file when the polyfill is require
 ## To Do...
 
 - [ ] Unit testing
+- [ ] Supports sticky items
 - [ ] `scrollBy` method
-- [ ] Infinite loop
-- [ ] Reverse scrolling
 
 ## Contributors ✨
 
