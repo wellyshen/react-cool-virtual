@@ -1,6 +1,16 @@
 import { MutableRefObject, RefCallback } from "react";
 
 // Internal
+export type ItemData = Map<
+  Element,
+  {
+    idx: number;
+    scrollOffset: number;
+    isScrolling?: boolean;
+    uxScrolling?: boolean;
+  }
+>;
+
 export interface Measure {
   idx: number;
   start: number;

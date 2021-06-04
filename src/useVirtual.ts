@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import {
   Align,
   Item,
+  ItemData,
   ItemSize,
   Measure,
   Options,
@@ -71,7 +72,8 @@ export default <
   );
   const hasDynamicSizeRef = useRef(false);
   const hasLoadMoreOnMountRef = useRef(false);
-  const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
+  const roRef = useRef<ResizeObserver>();
+  const itemDataRef = useRef<ItemData>(new Map());
   const scrollOffsetRef = useRef(0);
   const prevMeasureIdxRef = useRef(-1);
   const prevVStopRef = useRef<number>();
@@ -275,10 +277,10 @@ export default <
   const [resetOthers, cancelResetOthers] = useDebounce(() => {
     userScrollRef.current = true;
 
-    const len = rosRef.current.size - items.length;
-    const iter = rosRef.current[Symbol.iterator]();
+    const len = itemDataRef.current.size - items.length;
+    const iter = itemDataRef.current[Symbol.iterator]();
     for (let i = 0; i < len; i += 1)
-      rosRef.current.delete(iter.next().value[0]);
+      itemDataRef.current.delete(iter.next().value[0]);
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
@@ -313,50 +315,30 @@ export default <
 
       const nextItems: Item[] = [];
 
-      for (let i = oStart; i <= oStop; i += 1) {
-        const { current: msData } = msDataRef;
-        const { start, size } = msData[i];
-
+      for (let i = oStart; i <= oStop; i += 1)
         nextItems.push({
           index: i,
-          start: start - margin,
-          size,
+          start: msDataRef.current[i].start - margin,
+          size: msDataRef.current[i].size,
           width: outerRectRef.current.width,
           isScrolling: uxScrolling || undefined,
           measureRef: (el) => {
             if (!el) return;
 
-            // eslint-disable-next-line compat/compat
-            new ResizeObserver(([{ target }], ro) => {
-              // NOTE: Use `borderBoxSize` when it's supported by Safari
-              // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
-              const measuredSize = target.getBoundingClientRect()[sizeKey];
+            if (itemDataRef.current.get(el)) {
+              itemDataRef.current.delete(el);
+              roRef.current?.unobserve(el);
+            }
 
-              if (!measuredSize) {
-                ro.disconnect();
-                return;
-              }
-
-              const prevEnd = msData[i - 1]?.end || 0;
-
-              if (measuredSize !== size || start !== prevEnd) {
-                if (i < prevMeasureIdxRef.current && start < scrollOffset)
-                  scrollTo(scrollOffset + measuredSize - size);
-
-                msDataRef.current[i] = getMeasure(i, measuredSize);
-                handleScroll(scrollOffset, isScrolling, uxScrolling);
-
-                hasDynamicSizeRef.current = true;
-              }
-
-              prevMeasureIdxRef.current = i;
-
-              rosRef.current.get(target)?.disconnect();
-              rosRef.current.set(target, ro);
-            }).observe(el);
+            itemDataRef.current.set(el, {
+              idx: i,
+              scrollOffset,
+              isScrolling,
+              uxScrolling,
+            });
+            roRef.current?.observe(el);
           },
         });
-      }
 
       setItems((prevItems) =>
         shouldUpdate(prevItems, nextItems, { measureRef: true })
@@ -400,7 +382,6 @@ export default <
     },
     [
       getCalcData,
-      getMeasure,
       itemCount,
       loadMoreCount,
       loadMoreRef,
@@ -408,7 +389,6 @@ export default <
       onScrollRef,
       resetIsScrolling,
       resetOthers,
-      scrollTo,
       sizeKey,
     ]
   );
@@ -455,7 +435,38 @@ export default <
 
     outer.addEventListener("scroll", scrollHandler, { passive: true });
 
-    const ros = rosRef.current;
+    // eslint-disable-next-line compat/compat
+    roRef.current = new ResizeObserver((entries, ro) =>
+      entries.forEach(({ target }) => {
+        // NOTE: Use `borderBoxSize` when it's supported by Safari
+        // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
+        const measuredSize = target.getBoundingClientRect()[sizeKey];
+
+        if (!measuredSize) {
+          ro.unobserve(target);
+          return;
+        }
+
+        const { idx, scrollOffset, isScrolling, uxScrolling } =
+          itemDataRef.current.get(target)!;
+        const { start, size } = msDataRef.current[idx];
+        const prevEnd = msDataRef.current[idx - 1]?.end || 0;
+
+        if (measuredSize !== size || start !== prevEnd) {
+          if (idx < prevMeasureIdxRef.current && start < scrollOffset)
+            scrollTo(scrollOffset + measuredSize - size);
+
+          msDataRef.current[idx] = getMeasure(idx, measuredSize);
+          handleScroll(scrollOffset, isScrolling, uxScrolling);
+
+          hasDynamicSizeRef.current = true;
+        }
+
+        prevMeasureIdxRef.current = idx;
+      })
+    );
+
+    const itemData = itemDataRef.current;
 
     return () => {
       cancelResetIsScrolling();
@@ -466,15 +477,18 @@ export default <
       }
 
       outer.removeEventListener("scroll", scrollHandler);
+      roRef.current?.disconnect();
 
-      ros.forEach((ro) => ro.disconnect());
-      ros.clear();
+      itemData.clear();
     };
   }, [
     cancelResetIsScrolling,
     cancelResetOthers,
+    getMeasure,
     handleScroll,
     scrollKey,
+    scrollTo,
+    sizeKey,
     useIsScrollingRef,
   ]);
 
