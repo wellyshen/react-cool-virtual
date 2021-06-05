@@ -129,7 +129,7 @@ export default <
         while (
           vStart < msData.length &&
           msData[vStart].start < (msData[vStart + 1]?.start || 0) &&
-          msData[vStart].start < scrollOffset
+          msData[vStart].start + msData[vStart].size < scrollOffset
         )
           vStart += 1;
       } else {
@@ -148,20 +148,25 @@ export default <
         vStop < msData.length &&
         currStart < scrollOffset + outerRectRef.current[sizeKey]
       ) {
+        currStart += msData[vStop].size;
         vStop += 1;
-        currStart += msData[vStop]?.size || 0;
       }
 
       const oStart = Math.max(vStart - overscanCount, 0);
+      const oStop = Math.min(vStop + overscanCount, msData.length) - 1;
       const margin = msData[oStart].start;
+      const lastStart = Math[oStop < msData.length - 1 ? "max" : "min"](
+        msData[oStop].end + msData[oStop].size,
+        msData[msData.length - 1].start
+      );
 
       return {
         oStart,
-        oStop: Math.min(vStop + overscanCount, msData.length) - 1,
+        oStop,
         vStart,
         vStop: vStop - 1,
         margin,
-        innerSize: msData[msData.length - 1].end - margin,
+        innerSize: lastStart - margin,
       };
     },
     [overscanCount, sizeKey]
