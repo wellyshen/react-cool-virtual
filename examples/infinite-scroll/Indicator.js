@@ -22,7 +22,7 @@ const loadData = async ({ loadIndex }, setComments) => {
 
   try {
     // Simulating a slow network
-    await sleep(2500);
+    await sleep(2000);
 
     const { data: comments } = await axios(
       `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
