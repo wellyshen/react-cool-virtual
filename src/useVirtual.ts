@@ -127,7 +127,7 @@ export default <
 
       if (hasDynamicSizeRef.current) {
         while (
-          vStart < msData.length &&
+          vStart < itemCount &&
           msData[vStart].start < (msData[vStart + 1]?.start || 0) &&
           msData[vStart].start + msData[vStart].size < scrollOffset
         )
@@ -135,7 +135,7 @@ export default <
       } else {
         vStart = findNearestBinarySearch(
           0,
-          msData.length - 1,
+          itemCount - 1,
           scrollOffset,
           (idx) => msData[idx].start
         );
@@ -145,7 +145,7 @@ export default <
       let currStart = msData[vStop].start;
 
       while (
-        vStop < msData.length &&
+        vStop < itemCount &&
         currStart < scrollOffset + outerRectRef.current[sizeKey]
       ) {
         currStart += msData[vStop].size;
@@ -153,11 +153,11 @@ export default <
       }
 
       const oStart = Math.max(vStart - overscanCount, 0);
-      const oStop = Math.min(vStop + overscanCount, msData.length) - 1;
+      const oStop = Math.min(vStop + overscanCount, itemCount) - 1;
       const margin = msData[oStart].start;
-      const lastStart = Math[oStop < msData.length - 1 ? "max" : "min"](
+      const lastStart = Math[oStop < itemCount - 1 ? "max" : "min"](
         msData[oStop].end + msData[oStop].size,
-        msData[msData.length - 1].start
+        msData[itemCount - 1].start
       );
 
       return {
@@ -169,7 +169,7 @@ export default <
         innerSize: lastStart - margin,
       };
     },
-    [overscanCount, sizeKey]
+    [itemCount, overscanCount, sizeKey]
   );
 
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
@@ -231,7 +231,7 @@ export default <
               // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
               const measuredSize = target.getBoundingClientRect()[sizeKey];
 
-              if (!outerRef.current || !measuredSize) {
+              if (!measuredSize) {
                 ro.disconnect();
                 rosRef.current.delete(target);
                 return;
@@ -241,7 +241,7 @@ export default <
 
               if (measuredSize !== size || start !== prevEnd) {
                 if (i < prevItemIdxRef.current && start < scrollOffset)
-                  outerRef.current[scrollKey] =
+                  outerRef.current![scrollKey] =
                     scrollOffset + measuredSize - size;
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
@@ -418,14 +418,14 @@ export default <
       const { width, height } = outerRectRef.current;
       const isSameW = width === rect.width;
       const isSameS = isSameW && height === rect.height;
-      const prevTotalS = msDataRef.current[msDataRef.current.length - 1]?.end;
+      const prevTotalS = msDataRef.current[itemCount - 1]?.end;
 
       outerRectRef.current = rect;
-      measureItems(hasDynamicSizeRef.current || isSameS);
+      measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
 
       if (!hasDynamicSizeRef.current && !isSameW) {
-        const totalS = msDataRef.current[msDataRef.current.length - 1]?.end;
+        const totalS = msDataRef.current[itemCount - 1]?.end;
         const ratio = totalS / prevTotalS || 1;
 
         outerRef.current[scrollKey] = scrollOffsetRef.current * ratio;
