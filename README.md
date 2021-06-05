@@ -37,8 +37,6 @@ React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virt
 
 ## Docs
 
-Frequently viewed docs:
-
 - [Getting Started](#getting-started)
 - [Examples](#examples)
 - [API](#api)
