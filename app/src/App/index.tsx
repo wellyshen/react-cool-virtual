@@ -105,6 +105,7 @@ import styles from "./styles.module.scss";
 const sleep = (time: number) =>
   // eslint-disable-next-line compat/compat
   new Promise((resolve) => setTimeout(resolve, time));
+  
 const getMockData = (count: number, min = 25) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
@@ -112,7 +113,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 100),
   }));
 
-const mockData = getMockData(30);
+const mockData = getMockData(10);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(50);
@@ -121,7 +122,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    overscanCount: 2,
+    overscanCount: 0,
   });
 
   return (
@@ -132,8 +133,8 @@ export default (): JSX.Element => {
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${index === 1 ? sz : size}px` }}
+              style={{ height: `${mockData[index].size}px` }}
+              // style={{ height: `${index === 1 ? sz : size}px` }}
               ref={measureRef}
             >
               {index}
