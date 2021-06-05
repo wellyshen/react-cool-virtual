@@ -415,24 +415,24 @@ export default <
   useResizeEffect<O>(
     outerRef,
     (rect) => {
-      const isSameW = outerRectRef.current.width === rect.width;
-      const isSameH = outerRectRef.current.height === rect.height;
-      const prevTotalSize =
-        msDataRef.current[msDataRef.current.length - 1]?.end;
+      const { width, height } = outerRectRef.current;
+      const isSameW = width === rect.width;
+      const isSameS = isSameW && height === rect.height;
+      const prevTotalS = msDataRef.current[msDataRef.current.length - 1]?.end;
 
       outerRectRef.current = rect;
-      measureItems(hasDynamicSizeRef.current || isSameW);
+      measureItems(hasDynamicSizeRef.current || isSameS);
       handleScroll(scrollOffsetRef.current);
 
-      if (isMountedRef.current && (!isSameW || !isSameH) && onResizeRef.current)
+      if (!hasDynamicSizeRef.current && !isSameW) {
+        const totalS = msDataRef.current[msDataRef.current.length - 1]?.end;
+        const ratio = totalS / prevTotalS;
+
+        if (ratio) scrollTo(scrollOffsetRef.current * ratio);
+      }
+
+      if (isMountedRef.current && !isSameS && onResizeRef.current)
         onResizeRef.current(rect);
-
-      if (hasDynamicSizeRef.current || isSameW) return;
-
-      const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
-      const ratio = totalSize / prevTotalSize;
-
-      if (ratio) scrollTo(scrollOffsetRef.current * ratio);
 
       isMountedRef.current = true;
     },
