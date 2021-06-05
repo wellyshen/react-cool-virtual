@@ -109,15 +109,15 @@ export default <
 
   const measureItems = useCallback(
     (useCache = true) => {
-      const measures: Measure[] = [];
+      msDataRef.current.length = itemCount;
 
       for (let i = 0; i < itemCount; i += 1)
-        measures[i] = getMeasure(
+        msDataRef.current[i] = getMeasure(
           i,
-          (useCache && msDataRef.current[i]?.size) ?? getItemSize(i)
+          useCache && msDataRef.current[i]
+            ? msDataRef.current[i].size
+            : getItemSize(i)
         );
-
-      msDataRef.current = measures;
     },
     [getItemSize, getMeasure, itemCount]
   );
@@ -157,9 +157,9 @@ export default <
       const oStart = Math.max(vStart - overscanCount, 0);
       const oStop = Math.min(vStop + overscanCount, msData.length) - 1;
       const margin = msData[oStart].start;
-      const lastStart = Math[oStop < msData.length - 1 ? "max" : "min"](
+      const totalSize = Math[oStop < msData.length - 1 ? "max" : "min"](
         msData[oStop].end + msData[oStop].size,
-        msData[msData.length - 1].start
+        msData[msData.length - 1].end
       );
 
       return {
@@ -168,7 +168,7 @@ export default <
         vStart,
         vStop: vStop - 1,
         margin,
-        innerSize: lastStart - margin,
+        innerSize: totalSize - margin,
       };
     },
     [overscanCount, sizeKey]
@@ -230,8 +230,10 @@ export default <
 
       if (hasDynamicSizeRef.current) measureItems();
 
-      const { current: msData } = msDataRef;
-      const ms = msData[Math.max(0, Math.min(index, msData.length - 1))];
+      const ms =
+        msDataRef.current[
+          Math.max(0, Math.min(index, msDataRef.current.length - 1))
+        ];
 
       if (!ms) return;
 
@@ -422,22 +424,23 @@ export default <
     outerRef,
     (rect) => {
       const { width, height } = outerRectRef.current;
-      const isSameW = width === rect.width;
-      const isSameS = isSameW && height === rect.height;
-      const prevTotalS = msDataRef.current[msDataRef.current.length - 1]?.end;
+      const isSameWidth = width === rect.width;
+      const isSameSize = isSameWidth && height === rect.height;
+      const prevTotalSize =
+        msDataRef.current[msDataRef.current.length - 1]?.end;
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
 
-      if (!hasDynamicSizeRef.current && !isSameW) {
-        const totalS = msDataRef.current[msDataRef.current.length - 1]?.end;
-        const ratio = totalS / prevTotalS || 1;
+      if (!hasDynamicSizeRef.current && !isSameWidth) {
+        const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
+        const ratio = totalSize / prevTotalSize || 1;
 
         scrollToOffset(scrollOffsetRef.current * ratio);
       }
 
-      if (isMountedRef.current && !isSameS && onResizeRef.current)
+      if (isMountedRef.current && !isSameSize && onResizeRef.current)
         onResizeRef.current(rect);
 
       isMountedRef.current = true;
