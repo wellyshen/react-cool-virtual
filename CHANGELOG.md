@@ -1,5 +1,13 @@
 # react-cool-virtual
 
+## 0.1.3
+
+### Patch Changes
+
+- [#119](https://github.com/wellyshen/react-cool-virtual/pull/119) [`0f8618c`](https://github.com/wellyshen/react-cool-virtual/commit/0f8618c242bfd5bd468c386ee57eb42c91c495c9) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: app crash when working with lazily loading
+
+* [#121](https://github.com/wellyshen/react-cool-virtual/pull/121) [`554093a`](https://github.com/wellyshen/react-cool-virtual/commit/554093aead432a804aa6d34ac229ea19d3e71230) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: dynamic size scroll jumping
+
 ## 0.1.2
 
 ### Patch Changes
