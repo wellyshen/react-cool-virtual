@@ -272,13 +272,8 @@ export default <
     DEBOUNCE_INTERVAL
   );
 
-  const [resetOthers, cancelResetOthers] = useDebounce(() => {
+  const [resetUserScroll, cancelResetUserScroll] = useDebounce(() => {
     userScrollRef.current = true;
-
-    const len = rosRef.current.size - items.length;
-    const iter = rosRef.current[Symbol.iterator]();
-    for (let i = 0; i < len; i += 1)
-      rosRef.current.delete(iter.next().value[0]);
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
@@ -332,6 +327,7 @@ export default <
 
               if (!measuredSize) {
                 ro.disconnect();
+                rosRef.current.delete(target);
                 return;
               }
 
@@ -394,7 +390,7 @@ export default <
       prevVStopRef.current = vStop;
 
       if (uxScrolling) resetIsScrolling();
-      resetOthers();
+      if (!userScrollRef.current) resetUserScroll();
     },
     [
       getCalcData,
@@ -405,7 +401,7 @@ export default <
       marginKey,
       onScrollRef,
       resetIsScrolling,
-      resetOthers,
+      resetUserScroll,
       scrollTo,
       sizeKey,
     ]
@@ -461,7 +457,7 @@ export default <
 
     return () => {
       cancelResetIsScrolling();
-      cancelResetOthers();
+      cancelResetUserScroll();
       if (scrollToRafRef.current) {
         cancelAnimationFrame(scrollToRafRef.current);
         scrollToRafRef.current = undefined;
@@ -474,7 +470,7 @@ export default <
     };
   }, [
     cancelResetIsScrolling,
-    cancelResetOthers,
+    cancelResetUserScroll,
     handleScroll,
     scrollKey,
     useIsScrollingRef,
