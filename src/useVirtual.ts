@@ -73,7 +73,7 @@ export default <
   const hasDynamicSizeRef = useRef(false);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
-  const prevMeasureIdxRef = useRef(-1);
+  const prevItemIdxRef = useRef(-1);
   const prevVStopRef = useRef<number>();
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
@@ -338,7 +338,7 @@ export default <
               const prevEnd = msData[i - 1]?.end || 0;
 
               if (measuredSize !== size || start !== prevEnd) {
-                if (i < prevMeasureIdxRef.current && start < scrollOffset)
+                if (i < prevItemIdxRef.current && start < scrollOffset)
                   scrollTo(scrollOffset + measuredSize - size);
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
@@ -347,7 +347,7 @@ export default <
                 hasDynamicSizeRef.current = true;
               }
 
-              prevMeasureIdxRef.current = i;
+              prevItemIdxRef.current = i;
 
               rosRef.current.get(target)?.disconnect();
               rosRef.current.set(target, ro);
