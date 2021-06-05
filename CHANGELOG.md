@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.1.2
+
+### Patch Changes
+
+- [#109](https://github.com/wellyshen/react-cool-virtual/pull/109) [`49f991e`](https://github.com/wellyshen/react-cool-virtual/commit/49f991ea06738b8b1b676ede4d364b66405fd753) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: only triggers `onResize` event when width or height changes
+
 ## 0.1.1
 
 ### Patch Changes
