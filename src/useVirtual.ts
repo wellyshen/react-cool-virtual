@@ -103,19 +103,21 @@ export default <
   );
 
   const getMeasure = useCallback((idx: number, size: number): Measure => {
-    const start = msDataRef.current[idx - 1]?.end || 0;
+    const start = msDataRef.current[idx - 1]?.end ?? 0;
     return { idx, start, end: start + size, size };
   }, []);
 
   const measureItems = useCallback(
     (useCache = true) => {
+      const measures: Measure[] = [];
+
       for (let i = 0; i < itemCount; i += 1)
-        msDataRef.current[i] = getMeasure(
+        measures[i] = getMeasure(
           i,
-          useCache && msDataRef.current[i]
-            ? msDataRef.current[i].size
-            : getItemSize(i)
+          (useCache && msDataRef.current[i]?.size) ?? getItemSize(i)
         );
+
+      msDataRef.current = measures;
     },
     [getItemSize, getMeasure, itemCount]
   );
@@ -127,15 +129,15 @@ export default <
 
       if (hasDynamicSizeRef.current) {
         while (
-          vStart < itemCount &&
-          msData[vStart].start < (msData[vStart + 1]?.start || 0) &&
+          vStart < msData.length &&
+          msData[vStart].start < (msData[vStart + 1]?.start ?? 0) &&
           msData[vStart].start + msData[vStart].size < scrollOffset
         )
           vStart += 1;
       } else {
         vStart = findNearestBinarySearch(
           0,
-          itemCount - 1,
+          msData.length - 1,
           scrollOffset,
           (idx) => msData[idx].start
         );
@@ -145,7 +147,7 @@ export default <
       let currStart = msData[vStop].start;
 
       while (
-        vStop < itemCount &&
+        vStop < msData.length &&
         currStart < scrollOffset + outerRectRef.current[sizeKey]
       ) {
         currStart += msData[vStop].size;
@@ -153,11 +155,11 @@ export default <
       }
 
       const oStart = Math.max(vStart - overscanCount, 0);
-      const oStop = Math.min(vStop + overscanCount, itemCount) - 1;
+      const oStop = Math.min(vStop + overscanCount, msData.length) - 1;
       const margin = msData[oStart].start;
-      const lastStart = Math[oStop < itemCount - 1 ? "max" : "min"](
+      const lastStart = Math[oStop < msData.length - 1 ? "max" : "min"](
         msData[oStop].end + msData[oStop].size,
-        msData[itemCount - 1].start
+        msData[msData.length - 1].start
       );
 
       return {
@@ -169,7 +171,7 @@ export default <
         innerSize: lastStart - margin,
       };
     },
-    [itemCount, overscanCount, sizeKey]
+    [overscanCount, sizeKey]
   );
 
   const scrollToOffset = useCallback(
@@ -228,7 +230,8 @@ export default <
 
       if (hasDynamicSizeRef.current) measureItems();
 
-      const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
+      const { current: msData } = msDataRef;
+      const ms = msData[Math.max(0, Math.min(index, msData.length - 1))];
 
       if (!ms) return;
 
@@ -271,7 +274,7 @@ export default <
         }
       });
     },
-    [itemCount, measureItems, scrollTo, sizeKey]
+    [measureItems, scrollTo, sizeKey]
   );
 
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
@@ -339,7 +342,7 @@ export default <
                 return;
               }
 
-              const prevEnd = msData[i - 1]?.end || 0;
+              const prevEnd = msData[i - 1]?.end ?? 0;
 
               if (measuredSize !== size || start !== prevEnd) {
                 if (i < prevItemIdxRef.current && start < scrollOffset)
@@ -421,14 +424,14 @@ export default <
       const { width, height } = outerRectRef.current;
       const isSameW = width === rect.width;
       const isSameS = isSameW && height === rect.height;
-      const prevTotalS = msDataRef.current[itemCount - 1]?.end;
+      const prevTotalS = msDataRef.current[msDataRef.current.length - 1]?.end;
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
 
       if (!hasDynamicSizeRef.current && !isSameW) {
-        const totalS = msDataRef.current[itemCount - 1]?.end;
+        const totalS = msDataRef.current[msDataRef.current.length - 1]?.end;
         const ratio = totalS / prevTotalS || 1;
 
         scrollToOffset(scrollOffsetRef.current * ratio);
@@ -439,7 +442,7 @@ export default <
 
       isMountedRef.current = true;
     },
-    [handleScroll, itemCount, measureItems, onResizeRef, scrollToOffset]
+    [itemCount, handleScroll, measureItems, onResizeRef, scrollToOffset]
   );
 
   useIsoLayoutEffect(() => {
