@@ -69,8 +69,8 @@ export default <
   const [items, setItems] = useState<Item[]>(() =>
     getInitItems(itemSize, ssrItemCount)
   );
-  const isMountedRef = useRef(false);
   const hasDynamicSizeRef = useRef(false);
+  const hasLoadMoreOnMountRef = useRef(false);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
   const prevMeasureIdxRef = useRef(-1);
@@ -287,7 +287,7 @@ export default <
 
       if (
         loadMoreRef.current &&
-        !isMountedRef.current &&
+        !hasLoadMoreOnMountRef.current &&
         !(isItemLoadedRef.current && isItemLoadedRef.current(0))
       )
         loadMoreRef.current({
@@ -297,6 +297,8 @@ export default <
           scrollOffset,
           userScroll: userScrollRef.current,
         });
+
+      hasLoadMoreOnMountRef.current = true;
 
       if (!itemCount) {
         setItems([]);
@@ -414,26 +416,22 @@ export default <
   useResizeEffect<O>(
     outerRef,
     (rect) => {
-      const isSameW = outerRectRef.current.width === rect.width;
-      const isSameH = outerRectRef.current.height === rect.height;
+      const isSameWidth = outerRectRef.current.width === rect.width;
       const prevTotalSize =
         msDataRef.current[msDataRef.current.length - 1]?.end;
 
       outerRectRef.current = rect;
-      measureItems(hasDynamicSizeRef.current || isSameW);
+      measureItems(hasDynamicSizeRef.current || isSameWidth);
       handleScroll(scrollOffsetRef.current);
 
-      if (!isMountedRef.current && !(isSameW || isSameH) && onResizeRef.current)
-        onResizeRef.current(rect);
+      if (onResizeRef.current) onResizeRef.current(rect);
 
-      if (hasDynamicSizeRef.current || isSameW) return;
+      if (hasDynamicSizeRef.current || isSameWidth) return;
 
       const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
       const ratio = totalSize / prevTotalSize;
 
       if (ratio) scrollTo(scrollOffsetRef.current * ratio);
-
-      isMountedRef.current = true;
     },
     [itemCount, handleScroll, measureItems, onResizeRef, scrollTo]
   );
