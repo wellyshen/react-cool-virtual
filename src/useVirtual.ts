@@ -181,10 +181,7 @@ export default <
         ? { offset: val }
         : val;
 
-      if (!isNumber(offset) || offset === prevOffset) {
-        if (cb) cb();
-        return;
-      }
+      if (!isNumber(offset)) return;
 
       userScrollRef.current = false;
 
@@ -330,7 +327,7 @@ export default <
               // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
               const measuredSize = target.getBoundingClientRect()[sizeKey];
 
-              if (!measuredSize) {
+              if (!outerRef.current || !measuredSize) {
                 ro.disconnect();
                 rosRef.current.delete(target);
                 return;
@@ -340,7 +337,8 @@ export default <
 
               if (measuredSize !== size || start !== prevEnd) {
                 if (i < prevItemIdxRef.current && start < scrollOffset)
-                  scrollTo(scrollOffset + measuredSize - size);
+                  outerRef.current[scrollKey] =
+                    scrollOffset + measuredSize - size;
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(scrollOffset, isScrolling, uxScrolling);
@@ -407,7 +405,7 @@ export default <
       onScrollRef,
       resetIsScrolling,
       resetUserScroll,
-      scrollTo,
+      scrollKey,
       sizeKey,
     ]
   );
@@ -415,6 +413,8 @@ export default <
   useResizeEffect<O>(
     outerRef,
     (rect) => {
+      if (!outerRef.current) return;
+
       const { width, height } = outerRectRef.current;
       const isSameW = width === rect.width;
       const isSameS = isSameW && height === rect.height;
@@ -426,9 +426,9 @@ export default <
 
       if (!hasDynamicSizeRef.current && !isSameW) {
         const totalS = msDataRef.current[msDataRef.current.length - 1]?.end;
-        const ratio = totalS / prevTotalS;
+        const ratio = totalS / prevTotalS || 1;
 
-        if (ratio) scrollTo(scrollOffsetRef.current * ratio);
+        outerRef.current[scrollKey] = scrollOffsetRef.current * ratio;
       }
 
       if (isMountedRef.current && !isSameS && onResizeRef.current)
@@ -436,7 +436,7 @@ export default <
 
       isMountedRef.current = true;
     },
-    [itemCount, handleScroll, measureItems, onResizeRef, scrollTo]
+    [itemCount, handleScroll, measureItems, onResizeRef, scrollKey]
   );
 
   useIsoLayoutEffect(() => {
@@ -446,6 +446,9 @@ export default <
 
     const scrollHandler = ({ target }: Event) => {
       const scrollOffset = (target as O)[scrollKey];
+
+      if (scrollOffset === scrollOffsetRef.current) return;
+
       let { current: uxScrolling } = useIsScrollingRef;
       uxScrolling =
         typeof uxScrolling === "function"
