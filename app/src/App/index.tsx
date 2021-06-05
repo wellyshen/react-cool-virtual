@@ -1,92 +1,152 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
-
-import { useState, forwardRef } from "react";
+/* import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
-import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
+import "normalize.css";
 import styles from "./styles.module.scss";
 
-const AccordionItem = forwardRef(({ height, ...rest }: any, ref: any) => {
-  const [h, setH] = useState<number>(height);
+const sleep = (time: number) =>
+  // eslint-disable-next-line compat/compat
+  new Promise((resolve) => setTimeout(resolve, time));
 
-  return (
-    <div
-      {...rest}
-      style={{ height: `${h}px`, cursor: "pointer", padding: "0" }}
-      ref={ref}
-      onClick={() => setH((prevH) => (prevH === 120 ? 240 : 120))}
-    >
-      🪗 Real-time resize
-    </div>
-  );
-});
+const getMockData = (count: number, min = 25) =>
+  // eslint-disable-next-line no-plusplus
+  new Array(count).fill({}).map((_, idx) => ({
+    text: uuidv4(),
+    size: min + Math.round(Math.random() * 100),
+  }));
 
-// eslint-disable-next-line compat/compat
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const rowHeights = getMockData(100000);
+const colWidths = getMockData(100000, 75);
 
-const isItemLoadedArr: any[] = [];
-
-export default () => {
-  const [outerSize, setOutersize] = useState<{
-    width?: number;
-    height?: number;
-  }>({});
-  const [comments, setComments] = useState<any[]>([]);
-  const { outerRef, innerRef, items } = useVirtual<
-    HTMLDivElement,
-    HTMLDivElement
-  >({
-    itemCount: 60,
-    itemSize: 120,
-    loadMoreCount: 5,
-    isItemLoaded: (idx) => isItemLoadedArr[idx],
-    loadMore: async ({ loadIndex }) => {
-      if (loadIndex >= 10) return;
-
-      isItemLoadedArr[loadIndex] = true;
-
-      await sleep(2000);
-      const { data } = await axios(
-        `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
-      );
-
-      setComments((prevComments) => [...prevComments, ...data]);
-    },
-    onResize: setOutersize,
+export default (): JSX.Element => {
+  const [sz, setSz] = useState(25);
+  const row = useVirtual<HTMLDivElement, HTMLDivElement>({
+    itemCount: rowHeights.length,
+    onResize: (size: any) => console.log("LOG ===> ", size),
+  });
+  const col = useVirtual<HTMLDivElement, HTMLDivElement>({
+    itemCount: colWidths.length,
+    horizontal: true,
   });
 
   return (
     <div className={styles.app}>
-      {Object.keys(outerSize).length ? (
-        <p>
-          Container size: {Math.floor(outerSize.width || 0)} x{" "}
-          {Math.floor(outerSize.height || 0)}
-        </p>
-      ) : null}
-      <div className={styles.outer} ref={outerRef}>
-        <div ref={innerRef}>
-          {items.map(({ index, size, measureRef }) =>
-            index <= 49 ? (
-              <div
-                key={index}
-                className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-                ref={measureRef}
-              >
-                {comments[index]
-                  ? `${comments[index].id}. ${comments[index].body}`
-                  : "⏳ Loading..."}
-              </div>
-            ) : (
-              <AccordionItem
-                key={index}
-                className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-                height={size}
-                ref={measureRef}
-              />
-            )
-          )}
+      <div
+        className={styles.outer}
+        ref={(el) => {
+          row.outerRef.current = el;
+          col.outerRef.current = el;
+        }}
+      >
+        <div
+          style={{ position: "relative" }}
+          ref={(el) => {
+            row.innerRef.current = el;
+            col.innerRef.current = el;
+          }}
+        >
+          {row.items.map((rowItem) => (
+            <Fragment key={rowItem.index}>
+              {col.items.map((colItem) => (
+                <div
+                  key={colItem.index}
+                  className={`${styles.item} ${
+                    // eslint-disable-next-line no-nested-ternary
+                    rowItem.index % 2
+                      ? colItem.index % 2
+                        ? styles.dark
+                        : ""
+                      : !(colItem.index % 2)
+                      ? styles.dark
+                      : ""
+                  }`}
+                  style={{
+                    position: "absolute",
+                    height: `${rowHeights[rowItem.index].size}px`,
+                    width: `${colWidths[colItem.index].size}px`,
+                    // height: `${
+                    //   rowItem.index ? rowHeights[rowItem.index].size : sz
+                    // }px`,
+                    // width: `${
+                    //   colItem.index ? colWidths[colItem.index].size : sz
+                    // }px`,
+                    transform: `translateX(${colItem.start}px) translateY(${rowItem.start}px)`,
+                  }}
+                  ref={(el) => {
+                    rowItem.measureRef(el);
+                    colItem.measureRef(el);
+                  }}
+                >
+                  {rowItem.index}, {colItem.index}
+                </div>
+              ))}
+            </Fragment>
+          ))}
         </div>
       </div>
+      <button
+        type="button"
+        onClick={() => setSz((prev) => (prev === 25 ? 250 : 25))}
+      >
+        Resize
+      </button>
+    </div>
+  );
+}; */
+
+import { useState } from "react";
+import useVirtual from "react-cool-virtual";
+import { v4 as uuidv4 } from "uuid";
+
+import "normalize.css";
+import styles from "./styles.module.scss";
+
+const sleep = (time: number) =>
+  // eslint-disable-next-line compat/compat
+  new Promise((resolve) => setTimeout(resolve, time));
+const getMockData = (count: number, min = 25) =>
+  // eslint-disable-next-line no-plusplus
+  new Array(count).fill({}).map((_, idx) => ({
+    text: uuidv4(),
+    size: min + Math.round(Math.random() * 100),
+  }));
+
+const mockData = getMockData(30);
+
+export default (): JSX.Element => {
+  const [sz, setSz] = useState(50);
+  const { outerRef, innerRef, items } = useVirtual<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    itemCount: mockData.length,
+    overscanCount: 2,
+  });
+
+  return (
+    <div className={styles.app}>
+      <div className={styles.outer} ref={outerRef}>
+        <div style={{ position: "relative" }} ref={innerRef}>
+          {items.map(({ index, size, isScrolling, measureRef }) => (
+            <div
+              key={index}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              // style={{ height: `${mockData[index].size}px` }}
+              style={{ height: `${index === 1 ? sz : size}px` }}
+              ref={measureRef}
+            >
+              {index}
+            </div>
+          ))}
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() => setSz((prev) => (prev === 50 ? 200 : 50))}
+      >
+        Resize
+      </button>
     </div>
   );
 };
