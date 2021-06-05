@@ -74,9 +74,9 @@ export default <
   const hasDynamicSizeRef = useRef(false);
   const roRef = useRef<ResizeObserver>();
   const itemDataRef = useRef<ItemData>(new Map());
-  const scrollOffsetRef = useRef(0);
-  const prevMeasureIdxRef = useRef(-1);
+  const prevItemIdxRef = useRef(-1);
   const prevVStopRef = useRef<number>();
+  const scrollOffsetRef = useRef(0);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
@@ -277,10 +277,10 @@ export default <
   const [resetOthers, cancelResetOthers] = useDebounce(() => {
     userScrollRef.current = true;
 
-    const len = itemDataRef.current.size - items.length;
+    /* const len = itemDataRef.current.size - items.length;
     const iter = itemDataRef.current[Symbol.iterator]();
     for (let i = 0; i < len; i += 1)
-      itemDataRef.current.delete(iter.next().value[0]);
+      itemDataRef.current.delete(iter.next().value[0]); */
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
@@ -423,6 +423,38 @@ export default <
 
     if (!outer) return () => null;
 
+    // eslint-disable-next-line compat/compat
+    roRef.current = new ResizeObserver((entries, ro) =>
+      entries.forEach(({ target }, i) => {
+        // NOTE: Use `borderBoxSize` when it's supported by Safari
+        // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
+        const measuredSize = target.getBoundingClientRect()[sizeKey];
+
+        if (!measuredSize) {
+          itemDataRef.current.delete(target);
+          ro.unobserve(target);
+          return;
+        }
+
+        const { idx, scrollOffset, isScrolling, uxScrolling } =
+          itemDataRef.current.get(target)!;
+        const { start, size } = msDataRef.current[idx];
+        const prevEnd = msDataRef.current[idx - 1]?.end || 0;
+
+        if (measuredSize !== size || start !== prevEnd) {
+          if (idx < prevItemIdxRef.current && start < scrollOffset)
+            scrollTo(scrollOffset + measuredSize - size);
+
+          msDataRef.current[idx] = getMeasure(idx, measuredSize);
+          handleScroll(scrollOffset, isScrolling, uxScrolling);
+
+          hasDynamicSizeRef.current = true;
+        }
+
+        prevItemIdxRef.current = idx;
+      })
+    );
+
     const scrollHandler = ({ target }: Event) => {
       const scrollOffset = (target as O)[scrollKey];
       let { current: uxScrolling } = useIsScrollingRef;
@@ -437,39 +469,6 @@ export default <
 
     outer.addEventListener("scroll", scrollHandler, { passive: true });
 
-    // eslint-disable-next-line compat/compat
-    roRef.current = new ResizeObserver((entries, ro) =>
-      entries.forEach(({ target }) => {
-        // NOTE: Use `borderBoxSize` when it's supported by Safari
-        // see: https://caniuse.com/mdn-api_resizeobserverentry_borderboxsize
-        const measuredSize = target.getBoundingClientRect()[sizeKey];
-
-        if (!measuredSize) {
-          ro.unobserve(target);
-          return;
-        }
-
-        const { idx, scrollOffset, isScrolling, uxScrolling } =
-          itemDataRef.current.get(target)!;
-        const { start, size } = msDataRef.current[idx];
-        const prevEnd = msDataRef.current[idx - 1]?.end || 0;
-
-        if (measuredSize !== size || start !== prevEnd) {
-          if (idx < prevMeasureIdxRef.current && start < scrollOffset)
-            scrollTo(scrollOffset + measuredSize - size);
-
-          msDataRef.current[idx] = getMeasure(idx, measuredSize);
-          handleScroll(scrollOffset, isScrolling, uxScrolling);
-
-          hasDynamicSizeRef.current = true;
-        }
-
-        prevMeasureIdxRef.current = idx;
-      })
-    );
-
-    const itemData = itemDataRef.current;
-
     return () => {
       cancelResetIsScrolling();
       cancelResetOthers();
@@ -478,10 +477,10 @@ export default <
         scrollToRafRef.current = undefined;
       }
 
-      outer.removeEventListener("scroll", scrollHandler);
       roRef.current?.disconnect();
+      roRef.current = undefined;
 
-      itemData.clear();
+      outer.removeEventListener("scroll", scrollHandler);
     };
   }, [
     cancelResetIsScrolling,
