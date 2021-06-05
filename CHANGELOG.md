@@ -1,5 +1,21 @@
 # react-cool-virtual
 
+## 0.1.2
+
+### Patch Changes
+
+- [#112](https://github.com/wellyshen/react-cool-virtual/pull/112) [`6bf99a3`](https://github.com/wellyshen/react-cool-virtual/commit/6bf99a308166884299c639e1797b34acd2692f0c) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: only triggers `onResize` event when width or height changes
+
+* [#116](https://github.com/wellyshen/react-cool-virtual/pull/116) [`86fc48d`](https://github.com/wellyshen/react-cool-virtual/commit/86fc48dd66ae210af613e2ef5640af7c10969f38) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: re-calculate items when the size of outer element changes
+
+- [#114](https://github.com/wellyshen/react-cool-virtual/pull/114) [`5d44bf0`](https://github.com/wellyshen/react-cool-virtual/commit/5d44bf078ed23f1ec7dec6ce37c4784f8bcd521e) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor: destroy previous resize observer from its callback
+
+* [#117](https://github.com/wellyshen/react-cool-virtual/pull/117) [`1c98a21`](https://github.com/wellyshen/react-cool-virtual/commit/1c98a21cf509fd526bbdf5800309e89a7ade3e12) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: the side-effect of triggering `scrollTo` method
+
+- [#115](https://github.com/wellyshen/react-cool-virtual/pull/115) [`9117692`](https://github.com/wellyshen/react-cool-virtual/commit/9117692618c3f6b83b3b661115643d2b3e44d403) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: wrong item range when `overscanCount` option set to zero
+
+* [#118](https://github.com/wellyshen/react-cool-virtual/pull/118) [`bf877cd`](https://github.com/wellyshen/react-cool-virtual/commit/bf877cd8502f6b97f28683349d6096096f285bac) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: items not updated when `itemCount` changed
+
 ## 0.1.1
 
 ### Patch Changes
