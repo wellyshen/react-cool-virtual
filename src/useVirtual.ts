@@ -172,102 +172,6 @@ export default <
     [overscanCount, sizeKey]
   );
 
-  const scrollTo = useCallback<ScrollTo>(
-    (val, cb) => {
-      if (!outerRef.current) return;
-
-      const { current: prevOffset } = scrollOffsetRef;
-      const { offset, smooth }: ScrollToOptions = isNumber(val)
-        ? { offset: val }
-        : val;
-
-      if (!isNumber(offset)) return;
-
-      userScrollRef.current = false;
-
-      if (!smooth) {
-        outerRef.current[scrollKey] = offset;
-        if (cb) cb();
-        return;
-      }
-
-      const start = now();
-      const scroll = () => {
-        const time = Math.min((now() - start) / scrollDuration, 1);
-
-        outerRef.current![scrollKey] =
-          easingFnRef.current(time) * (offset - prevOffset) + prevOffset;
-
-        if (time < 1) {
-          scrollToRafRef.current = requestAnimationFrame(scroll);
-        } else if (cb) {
-          cb();
-        }
-      };
-
-      scrollToRafRef.current = requestAnimationFrame(scroll);
-    },
-    [easingFnRef, scrollDuration, scrollKey]
-  );
-
-  const scrollToItem = useCallback<ScrollToItem>(
-    (val, cb) => {
-      const {
-        index,
-        align = Align.auto,
-        smooth,
-      }: ScrollToItemOptions = isNumber(val) ? { index: val } : val;
-
-      if (!isNumber(index)) return;
-
-      if (hasDynamicSizeRef.current) measureItems();
-
-      const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
-
-      if (!ms) return;
-
-      const { start, end, size } = ms;
-      let { current: scrollOffset } = scrollOffsetRef;
-      const outerSize = outerRectRef.current[sizeKey];
-      const endPos = start - outerSize + size;
-
-      switch (align) {
-        case Align.start:
-          scrollOffset = start;
-          break;
-        case Align.center:
-          scrollOffset = start - outerSize / 2 + size / 2;
-          break;
-        case Align.end:
-          scrollOffset = endPos;
-          break;
-        default:
-          if (scrollOffset > start) {
-            scrollOffset = start;
-          } else if (scrollOffset + outerSize < end) {
-            scrollOffset = endPos;
-          }
-      }
-
-      if (
-        hasDynamicSizeRef.current &&
-        Math.abs(scrollOffset - scrollOffsetRef.current) <= 1
-      ) {
-        if (cb) cb();
-        return;
-      }
-
-      scrollTo({ offset: scrollOffset, smooth }, () => {
-        if (!hasDynamicSizeRef.current) {
-          if (cb) cb();
-        } else {
-          setTimeout(() => scrollToItem(val, cb));
-        }
-      });
-    },
-    [itemCount, measureItems, scrollTo, sizeKey]
-  );
-
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => handleScroll(scrollOffsetRef.current),
@@ -408,6 +312,102 @@ export default <
       scrollKey,
       sizeKey,
     ]
+  );
+
+  const scrollTo = useCallback<ScrollTo>(
+    (val, cb) => {
+      if (!outerRef.current) return;
+
+      const { current: prevOffset } = scrollOffsetRef;
+      const { offset, smooth }: ScrollToOptions = isNumber(val)
+        ? { offset: val }
+        : val;
+
+      if (!isNumber(offset)) return;
+
+      userScrollRef.current = false;
+
+      if (!smooth) {
+        outerRef.current[scrollKey] = offset;
+        if (cb) cb();
+        return;
+      }
+
+      const start = now();
+      const scroll = () => {
+        const time = Math.min((now() - start) / scrollDuration, 1);
+
+        outerRef.current![scrollKey] =
+          easingFnRef.current(time) * (offset - prevOffset) + prevOffset;
+
+        if (time < 1) {
+          scrollToRafRef.current = requestAnimationFrame(scroll);
+        } else if (cb) {
+          cb();
+        }
+      };
+
+      scrollToRafRef.current = requestAnimationFrame(scroll);
+    },
+    [easingFnRef, scrollDuration, scrollKey]
+  );
+
+  const scrollToItem = useCallback<ScrollToItem>(
+    (val, cb) => {
+      const {
+        index,
+        align = Align.auto,
+        smooth,
+      }: ScrollToItemOptions = isNumber(val) ? { index: val } : val;
+
+      if (!isNumber(index)) return;
+
+      if (hasDynamicSizeRef.current) measureItems();
+
+      const ms = msDataRef.current[Math.max(0, Math.min(index, itemCount - 1))];
+
+      if (!ms) return;
+
+      const { start, end, size } = ms;
+      let { current: scrollOffset } = scrollOffsetRef;
+      const outerSize = outerRectRef.current[sizeKey];
+      const endPos = start - outerSize + size;
+
+      switch (align) {
+        case Align.start:
+          scrollOffset = start;
+          break;
+        case Align.center:
+          scrollOffset = start - outerSize / 2 + size / 2;
+          break;
+        case Align.end:
+          scrollOffset = endPos;
+          break;
+        default:
+          if (scrollOffset > start) {
+            scrollOffset = start;
+          } else if (scrollOffset + outerSize < end) {
+            scrollOffset = endPos;
+          }
+      }
+
+      if (
+        hasDynamicSizeRef.current &&
+        Math.abs(scrollOffset - scrollOffsetRef.current) <= 1
+      ) {
+        if (cb) cb();
+        return;
+      }
+
+      scrollTo({ offset: scrollOffset, smooth }, () => {
+        if (!hasDynamicSizeRef.current) {
+          if (cb) cb();
+        } else {
+          setTimeout(() => scrollToItem(val, cb));
+        }
+      });
+    },
+    [itemCount, measureItems, scrollTo, sizeKey]
   );
 
   useResizeEffect<O>(
