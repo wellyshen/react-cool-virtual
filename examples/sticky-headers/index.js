@@ -34,7 +34,9 @@ const emojis = [
 
 const App = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 24
+    itemCount: 24,
+    // The values must be provided in ascending order
+    stickyIndices: [0, 6, 12, 18]
   });
 
   return (
@@ -51,15 +53,23 @@ const App = () => {
         ref={outerRef}
       >
         <div ref={innerRef}>
-          {items.map(({ index, size }) => (
-            <div
-              key={index}
-              className={`item ${index % 2 ? "dark" : ""}`}
-              style={{ height: `${size}px` }}
-            >
-              {emojis[index]}
-            </div>
-          ))}
+          {items.map(({ index, size, isSticky }) => {
+            let style = { height: `${size}px` };
+            // Use the `isSticky` property to style the sticky item, that's it ✨
+            style = isSticky
+              ? { ...style, position: "sticky", top: "0" }
+              : style;
+
+            return (
+              <div
+                key={index}
+                className={`item ${isSticky ? "sticky" : ""}`}
+                style={style}
+              >
+                {emojis[index]}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
