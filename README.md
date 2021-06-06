@@ -20,7 +20,7 @@
 - 💅🏼 Apply styles without hassle, just [few setups](#basic-usage).
 - 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
 - 🖥 Supports [responsive web design (RWD)](#responsive-web-design-rwd) for better UX.
-- 📌 Supports [sticky items](#sticky-items) for building on-trend lists.
+- 📌 Supports [sticky headers](#sticky-headers) for building on-trend lists.
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to methods](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
@@ -300,9 +300,9 @@ const List = () => {
 
 > 💡 If the item size is specified through the function of `itemSize`, please ensure there's no the [measureRef](#items) on the item element. Otherwise, the hook will use the measured (cached) size for the item. When working with RWD, we can only use either of the two.
 
-### Sticky Items
+### Sticky Headers
 
-This example demonstrates how to make sticky items when using React Cool Virtual.
+This example demonstrates how to make sticky headers when using React Cool Virtual.
 
 [![Edit RCV - Sticky Items](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-sticky-items-si952?fontsize=14&hidenavigation=1&theme=dark)
 
@@ -852,7 +852,7 @@ To enable/disable the [isScrolling](#items) indicator of an item (default = fals
 
 `number[]`
 
-An array of indexes to make certain items in the list sticky. See the [example](#sticky-items) to learn more.
+An array of indexes to make certain items in the list sticky. See the [example](#sticky-headers) to learn more.
 
 - The values must be provided **in ascending order**, i.e. `[0, 10, 20, 30, ...]`.
 
@@ -968,7 +968,7 @@ The virtualized items for rendering rows/columns. Each item is an `object` that 
 | width       | number            | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
 | start       | number            | The starting position of the item. We might only need this when [working with grids](#layout-items).            |
 | isScrolling | true \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
-| isSticky    | true \| undefined | An indicator to make certain items become [sticky in the list](#sticky-items).                                  |
+| isSticky    | true \| undefined | An indicator to make certain items become [sticky in the list](#sticky-headers).                                |
 | measureRef  | Function          | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
 
 ### scrollTo
