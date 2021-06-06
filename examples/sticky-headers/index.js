@@ -29,14 +29,20 @@ const emojis = [
   "🏈",
   "🏀",
   "⚾️",
-  "🎱"
+  "🎱",
+  "Accessories",
+  "☂️",
+  "🧦",
+  "🎒",
+  "🧢",
+  "👟"
 ];
 
 const App = () => {
   const { outerRef, innerRef, items } = useVirtual({
-    itemCount: 24,
+    itemCount: 30,
     // The values must be provided in ascending order
-    stickyIndices: [0, 6, 12, 18]
+    stickyIndices: [0, 6, 12, 18, 24]
   });
 
   return (
