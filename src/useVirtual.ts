@@ -58,6 +58,7 @@ export default <
   horizontal,
   overscanCount = 1,
   useIsScrolling,
+  stickyIndices,
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
   loadMoreCount = 15,
@@ -81,6 +82,7 @@ export default <
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
+  const stickyIndicesRef = useRef(stickyIndices);
   const isItemLoadedRef = useRef(isItemLoaded);
   const loadMoreRef = useLatest(loadMore);
   const easingFnRef = useLatest(scrollEasingFunction);
@@ -363,6 +365,23 @@ export default <
             }).observe(el);
           },
         });
+      }
+
+      if (Array.isArray(stickyIndicesRef.current)) {
+        const stickyIdx =
+          stickyIndicesRef.current[
+            findNearestBinarySearch(
+              0,
+              stickyIndicesRef.current.length - 1,
+              vStart,
+              (idx) => stickyIndicesRef.current![idx],
+              -1
+            )
+          ];
+
+        if (stickyIdx) {
+          // ...
+        }
       }
 
       setItems((prevItems) =>

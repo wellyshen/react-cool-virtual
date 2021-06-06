@@ -1,21 +1,22 @@
 export default (
   low: number,
   high: number,
-  offset: number,
-  getVal: (idx: number) => number
+  target: number,
+  getVal: (idx: number) => number,
+  defaultVal?: number
 ): number => {
   while (low <= high) {
     const mid = ((low + high) / 2) | 0;
     const val = getVal(mid);
 
-    if (offset < val) {
+    if (target < val) {
       high = mid - 1;
-    } else if (offset > val) {
+    } else if (target > val) {
       low = mid + 1;
     } else {
       return mid;
     }
   }
 
-  return low > 0 ? low - 1 : 0;
+  return defaultVal ?? low > 0 ? low - 1 : 0;
 };
