@@ -176,14 +176,14 @@ export default <
     [overscanCount, sizeKey]
   );
 
-  const scrollToOffset = useCallback(
+  const scrollTo = useCallback(
     (offset: number) => {
       if (outerRef.current) outerRef.current[scrollKey] = offset;
     },
     [scrollKey]
   );
 
-  const scrollTo = useCallback<ScrollTo>(
+  const scrollToOffset = useCallback<ScrollTo>(
     (val, cb) => {
       const { current: prevOffset } = scrollOffsetRef;
       const { offset, smooth }: ScrollToOptions = isNumber(val)
@@ -195,7 +195,7 @@ export default <
       userScrollRef.current = false;
 
       if (!smooth) {
-        scrollToOffset(offset);
+        scrollTo(offset);
         if (cb) cb();
 
         return;
@@ -204,9 +204,9 @@ export default <
       const start = now();
       const scroll = () => {
         const time = Math.min((now() - start) / scrollDuration, 1);
-        const effect = easingFnRef.current(time);
+        const easing = easingFnRef.current(time);
 
-        scrollToOffset(effect * (offset - prevOffset) + prevOffset);
+        scrollTo(easing * (offset - prevOffset) + prevOffset);
 
         if (time < 1) {
           scrollToRafRef.current = requestAnimationFrame(scroll);
@@ -217,7 +217,7 @@ export default <
 
       scrollToRafRef.current = requestAnimationFrame(scroll);
     },
-    [easingFnRef, scrollDuration, scrollToOffset]
+    [easingFnRef, scrollDuration, scrollTo]
   );
 
   const scrollToItem = useCallback<ScrollToItem>(
@@ -270,7 +270,7 @@ export default <
         return;
       }
 
-      scrollTo({ offset: scrollOffset, smooth }, () => {
+      scrollToOffset({ offset: scrollOffset, smooth }, () => {
         if (!hasDynamicSizeRef.current) {
           if (cb) cb();
         } else {
@@ -278,7 +278,7 @@ export default <
         }
       });
     },
-    [measureItems, scrollTo, sizeKey]
+    [measureItems, scrollToOffset, sizeKey]
   );
 
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
@@ -354,7 +354,7 @@ export default <
 
               if (measuredSize !== size || start !== prevEnd) {
                 if (i < prevItemIdxRef.current && start < scrollOffset)
-                  scrollToOffset(scrollOffset + measuredSize - size);
+                  scrollTo(scrollOffset + measuredSize - size);
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 handleScroll(scrollOffset, isScrolling, uxScrolling);
@@ -450,7 +450,7 @@ export default <
       onScrollRef,
       resetIsScrolling,
       resetUserScroll,
-      scrollToOffset,
+      scrollTo,
       sizeKey,
     ]
   );
@@ -472,7 +472,7 @@ export default <
         const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
         const ratio = totalSize / prevTotalSize || 1;
 
-        scrollToOffset(scrollOffsetRef.current * ratio);
+        scrollTo(scrollOffsetRef.current * ratio);
       }
 
       if (isMountedRef.current && !isSameSize && onResizeRef.current)
@@ -480,7 +480,7 @@ export default <
 
       isMountedRef.current = true;
     },
-    [itemCount, handleScroll, measureItems, onResizeRef, scrollToOffset]
+    [itemCount, handleScroll, measureItems, onResizeRef, scrollTo]
   );
 
   useIsoLayoutEffect(() => {
@@ -528,5 +528,5 @@ export default <
     useIsScrollingRef,
   ]);
 
-  return { outerRef, innerRef, items, scrollTo, scrollToItem };
+  return { outerRef, innerRef, items, scrollTo: scrollToOffset, scrollToItem };
 };
