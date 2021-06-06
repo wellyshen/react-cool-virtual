@@ -7,7 +7,6 @@ describe("shouldUpdate", () => {
       start: 0,
       size: 0,
       width: 0,
-      isScrolling: false,
       measureRef: () => null,
     };
     const b = { ...a, measureRef: () => null };
