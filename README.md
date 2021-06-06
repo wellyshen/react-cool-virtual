@@ -20,6 +20,7 @@
 - 💅🏼 Apply styles without hassle, just [few setups](#basic-usage).
 - 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
 - 🖥 Supports [responsive web design (RWD)](#responsive-web-design-rwd) for better UX.
+- 📌 Supports [sticky items](#sticky-items) for building on-trend lists.
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to methods](#scroll-to-offsetitems) for offset, items, and alignment.
 - 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
@@ -27,7 +28,7 @@
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
-- 🦔 Tiny size ([~ 2.8kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
+- 🦔 Tiny size ([~ 3kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
 
 ## Why?
 
@@ -298,6 +299,45 @@ const List = () => {
 ```
 
 > 💡 If the item size is specified through the function of `itemSize`, please ensure there's no the [measureRef](#items) on the item element. Otherwise, the hook will use the measured (cached) size for the item. When working with RWD, we can only use either of the two.
+
+### Sticky Items
+
+This example demonstrates how to make sticky items when using React Cool Virtual.
+
+```js
+import useVirtual from "react-cool-virtual";
+
+const List = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: 1000,
+    itemSize: 75,
+    stickyIndices: [0, 10, 20, 30, 40, 50], // The values must be provided in ascending order
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size, isSticky }) => {
+          let style = { height: `${size}px` };
+          // Use the `isSticky` to style the sticky item, that's it ✨
+          style = isSticky ? { ...style, position: "sticky", top: "0" } : style;
+
+          return (
+            <div key={someData[index].id} style={style}>
+              {someData[index].content}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+```
+
+> 💡 Scrollbars disappear when using Chrome in Mac? If you encounter [this issue](https://bugs.chromium.org/p/chromium/issues/detail?id=1033712), you can add `will-change:transform` to the outer element to workaround this problem.
 
 ### Scroll to Offset/Items
 
@@ -806,6 +846,14 @@ The number of items to render behind and ahead of the visible area (default = 1)
 
 To enable/disable the [isScrolling](#items) indicator of an item (default = false). It's useful for UI placeholders or [performance optimization](#use-isscrolling-indicator) when the list is being scrolled. Please note, using it will result in an additional render after scrolling has stopped.
 
+### stickyIndices
+
+`number[]`
+
+An array of indexes to make certain items in the list sticky. See the [example](#sticky-items) to learn more.
+
+- The values must be provided **in ascending order**, i.e. `[0, 10, 20, 30, ...]`.
+
 ### scrollDuration
 
 `number`
@@ -918,6 +966,7 @@ The virtualized items for rendering rows/columns. Each item is an `object` that 
 | width       | number            | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
 | start       | number            | The starting position of the item. We might only need this when [working with grids](#layout-items).            |
 | isScrolling | true \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
+| isSticky    | true \| undefined | An indicator to make certain items become [sticky in the list](#sticky-items).                                  |
 | measureRef  | Function          | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
 
 ### scrollTo
@@ -996,8 +1045,8 @@ You could use dynamic imports to only load the file when the polyfill is require
 ## To Do...
 
 - [ ] Unit testing
-- [ ] Supports sticky items
 - [ ] `scrollBy` method
+- [ ] Input element example
 
 ## Contributors ✨
 

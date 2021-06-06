@@ -320,6 +320,9 @@ export default <
       innerRef.current.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item[] = [];
+      const stickies = Array.isArray(stickyIndicesRef.current)
+        ? stickyIndicesRef.current
+        : [];
 
       for (let i = oStart; i <= oStop; i += 1) {
         const { current: msData } = msDataRef;
@@ -331,6 +334,7 @@ export default <
           size,
           width: outerRectRef.current.width,
           isScrolling: uxScrolling || undefined,
+          isSticky: stickies.includes(i) || undefined,
           measureRef: (el) => {
             if (!el) return;
 
@@ -367,20 +371,32 @@ export default <
         });
       }
 
-      if (Array.isArray(stickyIndicesRef.current)) {
+      if (stickies.length) {
         const stickyIdx =
-          stickyIndicesRef.current[
+          stickies[
             findNearestBinarySearch(
               0,
-              stickyIndicesRef.current.length - 1,
+              stickies.length - 1,
               vStart,
-              (idx) => stickyIndicesRef.current![idx],
-              -1
+              (idx) => stickies[idx]
             )
           ];
 
-        if (stickyIdx) {
-          // ...
+        if (oStart > stickyIdx) {
+          const { size } = msDataRef.current[stickyIdx];
+
+          nextItems.unshift({
+            index: stickyIdx,
+            start: 0,
+            size,
+            width: outerRectRef.current.width,
+            isScrolling: uxScrolling || undefined,
+            isSticky: true,
+            measureRef: () => null,
+          });
+
+          innerRef.current.style[marginKey] = `${margin - size}px`;
+          innerRef.current.style[sizeKey] = `${innerSize + size}px`;
         }
       }
 

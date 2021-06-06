@@ -54,8 +54,8 @@ export interface Item {
   readonly start: number;
   readonly size: number;
   readonly width: number;
-  readonly isScrolling: true | undefined;
-  readonly isSticky: true | undefined;
+  readonly isScrolling?: true;
+  readonly isSticky?: true;
   measureRef: RefCallback<HTMLElement>;
 }
 

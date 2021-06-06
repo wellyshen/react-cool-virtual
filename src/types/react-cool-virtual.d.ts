@@ -63,8 +63,8 @@ declare module "react-cool-virtual" {
     readonly start: number;
     readonly size: number;
     readonly width: number;
-    readonly isScrolling: true | undefined;
-    readonly isSticky: true | undefined;
+    readonly isScrolling?: true;
+    readonly isSticky?: true;
     measureRef: MeasureRef;
   }
 
