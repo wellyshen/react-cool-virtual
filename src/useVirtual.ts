@@ -132,6 +132,7 @@ export default <
       if (hasDynamicSizeRef.current) {
         while (
           vStart < msData.length &&
+          // To prevent items from jumping while backward scrolling in dynamic size
           msData[vStart].start < (msData[vStart + 1]?.start ?? 0) &&
           msData[vStart].start + msData[vStart].size < scrollOffset
         )
