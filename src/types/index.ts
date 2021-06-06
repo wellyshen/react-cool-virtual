@@ -55,6 +55,7 @@ export interface Item {
   readonly size: number;
   readonly width: number;
   readonly isScrolling?: true;
+  readonly isSticky?: true;
   measureRef: RefCallback<HTMLElement>;
 }
 
@@ -91,6 +92,7 @@ export interface Options {
   horizontal?: boolean;
   overscanCount?: number;
   useIsScrolling?: UseIsScrolling;
+  stickyIndices?: number[];
   scrollDuration?: number;
   scrollEasingFunction?: ScrollEasingFunction;
   loadMoreCount?: number;

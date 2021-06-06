@@ -58,6 +58,7 @@ export default <
   horizontal,
   overscanCount = 1,
   useIsScrolling,
+  stickyIndices,
   scrollDuration = 500,
   scrollEasingFunction = easeInOutCubic,
   loadMoreCount = 15,
@@ -81,6 +82,7 @@ export default <
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
+  const stickyIndicesRef = useRef(stickyIndices);
   const isItemLoadedRef = useRef(isItemLoaded);
   const loadMoreRef = useLatest(loadMore);
   const easingFnRef = useLatest(scrollEasingFunction);
@@ -318,6 +320,9 @@ export default <
       innerRef.current.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item[] = [];
+      const stickies = Array.isArray(stickyIndicesRef.current)
+        ? stickyIndicesRef.current
+        : [];
 
       for (let i = oStart; i <= oStop; i += 1) {
         const { current: msData } = msDataRef;
@@ -329,6 +334,7 @@ export default <
           size,
           width: outerRectRef.current.width,
           isScrolling: uxScrolling || undefined,
+          isSticky: stickies.includes(i) || undefined,
           measureRef: (el) => {
             if (!el) return;
 
@@ -363,6 +369,35 @@ export default <
             }).observe(el);
           },
         });
+      }
+
+      if (stickies.length) {
+        const stickyIdx =
+          stickies[
+            findNearestBinarySearch(
+              0,
+              stickies.length - 1,
+              vStart,
+              (idx) => stickies[idx]
+            )
+          ];
+
+        if (oStart > stickyIdx) {
+          const { size } = msDataRef.current[stickyIdx];
+
+          nextItems.unshift({
+            index: stickyIdx,
+            start: 0,
+            size,
+            width: outerRectRef.current.width,
+            isScrolling: uxScrolling || undefined,
+            isSticky: true,
+            measureRef: () => null,
+          });
+
+          innerRef.current.style[marginKey] = `${margin - size}px`;
+          innerRef.current.style[sizeKey] = `${innerSize + size}px`;
+        }
       }
 
       setItems((prevItems) =>

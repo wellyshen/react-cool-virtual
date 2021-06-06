@@ -64,6 +64,7 @@ declare module "react-cool-virtual" {
     readonly size: number;
     readonly width: number;
     readonly isScrolling?: true;
+    readonly isSticky?: true;
     measureRef: MeasureRef;
   }
 
@@ -99,6 +100,7 @@ declare module "react-cool-virtual" {
     horizontal?: boolean;
     overscanCount?: number;
     useIsScrolling?: UseIsScrolling;
+    stickyIndices?: number[];
     scrollDuration?: number;
     scrollEasingFunction?: ScrollEasingFunction;
     loadMoreCount?: number;
