@@ -324,7 +324,7 @@ const List = () => {
       <div ref={innerRef}>
         {items.map(({ index, size, isSticky }) => {
           let style = { height: `${size}px` };
-          // Use the `isSticky` to style the sticky item, that's it ✨
+          // Use the `isSticky` property to style the sticky item, that's it ✨
           style = isSticky ? { ...style, position: "sticky", top: "0" } : style;
 
           return (
