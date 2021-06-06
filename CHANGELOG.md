@@ -1,5 +1,15 @@
 # react-cool-virtual
 
+## 0.2.0
+
+### Minor Changes
+
+- [#124](https://github.com/wellyshen/react-cool-virtual/pull/124) [`714dc96`](https://github.com/wellyshen/react-cool-virtual/commit/714dc96ce90a53996057efd3fdfc48f7d392536e) Thanks [@wellyshen](https://github.com/wellyshen)! - feat: support sticky items
+
+### Patch Changes
+
+- [#122](https://github.com/wellyshen/react-cool-virtual/pull/122) [`e451954`](https://github.com/wellyshen/react-cool-virtual/commit/e451954facbcdacb88e20712fbe179dff8da368b) Thanks [@wellyshen](https://github.com/wellyshen)! - fix(types): correct the type of `isScrolling` property
+
 ## 0.1.3
 
 ### Patch Changes
