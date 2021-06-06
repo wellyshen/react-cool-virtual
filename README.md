@@ -304,6 +304,8 @@ const List = () => {
 
 This example demonstrates how to make sticky items when using React Cool Virtual.
 
+[![Edit RCV - Sticky Items](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-sticky-items-si952?fontsize=14&hidenavigation=1&theme=dark)
+
 ```js
 import useVirtual from "react-cool-virtual";
 
