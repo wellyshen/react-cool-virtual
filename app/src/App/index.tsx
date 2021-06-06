@@ -1,4 +1,4 @@
-/* import { Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,11 +23,12 @@ export default (): JSX.Element => {
   const [sz, setSz] = useState(25);
   const row = useVirtual<HTMLDivElement, HTMLDivElement>({
     itemCount: rowHeights.length,
-    onResize: (size: any) => console.log("LOG ===> ", size),
+    // overscanCount: 0,
   });
   const col = useVirtual<HTMLDivElement, HTMLDivElement>({
-    itemCount: colWidths.length,
     horizontal: true,
+    itemCount: colWidths.length,
+    // overscanCount: 0,
   });
 
   return (
@@ -93,9 +94,9 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-}; */
+};
 
-import { useState } from "react";
+/* import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -110,10 +111,10 @@ const getMockData = (count: number, min = 25) =>
   // eslint-disable-next-line no-plusplus
   new Array(count).fill({}).map((_, idx) => ({
     text: uuidv4(),
-    size: min + Math.round(Math.random() * 100),
+    size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(30);
+const mockData = getMockData(10000);
 
 export default (): JSX.Element => {
   const [test, setTest] = useState(false);
@@ -122,29 +123,21 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    stickyIndices: [5, 10, 15, 20],
-    overscanCount: 0,
+    itemSize: 75,
+    // overscanCount: 0,
   });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
-        {/* <div
-          className={`${styles.item} ${styles.sticky}`}
-          style={{ height: "50px" }}
-        >
-          Sticky
-        </div> */}
         <div ref={innerRef}>
-          {items.map(({ index, size, isScrolling, measureRef }) => (
+          {items.map(({ index, size, measureRef }) => (
             <div
               key={index}
-              className={`${styles.item} ${index % 2 ? styles.dark : ""} ${
-                index === 3 && test ? styles.sticky : ""
-              }`}
-              // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${size}px` }}
-              // ref={measureRef}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              style={{ height: `${mockData[index].size}px` }}
+              // style={{ height: `${50}px` }}
+              ref={measureRef}
             >
               {index}
             </div>
@@ -156,4 +149,4 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-};
+}; */

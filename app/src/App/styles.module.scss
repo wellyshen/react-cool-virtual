@@ -3,15 +3,15 @@ body {
 }
 
 .app {
-  margin-top: 5rem;
+  margin-top: 3rem;
   text-align: center;
-  height: 100vh;
+  height: 90vh;
 }
 
 .outer {
   margin: 0 auto;
-  width: 300px;
-  height: 300px;
+  width: 90%;
+  height: 90%;
   border: 1px solid #000;
   margin-bottom: 1rem;
   overflow: auto;
@@ -29,12 +29,5 @@ body {
 
   &.dark {
     background: #ddd;
-  }
-
-  &.sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    z-index: 100;
   }
 }
