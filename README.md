@@ -899,7 +899,7 @@ The virtualized items for rendering rows/columns. Each item is an `object` that 
 | start       | number            | The starting position of the item. We might only need this when [working with grids](#layout-items).            |
 | isScrolling | true \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
 | isSticky    | true \| undefined | An indicator to make certain items become [sticky in the list](#sticky-headers).                                |
-| measureRef  | Function          | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
+| measureRef  | Function          | It's used to measure an item with [dynamic](#dynamic-size) or [real-time](#real-time-resize) heights/widths.    |
 
 #### scrollTo
 
