@@ -11,7 +11,7 @@ const RCF = () => {
   });
   const { form } = useForm({
     defaultValues: { todo: defaultValues },
-    removeOnUnmounted: false, // Keep the value of unmounted fields
+    removeOnUnmounted: false, // To keep the value of unmounted fields
     onSubmit: (formData) => alert(JSON.stringify(formData, undefined, 2))
   });
 
