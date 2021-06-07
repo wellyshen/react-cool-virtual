@@ -543,6 +543,108 @@ const List = () => {
 };
 ```
 
+### Working with Input Elements
+
+This example demonstrates how to handle input elements (or form fields) in a virtualized list.
+
+[![Edit RCV - Input Elements](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-input-elements-9p6ot?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import { useState } from "react";
+import useVirtual from "react-cool-virtual";
+
+const defaultValues = new Array(20).fill(false);
+
+const Form = () => {
+  const [formData, setFormData] = useState({ todo: defaultValues });
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: defaultValues.length,
+  });
+
+  const handleInputChange = ({ target }, index) => {
+    // Store the input values in React state
+    setFormData((prevData) => {
+      const todo = [...prevData.todo];
+      todo[index] = target.checked;
+      return { todo };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(JSON.stringify(formData, undefined, 2));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div
+        style={{ width: "300px", height: "300px", overflow: "auto" }}
+        ref={outerRef}
+      >
+        <div ref={innerRef}>
+          {items.map(({ index, size }) => (
+            <div key={index} style={{ height: `${size}px` }}>
+              <input
+                id={`todo-${index}`}
+                type="checkbox"
+                // Populate the corresponding state to the default value
+                defaultChecked={formData.todo[index]}
+                onChange={(e) => handleInputChange(e, index)}
+              />
+              <label htmlFor={`todo-${index}`}>{index}. I'd like to...</label>
+            </div>
+          ))}
+        </div>
+      </div>
+      <input type="submit" />
+    </form>
+  );
+};
+```
+
+When dealing with forms, we can use [React Cool Form](react-cool-form.netlify.app) to handle the form state and boost performance for use.
+
+```js
+import useVirtual from "react-cool-virtual";
+import { useForm } from "react-cool-form";
+
+const defaultValues = new Array(20).fill(false);
+
+const Form = () => {
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount: defaultValues.length,
+  });
+  const { form } = useForm({
+    defaultValues: { todo: defaultValues },
+    removeOnUnmounted: false, // To keep the value of unmounted fields
+    onSubmit: (formData) => alert(JSON.stringify(formData, undefined, 2)),
+  });
+
+  return (
+    <form ref={form}>
+      <div
+        style={{ width: "300px", height: "300px", overflow: "auto" }}
+        ref={outerRef}
+      >
+        <div ref={innerRef}>
+          {items.map(({ index, size }) => (
+            <div key={index} style={{ height: `${size}px` }}>
+              <input
+                id={`todo-${index}`}
+                name={`todo[${index}]`}
+                type="checkbox"
+              />
+              <label htmlFor={`todo-${index}`}>{index}. I'd like to...</label>
+            </div>
+          ))}
+        </div>
+      </div>
+      <input type="submit" />
+    </form>
+  );
+};
+```
+
 ### Dealing with Dynamic Items
 
 React requires [keys](https://reactjs.org/docs/lists-and-keys.html#keys) for array items. I'd recommend using an unique id as the key as possible as we can, especially when working with reordering, filtering etc. Refer to [this article](https://robinpokorny.medium.com/index-as-a-key-is-an-anti-pattern-e0349aece318) to learn more.
