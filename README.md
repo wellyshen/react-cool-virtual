@@ -18,7 +18,7 @@
 - ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 💅🏼 Apply styles without hassle, just [few setups](#basic-usage).
-- 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time resize](#real-time-resize) heights/widths.
+- 🧱 Supports [fixed](#fixed-size), [variable](#variable-size), [dynamic](#dynamic-size), and [real-time](#real-time-resize) heights/widths.
 - 🖥 Supports [responsive web design (RWD)](#responsive-web-design-rwd) for better UX.
 - 📌 Supports [sticky headers](#sticky-headers) for building on-trend lists.
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
