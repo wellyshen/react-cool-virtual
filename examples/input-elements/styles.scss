@@ -18,11 +18,20 @@ p {
 
 .item {
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding-left: 1rem;
   background: #fff;
 
   &.dark {
     background: #e5e5e5;
   }
+}
+
+input[type="submit"] {
+  margin-top: 1rem;
+  width: 300px;
+}
+
+label {
+  margin: 0 0 0.125rem 0.5rem;
 }
