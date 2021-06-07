@@ -13,7 +13,7 @@
 
 </div>
 
-## Features
+## Features <!-- omit in toc -->
 
 - ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
@@ -30,24 +30,45 @@
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 Tiny size ([~ 2.9kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
 
-## Why?
+## Why? <!-- omit in toc -->
 
 When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that provide well-defineded way of using but increase a lot of bundle size. However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution that is flexible and `headless` but applying styles for using it can be verbose. Furthermore, it lacks many of the [useful features](#features).
 
 React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 🤯.
 
-## Docs
+## Docs <!-- omit in toc -->
 
 - [Getting Started](#getting-started)
+  - [Requirement](#requirement)
+  - [Installation](#installation)
+  - [CDN](#cdn)
+  - [Basic Usage](#basic-usage)
 - [Examples](#examples)
+  - [Fixed Size](#fixed-size)
+  - [Variable Size](#variable-size)
+  - [Dynamic Size](#dynamic-size)
+  - [Real-time Resize](#real-time-resize)
+  - [Responsive Web Design (RWD)](#responsive-web-design-rwd)
+  - [Sticky Headers](#sticky-headers)
+  - [Scroll to Offset/Items](#scroll-to-offsetitems)
+  - [Smooth Scrolling](#smooth-scrolling)
+  - [Infinite Scroll](#infinite-scroll)
+  - [Working with Input Elements](#working-with-input-elements)
+  - [Dealing with Dynamic Items](#dealing-with-dynamic-items)
+  - [Server-side Rendering (SSR)](#server-side-rendering-ssr)
 - [API](#api)
-- [Performance Optimization](#performance-optimization)
-- [Sharing A `ref`](#how-to-share-a-ref)
-- [Layout items](#layout-items)
-- [TypeScript](#working-in-typescript)
-- [Polyfill](#resizeobserver-polyfill)
+  - [Options](#options)
+  - [Return Values](#return-values)
+- [Others](#others)
+  - [Performance Optimization](#performance-optimization)
+  - [How to Share A `ref`?](#how-to-share-a-ref)
+  - [Layout Items](#layout-items)
+  - [Working in TypeScript](#working-in-typescript)
+  - [ResizeObserver Polyfill](#resizeobserver-polyfill)
 
 ## Getting Started
+
+### Requirement
 
 To use React Cool Virtual, you must use `react@16.8.0` or greater which includes hooks.
 
@@ -113,8 +134,6 @@ const List = () => {
 ✨ Pretty easy right? React Cool Virtual is more powerful than you think. Let's explore more use cases through the examples!
 
 ## Examples
-
-Some of the common use cases that React Cool Virtual can help you out.
 
 ### Fixed Size
 
@@ -704,11 +723,233 @@ const List = () => {
 
 > 💡 Please note, when using the `ssrItemCount`, the initial items will be the SSR items but it has no impact to the UX. In addition, you might notice that some styles (i.e. width, start) of the SSR items are `0`. It's by design, because there's no way to know the outer's size on SSR. However, you can make up these styles based on the environments if you need.
 
-## Performance Optimization
+## API
+
+React Cool Virtual is a custom React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that supplies you with [all the features](#features) for building highly performant virtualized datasets easily 🚀. It takes `options` parameters and returns useful methods as follows.
+
+```js
+const returnValues = useVirtual(options);
+```
+
+### Options
+
+An `object` with the following options:
+
+#### itemCount (Required)
+
+`number`
+
+The total number of items. It can be an arbitrary number if actual number is unknown, see the [example](#working-with-a-loading-indicator) to learn more.
+
+#### ssrItemCount
+
+`number | [number, number]`
+
+The number of items that are rendered on server-side, see the [example](#server-side-rendering-ssr) to learn more.
+
+#### itemSize
+
+`number | (index: number, width: number) => number`
+
+The size of an item (default = 50). When working with **dynamic size**, it will be the default/or estimated size of the unmeasured items.
+
+- For `number` use case, please refer to the [fixed size example](#fixed-size).
+- For `index` callback use case, please refer to the [variable size example](#variable-size).
+- For `width` callback use case, please refer to the [RWD example](#responsive-web-design-rwd).
+
+#### horizontal
+
+`boolean`
+
+The layout/orientation of the list (default = false). When `true` means left/right scrolling, so the hook will use `width` as the [item size](#itemsize) and use the `left` as the [start](#items) position.
+
+#### overscanCount
+
+`number`
+
+The number of items to render behind and ahead of the visible area (default = 1). That can be used for two reasons:
+
+- To slightly reduce/prevent a flash of empty screen while the user is scrolling. Please note, too many can negatively impact performance.
+- To allow the tab key to focus on the next (invisible) item for better accessibility.
+
+#### useIsScrolling
+
+`boolean`
+
+To enable/disable the [isScrolling](#items) indicator of an item (default = false). It's useful for UI placeholders or [performance optimization](#use-isscrolling-indicator) when the list is being scrolled. Please note, using it will result in an additional render after scrolling has stopped.
+
+#### stickyIndices
+
+`number[]`
+
+An array of indexes to make certain items in the list sticky. See the [example](#sticky-headers) to learn more.
+
+- The values must be provided **in ascending order**, i.e. `[0, 10, 20, 30, ...]`.
+
+#### scrollDuration
+
+`number`
+
+The duration of [smooth scrolling](#smooth-scrolling), the unit is milliseconds (default = 500ms).
+
+#### scrollEasingFunction
+
+`(time: number) => number`
+
+A function that allows us to customize the easing effect of [smooth scrolling](#smooth-scrolling) (default = [easeInOutCubic](https://easings.net/#easeInOutCubic)).
+
+#### loadMoreCount
+
+`number`
+
+How many number of items that you want to load/or pre-load (default = 15), it's used for [infinite scroll](#infinite-scroll). A number 15 means the [loadMore](#loadmore) callback will be invoked when the user scrolls within every 15 items, e.g. 1 - 15, 16 - 30, and so on.
+
+#### isItemLoaded
+
+`(index: number) => boolean`
+
+A callback for us to provide the loaded state of a batch items, it's used for [infinite scroll](#infinite-scroll). It tells the hook whether the [loadMore](#loadmore) should be triggered or not.
+
+#### loadMore
+
+`(event: Object) => void`
+
+A callback for us to fetch (more) data, it's used for [infinite scroll](#infinite-scroll). It's invoked when more items need to be loaded, which based on the mechanism of [loadMoreCount](#loadmorecount) and [isItemLoaded](#isitemloaded).
+
+```js
+const props = useVirtual({
+  onScroll: ({
+    startIndex, // (number) The index of the first batch item
+    stopIndex, // (number) The index of the last batch item
+    loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
+    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
+    userScroll, // (boolean) Tells you the scrolling is through the user or not
+  }) => {
+    // Fetch data...
+  },
+});
+```
+
+#### onScroll
+
+`(event: Object) => void`
+
+This event will be triggered when scroll position is being changed by the user scrolls or [scrollTo](#scrollto)/[scrollToItem](#scrolltoitem) methods.
+
+```js
+const props = useVirtual({
+  onScroll: ({
+    overscanStartIndex, // (number) The index of the first overscan item
+    overscanStopIndex, // (number) The index of the last overscan item
+    visibleStartIndex, // (number) The index of the first visible item
+    visibleStopIndex, // (number) The index of the last visible item
+    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
+    scrollForward, // (boolean) The scroll direction of up/down or left/right, depending on the `horizontal` option
+    userScroll, // (boolean) Tells you the scrolling is through the user or not
+  }) => {
+    // Do something...
+  },
+});
+```
+
+#### onResize
+
+`(event: Object) => void`
+
+This event will be triggered when the size of the outer element changes.
+
+```js
+const props = useVirtual({
+  onResize: ({
+    width, // (number) The content width of the outer element
+    height, // (number) The content height of the outer element
+  }) => {
+    // Do something...
+  },
+});
+```
+
+### Return Values
+
+An `object` with the following properties:
+
+#### outerRef
+
+`React.useRef<HTMLElement>`
+
+A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the outer element. We must [apply it](#basic-usage) for using this hook.
+
+#### innerRef
+
+`React.useRef<HTMLElement>`
+
+A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the inner element. We must [apply it](#basic-usage) for using this hook.
+
+#### items
+
+`Object[]`
+
+The virtualized items for rendering rows/columns. Each item is an `object` that contains the following properties:
+
+| Name        | Type              | Description                                                                                                     |
+| ----------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| index       | number            | The index of the item.                                                                                          |
+| size        | number            | The fixed/variable/measured size of the item.                                                                   |
+| width       | number            | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
+| start       | number            | The starting position of the item. We might only need this when [working with grids](#layout-items).            |
+| isScrolling | true \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
+| isSticky    | true \| undefined | An indicator to make certain items become [sticky in the list](#sticky-headers).                                |
+| measureRef  | Function          | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
+
+#### scrollTo
+
+`(offsetOrOptions: number | Object, callback?: () => void) => void`
+
+This method allows us to scroll to the specified offset from top/left, depending on the [horizontal](#horizontal) option.
+
+```js
+// Basic usage
+scrollTo(500);
+
+// Using options
+scrollTo({
+  offset: 500,
+  smooth: true, // Enable/disable smooth scrolling (default = false)
+});
+```
+
+> 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
+
+#### scrollToItem
+
+`(indexOrOptions: number | Object, callback?: () => void) => void`
+
+This method allows us to scroll to the specified item.
+
+```js
+// Basic usage
+scrollToItem(10);
+
+// Using options
+scrollTo({
+  index: 10,
+  // Control the alignment of the item, acceptable values are: "auto" (default) | "start" | "center" | "end"
+  // Using "auto" will scroll the item into the view at the start or end, depending on which is closer
+  align: "auto",
+  // Enable/disable smooth scrolling (default = false)
+  smooth: true,
+});
+```
+
+> 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
+
+## Others
+
+### Performance Optimization
 
 Items are re-rendered whenever the user scrolls. If your item is a **heavy data component**, there're two strategies for performance optimization.
 
-### Use [React.memo](https://reactjs.org/docs/react-api.html#reactmemo)
+#### Use [React.memo](https://reactjs.org/docs/react-api.html#reactmemo)
 
 When working with **non-dynamic size**, we can extract the item to it's own component and wrap it with `React.memo`. It shallowly compares the current props and the next props to avoid unnecessary re-renders.
 
@@ -747,7 +988,7 @@ const List = () => {
 };
 ```
 
-### Use `isScrolling` Indicator
+#### Use `isScrolling` Indicator
 
 If the above solution can't meet your case or you're working with **dynamic size**. React Cool Virtual supplies you an `isScrolling` indicator that allows you to replace the heavy component with a light one while the user is scrolling.
 
@@ -796,7 +1037,7 @@ const List = () => {
 
 > 💡 Well... the `isScrolling` can also be used in many other ways, please use your imagination 🤗.
 
-## How to Share A `ref`?
+### How to Share A `ref`?
 
 You can share a `ref` as follows, here we take the `outerRef` as the example:
 
@@ -819,7 +1060,7 @@ const App = () => {
 };
 ```
 
-## Layout Items
+### Layout Items
 
 React Cool Virtual is designed to [simplify the styling and keep all the items in the document flow for rows/columns](#basic-usage). However, when working with grids, we need to layout the items in two-dimensional. For that reason, we also provide the [start](#items) property for you to achieve it.
 
@@ -876,7 +1117,7 @@ const Grid = () => {
 };
 ```
 
-## Working in TypeScript
+### Working in TypeScript
 
 React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
 
@@ -895,227 +1136,7 @@ const App = () => {
 
 💡 For more available types, please [check it out](src/types/react-cool-virtual.d.ts).
 
-## API
-
-React Cool Virtual is a custom React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that supplies you with [all the features](#features) for building highly performant virtualized datasets easily 🚀. It takes `options` parameters and returns useful methods as follows.
-
-```js
-const props = useVirtual(options);
-```
-
-## Options
-
-An `object` with the following options:
-
-### itemCount (Required)
-
-`number`
-
-The total number of items. It can be an arbitrary number if actual number is unknown, see the [example](#working-with-a-loading-indicator) to learn more.
-
-### ssrItemCount
-
-`number | [number, number]`
-
-The number of items that are rendered on server-side, see the [example](#server-side-rendering-ssr) to learn more.
-
-### itemSize
-
-`number | (index: number, width: number) => number`
-
-The size of an item (default = 50). When working with **dynamic size**, it will be the default/or estimated size of the unmeasured items.
-
-- For `number` use case, please refer to the [fixed size example](#fixed-size).
-- For `index` callback use case, please refer to the [variable size example](#variable-size).
-- For `width` callback use case, please refer to the [RWD example](#responsive-web-design-rwd).
-
-### horizontal
-
-`boolean`
-
-The layout/orientation of the list (default = false). When `true` means left/right scrolling, so the hook will use `width` as the [item size](#itemsize) and use the `left` as the [start](#items) position.
-
-### overscanCount
-
-`number`
-
-The number of items to render behind and ahead of the visible area (default = 1). That can be used for two reasons:
-
-- To slightly reduce/prevent a flash of empty screen while the user is scrolling. Please note, too many can negatively impact performance.
-- To allow the tab key to focus on the next (invisible) item for better accessibility.
-
-### useIsScrolling
-
-`boolean`
-
-To enable/disable the [isScrolling](#items) indicator of an item (default = false). It's useful for UI placeholders or [performance optimization](#use-isscrolling-indicator) when the list is being scrolled. Please note, using it will result in an additional render after scrolling has stopped.
-
-### stickyIndices
-
-`number[]`
-
-An array of indexes to make certain items in the list sticky. See the [example](#sticky-headers) to learn more.
-
-- The values must be provided **in ascending order**, i.e. `[0, 10, 20, 30, ...]`.
-
-### scrollDuration
-
-`number`
-
-The duration of [smooth scrolling](#smooth-scrolling), the unit is milliseconds (default = 500ms).
-
-### scrollEasingFunction
-
-`(time: number) => number`
-
-A function that allows us to customize the easing effect of [smooth scrolling](#smooth-scrolling) (default = [easeInOutCubic](https://easings.net/#easeInOutCubic)).
-
-### loadMoreCount
-
-`number`
-
-How many number of items that you want to load/or pre-load (default = 15), it's used for [infinite scroll](#infinite-scroll). A number 15 means the [loadMore](#loadmore) callback will be invoked when the user scrolls within every 15 items, e.g. 1 - 15, 16 - 30, and so on.
-
-### isItemLoaded
-
-`(index: number) => boolean`
-
-A callback for us to provide the loaded state of a batch items, it's used for [infinite scroll](#infinite-scroll). It tells the hook whether the [loadMore](#loadmore) should be triggered or not.
-
-### loadMore
-
-`(event: Object) => void`
-
-A callback for us to fetch (more) data, it's used for [infinite scroll](#infinite-scroll). It's invoked when more items need to be loaded, which based on the mechanism of [loadMoreCount](#loadmorecount) and [isItemLoaded](#isitemloaded).
-
-```js
-const props = useVirtual({
-  onScroll: ({
-    startIndex, // (number) The index of the first batch item
-    stopIndex, // (number) The index of the last batch item
-    loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
-    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
-    userScroll, // (boolean) Tells you the scrolling is through the user or not
-  }) => {
-    // Fetch data...
-  },
-});
-```
-
-### onScroll
-
-`(event: Object) => void`
-
-This event will be triggered when scroll position is being changed by the user scrolls or [scrollTo](#scrollto)/[scrollToItem](#scrolltoitem) methods.
-
-```js
-const props = useVirtual({
-  onScroll: ({
-    overscanStartIndex, // (number) The index of the first overscan item
-    overscanStopIndex, // (number) The index of the last overscan item
-    visibleStartIndex, // (number) The index of the first visible item
-    visibleStopIndex, // (number) The index of the last visible item
-    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
-    scrollForward, // (boolean) The scroll direction of up/down or left/right, depending on the `horizontal` option
-    userScroll, // (boolean) Tells you the scrolling is through the user or not
-  }) => {
-    // Do something...
-  },
-});
-```
-
-### onResize
-
-`(event: Object) => void`
-
-This event will be triggered when the size of the outer element changes.
-
-```js
-const props = useVirtual({
-  onResize: ({
-    width, // (number) The content width of the outer element
-    height, // (number) The content height of the outer element
-  }) => {
-    // Do something...
-  },
-});
-```
-
-## Props
-
-An `object` with the following properties:
-
-### outerRef
-
-`React.useRef<HTMLElement>`
-
-A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the outer element. We must [apply it](#basic-usage) for using this hook.
-
-### innerRef
-
-`React.useRef<HTMLElement>`
-
-A [ref](https://reactjs.org/docs/hooks-reference.html#useref) to attach to the inner element. We must [apply it](#basic-usage) for using this hook.
-
-### items
-
-`Object[]`
-
-The virtualized items for rendering rows/columns. Each item is an `object` that contains the following properties:
-
-| Name        | Type              | Description                                                                                                     |
-| ----------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
-| index       | number            | The index of the item.                                                                                          |
-| size        | number            | The fixed/variable/measured size of the item.                                                                   |
-| width       | number            | The current content width of the outer element. It's useful for a [RWD row/column](#responsive-web-design-rwd). |
-| start       | number            | The starting position of the item. We might only need this when [working with grids](#layout-items).            |
-| isScrolling | true \| undefined | An indicator to show a placeholder or [optimize performance](#use-isscrolling-indicator) for the item.          |
-| isSticky    | true \| undefined | An indicator to make certain items become [sticky in the list](#sticky-headers).                                |
-| measureRef  | Function          | It's used to measure the [dynamic size](#dynamic-size) or [real-time resize](#real-time-resize) of the item.    |
-
-### scrollTo
-
-`(offsetOrOptions: number | Object, callback?: () => void) => void`
-
-This method allows us to scroll to the specified offset from top/left, depending on the [horizontal](#horizontal) option.
-
-```js
-// Basic usage
-scrollTo(500);
-
-// Using options
-scrollTo({
-  offset: 500,
-  smooth: true, // Enable/disable smooth scrolling (default = false)
-});
-```
-
-> 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
-
-### scrollToItem
-
-`(indexOrOptions: number | Object, callback?: () => void) => void`
-
-This method allows us to scroll to the specified item.
-
-```js
-// Basic usage
-scrollToItem(10);
-
-// Using options
-scrollTo({
-  index: 10,
-  // Control the alignment of the item, acceptable values are: "auto" (default) | "start" | "center" | "end"
-  // Using "auto" will scroll the item into the view at the start or end, depending on which is closer
-  align: "auto",
-  // Enable/disable smooth scrolling (default = false)
-  smooth: true,
-});
-```
-
-> 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
-
-## ResizeObserver Polyfill
+### ResizeObserver Polyfill
 
 [ResizeObserver has good support amongst browsers](https://caniuse.com/?search=ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore React Cool Virtual doesn't include it.
 
@@ -1146,13 +1167,13 @@ You could use dynamic imports to only load the file when the polyfill is require
 })();
 ```
 
-## To Do...
+## To Do... <!-- omit in toc -->
 
 - [ ] Unit testing
 - [ ] `scrollBy` method
 - [ ] Input element example
 
-## Contributors ✨
+## Contributors ✨ <!-- omit in toc -->
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
