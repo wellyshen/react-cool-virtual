@@ -5,8 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "react": "^17.0.2",
-    "react-cool-form": "^0.3.1",
-    "react-cool-virtual": "^0.2.0",
+    "react-cool-form": "latest",
+    "react-cool-virtual": "^0.2.1",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3"
   },
