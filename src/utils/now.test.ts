@@ -1,18 +1,17 @@
+/* eslint-disable compat/compat */
+
 import now from "./now";
 
 describe("now", () => {
   it("should work correctly", () => {
-    // @ts-expect-error
-    global.performance = undefined;
-    // @ts-expect-error
-    global.Date = { now: jest.fn() };
+    performance.now = jest.fn();
     now();
-    expect(Date.now).toHaveBeenCalled();
+    expect(performance.now).toHaveBeenCalled();
 
     // @ts-expect-error
-    global.performance = { now: jest.fn() };
+    delete window.performance;
+    Date.now = jest.fn();
     now();
-    // eslint-disable-next-line compat/compat
-    expect(performance.now).toHaveBeenCalled();
+    expect(Date.now).toHaveBeenCalled();
   });
 });
