@@ -36,6 +36,8 @@
     "row",
     "column",
     "grid",
+    "chat",
+    "feeds",
     "resize",
     "resize-observer",
     "dynamic",
