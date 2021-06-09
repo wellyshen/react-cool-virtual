@@ -233,27 +233,36 @@ export default <
 
       if (hasDynamicSizeRef.current) measureItems();
 
-      const ms =
-        msDataRef.current[
-          Math.max(0, Math.min(index, msDataRef.current.length - 1))
-        ];
+      const { current: msData } = msDataRef;
+      const ms = msData[Math.max(0, Math.min(index, msData.length - 1))];
 
       if (!ms) return;
 
       const { start, end, size } = ms;
       let { current: scrollOffset } = scrollOffsetRef;
+      const totalSize = msData[msData.length - 1].end;
       const outerSize = outerRectRef.current[sizeKey];
+
+      if (totalSize <= outerSize) {
+        if (cb) cb();
+        return;
+      }
+
       const endPos = start - outerSize + size;
 
       switch (align) {
         case Align.start:
-          scrollOffset = start;
+          scrollOffset =
+            totalSize - start <= outerSize ? totalSize - outerSize : start;
           break;
-        case Align.center:
-          scrollOffset = start - outerSize / 2 + size / 2;
+        case Align.center: {
+          const to = start - outerSize / 2 + size / 2;
+          scrollOffset =
+            totalSize - to <= outerSize ? totalSize - outerSize : to;
           break;
+        }
         case Align.end:
-          scrollOffset = endPos;
+          scrollOffset = start + size <= outerSize ? 0 : endPos;
           break;
         default:
           if (scrollOffset > start) {
