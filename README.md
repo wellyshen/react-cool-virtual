@@ -23,7 +23,7 @@
 - 📌 Supports [sticky headers](#sticky-headers) for building on-trend lists.
 - 🚚 Built-ins [load more callback](#infinite-scroll) for you to deal with infinite scroll + [skeleton screens](https://uxdesign.cc/what-you-should-know-about-skeleton-screens-a820c45a571a).
 - 🖱 Imperative [scroll-to methods](#scroll-to-offsetitems) for offset, items, and alignment.
-- 🛹 Out of the box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
+- 🛹 Out-of-the-box [smooth scrolling](#smooth-scrolling) and the effect is DIY-able.
 - ⛳ Provides `isScrolling` indicator to you for UI placeholders or [performance optimization](#use-isscrolling-indicator).
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
