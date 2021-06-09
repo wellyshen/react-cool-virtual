@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.2.2
+
+### Patch Changes
+
+- [#127](https://github.com/wellyshen/react-cool-virtual/pull/127) [`a4dc66a`](https://github.com/wellyshen/react-cool-virtual/commit/a4dc66aea2e7024ae05dd5073a943a76fc44cff5) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `scrollToItem` method freezes scrolling
+
 ## 0.2.0
 
 ### Minor Changes
