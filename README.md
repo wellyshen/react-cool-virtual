@@ -1169,7 +1169,7 @@ You could use dynamic imports to only load the file when the polyfill is require
 
 ## To Do... <!-- omit in toc -->
 
-- [ ] Unit testing
+- [ ] Unit testing (WIP)
 - [ ] Supports chat
 - [ ] `scrollBy` method
 
