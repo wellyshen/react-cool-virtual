@@ -30,8 +30,7 @@ const App = () => {
     itemCount: messages.length,
     scrollDuration: 50, // Speed up smooth scrolling
     onScroll: ({ userScroll }) => {
-      // If the user scrolls and isn't scrolling
-      // cancel stick to bottom
+      // If the user scrolls and isn't automatically scrolling, cancel stick to bottom
       if (userScroll && !isScrolling) setShouldSticky(false);
     }
   });
