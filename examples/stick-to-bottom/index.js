@@ -27,8 +27,10 @@ const App = () => {
   const [shouldSticky, setShouldSticky] = useState(true);
   const [messages, setMessages] = useState([]);
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
+    // Provide the number of comments
     itemCount: messages.length,
-    scrollDuration: 50, // Speed up smooth scrolling
+    // Speed up smooth scrolling
+    scrollDuration: 50,
     onScroll: ({ userScroll }) => {
       // If the user scrolls and isn't automatically scrolling, cancel stick to bottom
       if (userScroll && !isScrolling) setShouldSticky(false);
