@@ -18,12 +18,22 @@ p {
 
 .item {
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-height: 50px;
-  background: #fff;
+  padding: 10px;
 
-  &.dark {
+  div {
+    padding: 4px 10px;
+    border-radius: 8px;
+    max-width: 70%;
     background: #e5e5e5;
   }
+
+  &.right {
+    justify-content: flex-end;
+  }
+}
+
+button  {
+  margin-top: 1rem;
+  width: 300px;
 }
