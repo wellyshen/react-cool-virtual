@@ -42,7 +42,7 @@ const Loading = () => <div className="item">⏳ Loading...</div>;
 const Indicator = () => {
   const [comments, setComments] = useState([]);
   const { outerRef, innerRef, items } = useVirtual({
-    // // Provide the number of comments
+    // Provide the number of comments
     itemCount: comments.length,
     // Starts to pre-fetch data when the user scrolls within every 5 items
     // e.g. 1 - 5, 6 - 10 and so on (default = 15)
