@@ -73,7 +73,7 @@ const Indicator = () => {
                   style={{ padding: "16px" }}
                   ref={measureRef} // Used to measure the unknown item size
                 >
-                  {comments[index].body}
+                  {comments[index].id}. {comments[index].body}
                 </div>
                 {showLoading && <Loading />}
               </Fragment>

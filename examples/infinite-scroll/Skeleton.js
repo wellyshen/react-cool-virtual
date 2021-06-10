@@ -64,7 +64,9 @@ const Skeleton = () => {
             style={{ padding: "16px", minHeight: "122px" }}
             ref={measureRef} // Used to measure the unknown item size
           >
-            {comments[index]?.body || "⏳ Loading..."}
+            {comments[index]
+              ? `${comments[index].id}. ${comments[index].body}`
+              : "⏳ Loading..."}
           </div>
         ))}
       </div>
