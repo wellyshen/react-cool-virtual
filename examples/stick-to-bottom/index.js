@@ -27,7 +27,7 @@ const App = () => {
   const [shouldSticky, setShouldSticky] = useState(true);
   const [messages, setMessages] = useState([]);
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
-    // Provide the number of comments
+    // Provide the number of messages
     itemCount: messages.length,
     // Speed up smooth scrolling
     scrollDuration: 50,
