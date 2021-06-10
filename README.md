@@ -33,7 +33,7 @@
 
 ## Why? <!-- omit in toc -->
 
-When rendering a large set of data (e.g. list, table etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that provide well-defineded way of using but increase a lot of bundle size. However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution that is flexible and `headless` but applying styles for using it can be verbose. Furthermore, it lacks many of the [useful features](#features).
+When rendering a large set of data (e.g. list, table, etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that provide well-defineded way of using but increase a lot of bundle size. However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution that is flexible and `headless` but applying styles for using it can be verbose. Furthermore, it lacks many of the [useful features](#features).
 
 React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 🤯.
 
@@ -238,7 +238,7 @@ const List = () => {
 
 ### Real-time Resize
 
-This example demonstrates how to create a real-time resize row (e.g. accordion, collapse etc.). For column or grid, please refer to CodeSandbox.
+This example demonstrates how to create a real-time resize row (e.g. accordion, collapse, etc.). For column or grid, please refer to CodeSandbox.
 
 [![Edit RCV - Real-time Resize](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-real-time-resize-fixvr?fontsize=14&hidenavigation=1&theme=dark)
 
@@ -830,7 +830,7 @@ const Form = () => {
 
 ### Dealing with Dynamic Items
 
-React requires [keys](https://reactjs.org/docs/lists-and-keys.html#keys) for array items. I'd recommend using an unique id as the key as possible as we can, especially when working with reordering, filtering etc. Refer to [this article](https://robinpokorny.medium.com/index-as-a-key-is-an-anti-pattern-e0349aece318) to learn more.
+React requires [keys](https://reactjs.org/docs/lists-and-keys.html#keys) for array items. I'd recommend using an unique id as the key as possible as we can, especially when working with reordering, filtering, etc. Refer to [this article](https://robinpokorny.medium.com/index-as-a-key-is-an-anti-pattern-e0349aece318) to learn more.
 
 ```js
 const List = () => {
