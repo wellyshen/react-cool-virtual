@@ -36,6 +36,7 @@ const App = () => {
   });
 
   useEffect(() => {
+    // Mock messages service
     if (id <= TOTAL_MESSAGES)
       setTimeout(
         () => loadData(++id, setMessages),
