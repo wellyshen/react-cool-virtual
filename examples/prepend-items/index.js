@@ -23,7 +23,7 @@ const fetchData = async (postId, setComments) => {
       `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
     );
 
-    // Prepend new items
+    // Pre-pend new items
     setComments((prevComments) => [...comments, ...prevComments]);
   } catch (err) {
     // Try again
