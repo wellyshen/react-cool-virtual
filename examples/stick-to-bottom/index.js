@@ -36,12 +36,11 @@ const App = () => {
   });
 
   useEffect(() => {
-    if (id <= TOTAL_MESSAGES) {
-      const it = setInterval(() => {
-        clearInterval(it);
-        loadData(++id, setMessages);
-      }, Math.floor(500 + Math.random() * 2000));
-    }
+    if (id <= TOTAL_MESSAGES)
+      setTimeout(
+        () => loadData(++id, setMessages),
+        Math.floor(500 + Math.random() * 2000)
+      );
   }, [messages.length]);
 
   useEffect(() => {
