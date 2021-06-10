@@ -1,7 +1,7 @@
 {
-  "name": "rcv-stick-to-bottom",
+  "name": "rcv-prepend-items",
   "version": "0.0.0",
-  "description": "The stick to bottom example of RCV.",
+  "description": "The prepend items example of RCV.",
   "main": "index.js",
   "dependencies": {
     "axios": "^0.21.1",
@@ -15,10 +15,5 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
 }
