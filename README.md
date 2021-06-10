@@ -53,6 +53,7 @@ React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virt
   - [Scroll to Offset/Items](#scroll-to-offsetitems)
   - [Smooth Scrolling](#smooth-scrolling)
   - [Infinite Scroll](#infinite-scroll)
+  - [Pre-pending Items](#pre-pending-items)
   - [Working with Input Elements](#working-with-input-elements)
   - [Dealing with Dynamic Items](#dealing-with-dynamic-items)
   - [Server-side Rendering (SSR)](#server-side-rendering-ssr)
@@ -556,6 +557,92 @@ const List = () => {
           })
         ) : (
           <Loading />
+        )}
+      </div>
+    </div>
+  );
+};
+```
+
+### Pre-pending Items
+
+This example demonstrates how to pre-pend items and maintain scroll position for the user.
+
+[![Edit RCV - Prepend Items](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-prepend-items-ui06h?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import { useEffect, useState } from "react";
+
+import useVirtual from "react-cool-virtual";
+import axios from "axios";
+
+const TOTAL_COMMENTS = 500;
+const BATCH_COMMENTS = 5;
+let shouldFetchData = true;
+let postId = 100;
+
+const fetchData = async (postId, setComments) => {
+  try {
+    const { data: comments } = await axios(`/comments?postId=${postId}`);
+
+    // Pre-pend new items
+    setComments((prevComments) => [...comments, ...prevComments]);
+  } catch (err) {
+    // Try again
+    fetchData(postId, setComments);
+  }
+};
+
+const List = () => {
+  const [comments, setComments] = useState([]);
+  const { outerRef, innerRef, items, scrollToItem } = useVirtual({
+    // Provide the number of comments
+    itemCount: comments.length,
+    onScroll: ({ scrollOffset }) => {
+      // Tweak the threshold of data fetching that you want
+      if (scrollOffset < 50 && shouldFetchData) {
+        fetchData(--postId, setComments);
+        shouldFetchData = false;
+      }
+    },
+  });
+
+  useEffect(() => {
+    const fetchInitData = async () => {
+      await fetchData(postId, setComments);
+      await fetchData(--postId, setComments);
+    };
+
+    fetchInitData();
+  }, []);
+
+  useEffect(() => {
+    // When working with dynamic size, we can use rAF to wait for
+    // the items are measured to reduce scroll jumping
+    requestAnimationFrame(() => {
+      // After the list updated, maintain the previous scroll position for the user
+      scrollToItem({ index: BATCH_COMMENTS, align: "start" }, () => {
+        // After the scroll position updated, re-allow data fetching
+        if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
+      });
+    });
+  }, [comments.length, scrollToItem]);
+
+  return (
+    <div
+      style={{ width: "300px", height: "500px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.length ? (
+          items.map(({ index, measureRef }) => (
+            // Used to measure the unknown item size
+            <div key={comments[index].id} ref={measureRef}>
+              {comments[index].id}. {comments[index].body}
+            </div>
+          ))
+        ) : (
+          <div className="item">⏳ Loading...</div>
         )}
       </div>
     </div>
