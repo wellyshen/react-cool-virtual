@@ -10,6 +10,7 @@ describe("shouldUpdate", () => {
       measureRef: () => null,
     };
     const b = { ...a, measureRef: () => null };
+    expect(shouldUpdate([a], [a, a], {})).toBeTruthy();
     expect(shouldUpdate([a], [b], {})).toBeTruthy();
     expect(shouldUpdate([a], [b], { measureRef: true })).toBeFalsy();
     expect(
