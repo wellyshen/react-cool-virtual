@@ -9,15 +9,15 @@ import "./styles.scss";
 
 const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
+let shouldFetchData = true;
 let postId = 100;
-let isLoading = false;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const fetchData = async (postId, setComments) => {
   try {
     // Simulating a slow network
-    await sleep(2000);
+    await sleep(500);
 
     const { data: comments } = await axios(
       `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
@@ -36,16 +36,11 @@ const App = () => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
     // Provide the number of comments
     itemCount: comments.length,
-    onScroll: ({ visibleStartIndex }) => {
-      if (
-        // Pre-fetch data while the user scrolls to the first item
-        // However, you can adjust the timing based on your case
-        visibleStartIndex === 0 &&
-        !isLoading &&
-        comments.length < TOTAL_COMMENTS
-      ) {
+    onScroll: ({ scrollOffset }) => {
+      // Tweak the threshold of data fetching that you want
+      if (scrollOffset < 50 && shouldFetchData) {
         fetchData(--postId, setComments);
-        isLoading = true;
+        shouldFetchData = false;
       }
     }
   });
@@ -61,12 +56,13 @@ const App = () => {
 
   useEffect(() => {
     // When working with dynamic size, we can use rAF to wait for
-    // the items measured to avoid scroll jumping
+    // the items are measured to reduce scroll jumping
     requestAnimationFrame(() => {
-      // After the list updated, remain the scroll position for the user
-      scrollToItem({ index: BATCH_COMMENTS, align: "start" });
-      // Then re-allow data fetching
-      isLoading = false;
+      // After the list updated, maintain the previous scroll position for the user
+      scrollToItem({ index: BATCH_COMMENTS, align: "start" }, () => {
+        // After the scroll position updated, re-allow data fetching
+        if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
+      });
     });
   }, [comments.length, scrollToItem]);
 
@@ -80,7 +76,7 @@ const App = () => {
       <br />
       <div
         className="outer"
-        style={{ width: "300px", height: "400px", overflow: "auto" }}
+        style={{ width: "300px", height: "500px", overflow: "auto" }}
         ref={outerRef}
       >
         <div ref={innerRef}>
@@ -100,6 +96,8 @@ const App = () => {
           )}
         </div>
       </div>
+      <br />
+      <br />
     </div>
   );
 };
