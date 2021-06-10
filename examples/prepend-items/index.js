@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { render } from "react-dom";
 
 import useVirtual from "react-cool-virtual";
@@ -82,14 +82,13 @@ const App = () => {
         <div ref={innerRef}>
           {items.length ? (
             items.map(({ index, measureRef }) => (
-              <Fragment key={comments[index].id}>
-                <div
-                  className={`item ${index % 2 ? "dark" : ""}`}
-                  ref={measureRef} // Used to measure the unknown item size
-                >
-                  {comments[index].id}. {comments[index].body}
-                </div>
-              </Fragment>
+              <div
+                key={comments[index].id}
+                className={`item ${index % 2 ? "dark" : ""}`}
+                ref={measureRef} // Used to measure the unknown item size
+              >
+                {comments[index].id}. {comments[index].body}
+              </div>
             ))
           ) : (
             <div className="item">⏳ Loading...</div>
