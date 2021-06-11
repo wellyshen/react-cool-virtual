@@ -82,12 +82,9 @@ export default <
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
-  const stickyIndicesRef = useRef(stickyIndices);
   const isItemLoadedRef = useRef(isItemLoaded);
   const loadMoreRef = useLatest(loadMore);
-  const easingFnRef = useLatest(scrollEasingFunction);
   const itemSizeRef = useLatest(itemSize);
-  const useIsScrollingRef = useLatest(useIsScrolling);
   const onScrollRef = useLatest(onScroll);
   const onResizeRef = useLatest(onResize);
   const sizeKey = !horizontal ? "height" : "width";
@@ -205,7 +202,7 @@ export default <
       const start = now();
       const scroll = () => {
         const time = Math.min((now() - start) / scrollDuration, 1);
-        const easing = easingFnRef.current(time);
+        const easing = scrollEasingFunction(time);
 
         scrollTo(easing * (offset - prevOffset) + prevOffset);
 
@@ -218,7 +215,8 @@ export default <
 
       scrollToRafRef.current = requestAnimationFrame(scroll);
     },
-    [easingFnRef, scrollDuration, scrollTo]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [scrollDuration, scrollTo]
   );
 
   const scrollToItem = useCallback<ScrollToItem>(
@@ -330,9 +328,7 @@ export default <
       innerRef.current.style[sizeKey] = `${innerSize}px`;
 
       const nextItems: Item[] = [];
-      const stickies = Array.isArray(stickyIndicesRef.current)
-        ? stickyIndicesRef.current
-        : [];
+      const stickies = Array.isArray(stickyIndices) ? stickyIndices : [];
 
       for (let i = oStart; i <= oStop; i += 1) {
         const { current: msData } = msDataRef;
@@ -450,6 +446,7 @@ export default <
       if (uxScrolling) resetIsScrolling();
       if (!userScrollRef.current) resetUserScroll();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       getCalcData,
       getMeasure,
@@ -503,7 +500,7 @@ export default <
 
       if (scrollOffset === scrollOffsetRef.current) return;
 
-      let { current: uxScrolling } = useIsScrollingRef;
+      let uxScrolling = useIsScrolling;
       uxScrolling =
         typeof uxScrolling === "function"
           ? uxScrolling(Math.abs(scrollOffset - scrollOffsetRef.current))
@@ -530,13 +527,7 @@ export default <
       ros.forEach((ro) => ro.disconnect());
       ros.clear();
     };
-  }, [
-    cancelResetIsScrolling,
-    cancelResetUserScroll,
-    handleScroll,
-    scrollKey,
-    useIsScrollingRef,
-  ]);
+  }, [cancelResetIsScrolling, cancelResetUserScroll, handleScroll, scrollKey]);
 
   return { outerRef, innerRef, items, scrollTo: scrollToOffset, scrollToItem };
 };
