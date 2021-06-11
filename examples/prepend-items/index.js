@@ -84,7 +84,7 @@ const App = () => {
             items.map(({ index, measureRef }) => (
               <div
                 key={comments[index].id}
-                className={`item ${index % 2 ? "dark" : ""}`}
+                className="item"
                 ref={measureRef} // Used to measure the unknown item size
               >
                 {comments[index].id}. {comments[index].body}
