@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+/* import { Fragment, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -94,9 +94,8 @@ export default (): JSX.Element => {
       </button>
     </div>
   );
-};
+}; */
 
-/* import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -114,16 +113,15 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(10000);
+const mockData = getMockData(50);
 
 export default (): JSX.Element => {
-  const [test, setTest] = useState(false);
-  const { outerRef, innerRef, items } = useVirtual<
+  const { outerRef, innerRef, items, scrollToItem } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    itemSize: 75,
+    // itemSize: 75,
     // overscanCount: 0,
   });
 
@@ -144,9 +142,14 @@ export default (): JSX.Element => {
           ))}
         </div>
       </div>
-      <button type="button" onClick={() => setTest(!test)}>
-        Resize
+      <button
+        type="button"
+        onClick={() =>
+          scrollToItem({ index: 30, align: "auto" }, () => console.log("Done"))
+        }
+      >
+        Scroll To...
       </button>
     </div>
   );
-}; */
+};
