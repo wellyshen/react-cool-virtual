@@ -243,37 +243,29 @@ export default <
       if (!ms) return;
 
       const { start, end, size } = ms;
-      let { current: scrollOffset } = scrollOffsetRef;
       const totalSize = msData[msData.length - 1].end;
       const outerSize = outerRectRef.current[sizeKey];
+      let { current: scrollOffset } = scrollOffsetRef;
 
       if (totalSize <= outerSize) {
         if (cb) cb();
         return;
       }
 
-      const endPos = start - outerSize + size;
-
-      switch (align) {
-        case Align.start:
-          scrollOffset =
-            totalSize - start <= outerSize ? totalSize - outerSize : start;
-          break;
-        case Align.center: {
-          const to = start - outerSize / 2 + size / 2;
-          scrollOffset =
-            totalSize - to <= outerSize ? totalSize - outerSize : to;
-          break;
-        }
-        case Align.end:
-          scrollOffset = start + size <= outerSize ? 0 : endPos;
-          break;
-        default:
-          if (scrollOffset > start) {
-            scrollOffset = start;
-          } else if (scrollOffset + outerSize < end) {
-            scrollOffset = endPos;
-          }
+      if (
+        align === Align.start ||
+        (align === Align.auto && scrollOffset > start)
+      ) {
+        scrollOffset =
+          totalSize - start <= outerSize ? totalSize - outerSize : start;
+      } else if (
+        align === Align.end ||
+        (align === Align.auto && scrollOffset + outerSize < end)
+      ) {
+        scrollOffset = start + size <= outerSize ? 0 : start - outerSize + size;
+      } else if (align === Align.center && start + size / 2 > outerSize / 2) {
+        const to = start - outerSize / 2 + size / 2;
+        scrollOffset = totalSize - to <= outerSize ? totalSize - outerSize : to;
       }
 
       if (
