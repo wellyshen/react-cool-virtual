@@ -53,7 +53,7 @@ const Skeleton = () => {
   return (
     <div
       className="outer"
-      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      style={{ width: "300px", height: "500px", overflow: "auto" }}
       ref={outerRef}
     >
       <div ref={innerRef}>
