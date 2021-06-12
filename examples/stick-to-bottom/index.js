@@ -29,7 +29,7 @@ const App = () => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
     // Provide the number of messages
     itemCount: messages.length,
-    // Speed up smooth scrolling
+    // You can speed up smooth scrolling
     scrollDuration: 50,
     onScroll: ({ userScroll }) => {
       // If the user scrolls and isn't automatically scrolling, cancel stick to bottom
