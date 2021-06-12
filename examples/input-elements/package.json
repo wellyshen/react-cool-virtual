@@ -1,6 +1,5 @@
 {
   "name": "rcv-input-elements",
-  "version": "0.0.0",
   "description": "The input elements example of RCV.",
   "main": "index.js",
   "dependencies": {
