@@ -1,6 +1,5 @@
 {
-  "name": "rcf-app",
-  "version": "0.0.0",
+  "name": "rcv-app",
   "private": true,
   "scripts": {
     "link-pkg": "yarn link 'react-cool-virtual'",
