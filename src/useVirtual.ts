@@ -71,6 +71,7 @@ export default <
     getInitItems(itemSize, ssrItemCount)
   );
   const isMountedRef = useRef(false);
+  const isScrollToItemRef = useRef(false);
   const hasDynamicSizeRef = useRef(false);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
@@ -132,7 +133,7 @@ export default <
       if (hasDynamicSizeRef.current) {
         while (
           vStart < msData.length &&
-          // To prevent items from jumping while backward scrolling in dynamic size
+          // To prevent dynamic size from jumping during backward scrolling
           msData[vStart].start < (msData[vStart + 1]?.start ?? 0) &&
           msData[vStart].start + msData[vStart].size < scrollOffset
         )
@@ -231,6 +232,9 @@ export default <
 
       if (!isNumber(index)) return;
 
+      isScrollToItemRef.current = true;
+
+      // For dynamic size, we must measure it for getting the correct scroll position
       if (hasDynamicSizeRef.current) measureItems();
 
       const { current: msData } = msDataRef;
@@ -297,8 +301,9 @@ export default <
     DEBOUNCE_INTERVAL
   );
 
-  const [resetUserScroll, cancelResetUserScroll] = useDebounce(() => {
+  const [resetScrollTo, cancelResetScrollTo] = useDebounce(() => {
     userScrollRef.current = true;
+    isScrollToItemRef.current = false;
   }, DEBOUNCE_INTERVAL);
 
   const handleScroll = useCallback(
@@ -363,11 +368,13 @@ export default <
               const prevEnd = msData[i - 1]?.end ?? 0;
 
               if (measuredSize !== size || start !== prevEnd) {
+                // To prevent dynamic size from jumping during backward scrolling
                 if (i < prevItemIdxRef.current && start < scrollOffset)
                   scrollTo(scrollOffset + measuredSize - size);
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
-                handleScroll(scrollOffset, isScrolling, uxScrolling);
+                if (!isScrollToItemRef.current)
+                  handleScroll(scrollOffset, isScrolling, uxScrolling);
 
                 hasDynamicSizeRef.current = true;
               }
@@ -418,6 +425,8 @@ export default <
 
       if (!isScrolling) return;
 
+      const { current: userScroll } = userScrollRef;
+
       if (onScrollRef.current)
         onScrollRef.current({
           overscanStartIndex: oStart,
@@ -426,7 +435,7 @@ export default <
           visibleStopIndex: vStop,
           scrollOffset,
           scrollForward: scrollOffset > scrollOffsetRef.current,
-          userScroll: userScrollRef.current,
+          userScroll,
         });
 
       const loadIndex = Math.floor((vStop + 1) / loadMoreCount);
@@ -442,13 +451,13 @@ export default <
           stopIndex: startIndex + loadMoreCount - 1,
           loadIndex,
           scrollOffset,
-          userScroll: userScrollRef.current,
+          userScroll,
         });
 
       prevVStopRef.current = vStop;
 
       if (uxScrolling) resetIsScrolling();
-      if (!userScrollRef.current) resetUserScroll();
+      if (!userScroll) resetScrollTo();
     },
     [
       getCalcData,
@@ -459,7 +468,7 @@ export default <
       marginKey,
       onScrollRef,
       resetIsScrolling,
-      resetUserScroll,
+      resetScrollTo,
       scrollTo,
       sizeKey,
     ]
@@ -519,7 +528,7 @@ export default <
 
     return () => {
       cancelResetIsScrolling();
-      cancelResetUserScroll();
+      cancelResetScrollTo();
       if (scrollToRafRef.current) {
         cancelAnimationFrame(scrollToRafRef.current);
         scrollToRafRef.current = undefined;
@@ -532,7 +541,7 @@ export default <
     };
   }, [
     cancelResetIsScrolling,
-    cancelResetUserScroll,
+    cancelResetScrollTo,
     handleScroll,
     scrollKey,
     useIsScrollingRef,
