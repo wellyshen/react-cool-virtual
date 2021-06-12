@@ -113,7 +113,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(10000);
 
 export default (): JSX.Element => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual<
@@ -131,9 +131,9 @@ export default (): JSX.Element => {
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ height: `${mockData[index].size}px` }}
-              // style={{ height: `${50}px` }}
-              ref={measureRef}
+              // style={{ height: `${mockData[index].size}px` }}
+              style={{ height: `${50}px` }}
+              // ref={measureRef}
             >
               {index}
             </div>
@@ -142,11 +142,9 @@ export default (): JSX.Element => {
       </div>
       <button
         type="button"
-        onClick={() =>
-          scrollToItem({ index: 50, align: "auto", smooth: true }, () =>
-            console.log("Done")
-          )
-        }
+        onClick={() => {
+          scrollToItem({ index: 1000, smooth: true }, () => console.log("Done"));
+        }}
       >
         Scroll To...
       </button>
