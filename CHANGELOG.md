@@ -1,5 +1,17 @@
 # react-cool-virtual
 
+## 0.3.0
+
+### Minor Changes
+
+- [#142](https://github.com/wellyshen/react-cool-virtual/pull/142) [`b1f96f3`](https://github.com/wellyshen/react-cool-virtual/commit/b1f96f3a77d7eb6ad2e3030a5be82c7da08320a9) Thanks [@wellyshen](https://github.com/wellyshen)! - feat: provides a callback with given `distance` parameter for `scrollDuration` option
+
+### Patch Changes
+
+- [#141](https://github.com/wellyshen/react-cool-virtual/pull/141) [`99ffe72`](https://github.com/wellyshen/react-cool-virtual/commit/99ffe724a48e6720e52113a52aa60a3af59580d5) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `scrollToItem` with center alignment causes infinite loop
+
+* [#139](https://github.com/wellyshen/react-cool-virtual/pull/139) [`5bdfbb2`](https://github.com/wellyshen/react-cool-virtual/commit/5bdfbb257c427617b6c3ec066deb41630a510b66) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `scrollToItem` causes empty rows
+
 ## 0.2.2
 
 ### Patch Changes
