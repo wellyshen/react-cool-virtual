@@ -408,13 +408,15 @@ const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
 const scrollToItem = () => scrollToItem({ index: 10, smooth: true });
 ```
 
-The default easing effect is [easeInOutCubic](https://easings.net/#easeInOutCubic), and the duration is 500 milliseconds. You can easily customize your own effect as follows:
+The default easing effect is [easeInOutSine](https://easings.net/#easeInOutSine), and the duration is `100ms <= distance * 0.075 <= 500ms`. You can easily customize your own effect as follows:
 
 ```js
 const { scrollTo } = useVirtual({
-  // For 500 milliseconds (default = 500ms)
+  // For 500 milliseconds
   scrollDuration: 500,
-  // Using "easeInOutBack" effect (default = easeInOutCubic), see: https://easings.net/#easeInOutBack
+  // Or whatever duration you want based on the scroll distance
+  scrollDuration: (distance) => distance * 0.05,
+  // Using "easeInOutBack" effect (default = easeInOutSine), see: https://easings.net/#easeInOutSine
   scrollEasingFunction: (t) => {
     const c1 = 1.70158;
     const c2 = c1 * 1.525;
@@ -676,7 +678,7 @@ const Chatroom = () => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
     // Provide the number of messages
     itemCount: messages.length,
-    // Speed up smooth scrolling
+    // You can speed up smooth scrolling
     scrollDuration: 50,
     onScroll: ({ userScroll }) => {
       // If the user scrolls and isn't automatically scrolling, cancel stick to bottom
@@ -863,7 +865,7 @@ const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: 1000,
     ssrItemCount: 30, // Renders 0th - 30th items on SSR
-    // or
+    // Or
     ssrItemCount: [50, 80], // Renders 50th - 80th items on SSR
   });
 
@@ -952,15 +954,15 @@ An array of indexes to make certain items in the list sticky. See the [example](
 
 #### scrollDuration
 
-`number`
+`number | (distance: number) => number`
 
-The duration of [smooth scrolling](#smooth-scrolling), the unit is milliseconds (default = 500ms).
+The duration of [smooth scrolling](#smooth-scrolling), the unit is milliseconds (default = `100ms <= distance * 0.075 <= 500ms`).
 
 #### scrollEasingFunction
 
 `(time: number) => number`
 
-A function that allows us to customize the easing effect of [smooth scrolling](#smooth-scrolling) (default = [easeInOutCubic](https://easings.net/#easeInOutCubic)).
+A function that allows us to customize the easing effect of [smooth scrolling](#smooth-scrolling) (default = [easeInOutSine](https://easings.net/#easeInOutSine)).
 
 #### loadMoreCount
 
@@ -1176,7 +1178,7 @@ const List = () => {
   const { outerRef, innerRef, items } = useVirtual({
     itemCount: 1000,
     useIsScrolling: true, // Just use it (default = false)
-    // or
+    // Or
     useIsScrolling: (speed) => speed > 50, // Use it based on the scroll speed (more user friendly)
   });
 

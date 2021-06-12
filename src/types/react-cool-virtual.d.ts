@@ -13,6 +13,8 @@ declare module "react-cool-virtual" {
 
   export type UseIsScrolling = boolean | UseIsScrollingFunction;
 
+  export type ScrollDuration = number | ((distance: number) => number);
+
   export interface ScrollEasingFunction {
     (time: number): number;
   }
@@ -101,7 +103,7 @@ declare module "react-cool-virtual" {
     overscanCount?: number;
     useIsScrolling?: UseIsScrolling;
     stickyIndices?: number[];
-    scrollDuration?: number;
+    scrollDuration?: ScrollDuration;
     scrollEasingFunction?: ScrollEasingFunction;
     loadMoreCount?: number;
     isItemLoaded?: IsItemLoaded;

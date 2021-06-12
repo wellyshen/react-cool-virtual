@@ -15,6 +15,8 @@ type UseIsScrolling = boolean | ((speed: number) => boolean);
 
 export type ItemSize = number | ((index: number, width: number) => number);
 
+type ScrollDuration = number | ((distance: number) => number);
+
 interface ScrollEasingFunction {
   (time: number): number;
 }
@@ -93,7 +95,7 @@ export interface Options {
   overscanCount?: number;
   useIsScrolling?: UseIsScrolling;
   stickyIndices?: number[];
-  scrollDuration?: number;
+  scrollDuration?: ScrollDuration;
   scrollEasingFunction?: ScrollEasingFunction;
   loadMoreCount?: number;
   isItemLoaded?: IsItemLoaded;

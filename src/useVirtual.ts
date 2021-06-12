@@ -14,7 +14,6 @@ import {
   SsrItemCount,
 } from "./types";
 import {
-  easeInOutCubic,
   findNearestBinarySearch,
   isNumber,
   now,
@@ -59,8 +58,8 @@ export default <
   overscanCount = 1,
   useIsScrolling,
   stickyIndices,
-  scrollDuration = 500,
-  scrollEasingFunction = easeInOutCubic,
+  scrollDuration = (d) => Math.min(Math.max(d * 0.075, 100), 500),
+  scrollEasingFunction = (t) => -(Math.cos(Math.PI * t) - 1) / 2,
   loadMoreCount = 15,
   isItemLoaded,
   loadMore,
@@ -84,9 +83,10 @@ export default <
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
   const stickyIndicesRef = useRef(stickyIndices);
+  const durationRef = useLatest(scrollDuration);
+  const easingFnRef = useLatest(scrollEasingFunction);
   const isItemLoadedRef = useRef(isItemLoaded);
   const loadMoreRef = useLatest(loadMore);
-  const easingFnRef = useLatest(scrollEasingFunction);
   const itemSizeRef = useLatest(itemSize);
   const useIsScrollingRef = useLatest(useIsScrolling);
   const onScrollRef = useLatest(onScroll);
@@ -205,7 +205,11 @@ export default <
 
       const start = now();
       const scroll = () => {
-        const time = Math.min((now() - start) / scrollDuration, 1);
+        let { current: duration } = durationRef;
+        duration = isNumber(duration)
+          ? duration
+          : duration(Math.abs(offset - prevOffset));
+        const time = Math.min((now() - start) / duration, 1);
         const easing = easingFnRef.current(time);
 
         scrollTo(easing * (offset - prevOffset) + prevOffset);
@@ -219,7 +223,7 @@ export default <
 
       scrollToRafRef.current = requestAnimationFrame(scroll);
     },
-    [easingFnRef, scrollDuration, scrollTo]
+    [durationRef, easingFnRef, scrollTo]
   );
 
   const scrollToItem = useCallback<ScrollToItem>(
