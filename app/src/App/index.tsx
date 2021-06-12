@@ -121,6 +121,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
+    // scrollDuration: (d) => d * 0.05,
   });
 
   return (
