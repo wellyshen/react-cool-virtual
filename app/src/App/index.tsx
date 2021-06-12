@@ -113,7 +113,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(50);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual<
@@ -121,8 +121,6 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    // itemSize: 75,
-    // overscanCount: 0,
   });
 
   return (
@@ -145,7 +143,9 @@ export default (): JSX.Element => {
       <button
         type="button"
         onClick={() =>
-          scrollToItem({ index: 30, align: "auto" }, () => console.log("Done"))
+          scrollToItem({ index: 50, align: "auto", smooth: true }, () =>
+            console.log("Done")
+          )
         }
       >
         Scroll To...
