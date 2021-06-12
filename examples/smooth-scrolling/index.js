@@ -14,7 +14,7 @@ const App = () => (
       examples.
     </p>
     <br />
-    <h4>Built-in (easeInOutCubic)</h4>
+    <h4>Built-in (easeInOutSine)</h4>
     <BuiltIn />
     <br />
     <br />
