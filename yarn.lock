@@ -1824,7 +1824,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^4.26.0":
+"@typescript-eslint/eslint-plugin@^4.26.1":
   version "4.26.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.26.1.tgz#b9c7313321cb837e2bf8bebe7acc2220659e67d3"
   integrity sha512-aoIusj/8CR+xDWmZxARivZjbMBQTT9dImUtdZ8tVCVRXgBUuuZyM5Of5A9D9arQPxbi/0rlJLcuArclz/rCMJw==
@@ -1850,7 +1850,7 @@
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
-"@typescript-eslint/parser@^4.26.0":
+"@typescript-eslint/parser@^4.26.1":
   version "4.26.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.26.1.tgz#cecfdd5eb7a5c13aabce1c1cfd7fbafb5a0f1e8e"
   integrity sha512-q7F3zSo/nU6YJpPJvQveVlIIzx9/wu75lr6oDbDzoeIRWxpoc/HQ43G4rmMoCc5my/3uSj2VEpg/D83LYZF5HQ==
@@ -3749,14 +3749,14 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.3.0.tgz#f7471b20b6fe8a9a9254cc684454202886a2dd7a"
   integrity sha512-BgZuLUSeKzvlL/VUjx/Yb787VQ26RU3gGjA3iiFvdsp/2bMfVIWUVP7tjxtjS0e+HP409cPlPvNkQloz8C91ew==
 
-eslint-config-welly@^1.10.6:
-  version "1.10.6"
-  resolved "https://registry.yarnpkg.com/eslint-config-welly/-/eslint-config-welly-1.10.6.tgz#9e2d05ad47c17210570edce8217f2a540e66354c"
-  integrity sha512-5vpyCiIgAYKdTQPP88MF4ZEuVUbRESfWCY48EWSqkdkSP1YlWhC60J5UuKyq00nUQ5LnXRwTQMm7wyFMAtI9+g==
+eslint-config-welly@^1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-welly/-/eslint-config-welly-1.11.1.tgz#7fbd68c48947776b785e783301749da48abc0b52"
+  integrity sha512-99Cs6N445B94opxyns/LUnPSg0Nnf6qia1ASKewRj/rYcgIRAo3XgAhc6qKwd1O00FfrqhB0mKnhbFrwD2bAjg==
   dependencies:
     "@emotion/eslint-plugin" "^11.2.0"
-    "@typescript-eslint/eslint-plugin" "^4.26.0"
-    "@typescript-eslint/parser" "^4.26.0"
+    "@typescript-eslint/eslint-plugin" "^4.26.1"
+    "@typescript-eslint/parser" "^4.26.1"
     eslint-config-airbnb "^18.2.1"
     eslint-config-prettier "^8.3.0"
     eslint-import-resolver-typescript "^2.4.0"
@@ -3765,6 +3765,7 @@ eslint-config-welly@^1.10.6:
     eslint-plugin-jest "^24.3.6"
     eslint-plugin-jest-dom "^3.9.0"
     eslint-plugin-jsx-a11y "^6.4.1"
+    eslint-plugin-promise "^5.1.0"
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4"
     eslint-plugin-testing-library "^4.6.0"
@@ -3864,6 +3865,11 @@ eslint-plugin-jsx-a11y@^6.4.1:
     has "^1.0.3"
     jsx-ast-utils "^3.1.0"
     language-tags "^1.0.5"
+
+eslint-plugin-promise@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-5.1.0.tgz#fb2188fb734e4557993733b41aa1a688f46c6f24"
+  integrity sha512-NGmI6BH5L12pl7ScQHbg7tvtk4wPxxj8yPHH47NvSmMtFneC077PSeY3huFj06ZWZvtbfxSPt3RuOQD5XcR4ng==
 
 eslint-plugin-react-hooks@^4:
   version "4.2.0"
