@@ -789,6 +789,8 @@ const Form = () => {
 
 When dealing with forms, we can use [React Cool Form](react-cool-form.netlify.app) to handle the form state and boost performance for use.
 
+[![Edit RCV - RCF](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-rcf-y6wiq?fontsize=14&hidenavigation=1&theme=dark)
+
 ```js
 import useVirtual from "react-cool-virtual";
 import { useForm } from "react-cool-form";
