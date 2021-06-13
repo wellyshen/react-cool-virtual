@@ -24,9 +24,6 @@ import {
   useResizeEffect,
 } from "./utils";
 
-const DEFAULT_ITEM_SIZE = 50;
-const DEBOUNCE_INTERVAL = 150;
-
 const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
   if (!ssrItemCount) return [];
 
@@ -40,7 +37,7 @@ const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
       index: i,
       start: 0,
       width: 0,
-      size: isNumber(itemSize) ? itemSize : itemSize(i, 0) ?? DEFAULT_ITEM_SIZE,
+      size: isNumber(itemSize) ? itemSize : itemSize(i, 0),
       measureRef: () => null,
     };
 
@@ -53,7 +50,7 @@ export default <
 >({
   itemCount,
   ssrItemCount,
-  itemSize = DEFAULT_ITEM_SIZE,
+  itemSize = 50,
   horizontal,
   overscanCount = 1,
   useIsScrolling,
@@ -98,9 +95,7 @@ export default <
   const getItemSize = useCallback(
     (idx: number) => {
       const { current: size } = itemSizeRef;
-      return isNumber(size)
-        ? size
-        : size(idx, outerRectRef.current.width) ?? DEFAULT_ITEM_SIZE;
+      return isNumber(size) ? size : size(idx, outerRectRef.current.width);
     },
     [itemSizeRef]
   );
@@ -294,13 +289,13 @@ export default <
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     () => handleScroll(scrollOffsetRef.current),
-    DEBOUNCE_INTERVAL
+    150
   );
 
   const [resetScrollTo, cancelResetScrollTo] = useDebounce(() => {
     userScrollRef.current = true;
     isScrollToItemRef.current = false;
-  }, DEBOUNCE_INTERVAL);
+  }, 150);
 
   const handleScroll = useCallback(
     (scrollOffset: number, isScrolling?: boolean, uxScrolling?: boolean) => {
