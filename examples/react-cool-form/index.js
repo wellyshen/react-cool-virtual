@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 
 import { render } from "react-dom";
-import useVirtual from "react-cool-virtual";
 import { useForm } from "react-cool-form";
+import useVirtual from "react-cool-virtual";
 
 import "./styles.scss";
 
