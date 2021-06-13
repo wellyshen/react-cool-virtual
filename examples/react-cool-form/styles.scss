@@ -1,0 +1,36 @@
+body {
+  font-family: sans-serif;
+  background: #fff;
+}
+
+.app {
+  padding: 0 1rem;
+}
+
+p {
+  color: #333;
+}
+
+.outer {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+
+  &.dark {
+    background: #e5e5e5;
+  }
+}
+
+input[type="submit"] {
+  margin-top: 1rem;
+  width: 300px;
+}
+
+label {
+  margin: 0 0 0.125rem 0.5rem;
+}
