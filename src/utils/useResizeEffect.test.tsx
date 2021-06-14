@@ -9,12 +9,12 @@ interface Event {
   contentRect: { width: number; height: number };
 }
 
-let callback: (e: Event[]) => void;
+let roCallback: (e: Event[]) => void;
 const observe = jest.fn();
 const disconnect = jest.fn();
 const mockResizeObserver = jest.fn((cb) => ({
   observe: () => {
-    callback = cb;
+    roCallback = cb;
     observe();
   },
   disconnect,
@@ -63,7 +63,7 @@ describe("useResizeEffect", () => {
     const cb = jest.fn();
     render(<Compo cb={cb} />);
     const contentRect = { width: 100, height: 100 };
-    callback([{ contentRect }]);
+    roCallback([{ contentRect }]);
     expect(cb).toHaveBeenCalledWith(contentRect);
   });
 
