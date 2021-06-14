@@ -234,7 +234,7 @@ const List = () => {
 };
 ```
 
-> 💡 Scrollbar thumb is jumping? It's because the total size of the items is gradually corrected along with an item has been measured. You can tweak the `itemSize` to reduce the phenomenon.
+> 💡 The scrollbar is jumping? It's because the total size of the items is gradually corrected along with an item has been measured. You can tweak the `itemSize` to reduce the phenomenon.
 
 ### Real-time Resize
 
@@ -361,7 +361,7 @@ const List = () => {
 };
 ```
 
-> 💡 Scrollbars disappear when using Chrome in Mac? If you encounter [this issue](https://bugs.chromium.org/p/chromium/issues/detail?id=1033712), you can add `will-change:transform` to the outer element to workaround this problem.
+> 💡 The scrollbar disappears when using Chrome in Mac? If you encounter [this issue](https://bugs.chromium.org/p/chromium/issues/detail?id=1033712), you can add `will-change:transform` to the outer element to workaround this problem.
 
 ### Scroll to Offset/Items
 
@@ -407,6 +407,8 @@ const scrollToOffset = () => scrollTo({ offset: 500, smooth: true });
 // Smoothly scroll to the 500th item
 const scrollToItem = () => scrollToItem({ index: 10, smooth: true });
 ```
+
+> 💡 When working with [dynamic size](#dynamic-size), the scroll position will be automatically corrected along with the items are measured. To optimize it, we can provide an estimated item size to the [itemSize](#itemsize) option.
 
 The default easing effect is [easeInOutSine](https://easings.net/#easeInOutSine), and the duration is `100ms <= distance * 0.075 <= 500ms`. You can easily customize your own effect as follows:
 
