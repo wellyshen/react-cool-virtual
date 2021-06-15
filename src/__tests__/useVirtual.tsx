@@ -1,20 +1,18 @@
 import { render as tlRender } from "@testing-library/react";
 
-import { Return } from "../types";
+import { Options, Return } from "../types";
 import { createRo } from "../utils";
 import useVirtual from "../useVirtual";
 
 type Obj = Omit<Return, "outerRef" | "innerRef">;
 
-interface Props {
-  children: (obj: Obj) => null;
-}
+type Props = Partial<Options> & { children: (obj: Obj) => null };
 
-const Compo = ({ children }: Props) => {
+const Compo = ({ children, itemCount = 100, ...options }: Props) => {
   const { outerRef, innerRef, items, ...rest } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
-  >({ itemCount: 100 });
+  >({ itemCount, ...options });
 
   return (
     <div ref={outerRef}>
@@ -28,10 +26,7 @@ const Compo = ({ children }: Props) => {
   );
 };
 
-const itemSize = 50;
-const overscanCount = 1;
-const rect = { width: 300, height: 300 };
-const mockResizeObserver = createRo(rect);
+const mockResizeObserver = createRo({ width: 300, height: 300 });
 
 const render = () => {
   let obj: Obj;
@@ -58,6 +53,7 @@ describe("useVirtual", () => {
 
   it("should return `items` correctly", () => {
     const { items } = render();
-    expect(items).toHaveLength(rect.height / itemSize + overscanCount);
+    expect(items).toHaveLength(7);
+    // TODO: more testing cases
   });
 });
