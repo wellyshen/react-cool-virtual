@@ -96,6 +96,7 @@ export default (): JSX.Element => {
   );
 }; */
 
+import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { v4 as uuidv4 } from "uuid";
 
@@ -113,15 +114,15 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(10000);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
-  const { outerRef, innerRef, items, scrollToItem } = useVirtual<
+  const [sz, setSz] = useState(50);
+  const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemCount: mockData.length,
-    // scrollDuration: (d) => d * 0.05,
   });
 
   return (
@@ -133,8 +134,8 @@ export default (): JSX.Element => {
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
               // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${50}px` }}
-              // ref={measureRef}
+              style={{ height: `${index === 10 ? sz : size}px` }}
+              ref={measureRef}
             >
               {index}
             </div>
@@ -143,11 +144,9 @@ export default (): JSX.Element => {
       </div>
       <button
         type="button"
-        onClick={() => {
-          scrollToItem({ index: 1000, smooth: true }, () => console.log("Done"));
-        }}
+        onClick={() => setSz((prevSz) => (prevSz === 50 ? 200 : 50))}
       >
-        Scroll To...
+        Resize
       </button>
     </div>
   );

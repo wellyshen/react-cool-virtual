@@ -56,6 +56,7 @@ export default <
   useIsScrolling,
   stickyIndices,
   scrollDuration = (d) => Math.min(Math.max(d * 0.075, 100), 500),
+  // Using easeInOutSine by default
   scrollEasingFunction = (t) => -(Math.cos(Math.PI * t) - 1) / 2,
   loadMoreCount = 15,
   isItemLoaded,
