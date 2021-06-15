@@ -1340,7 +1340,7 @@ You could use dynamic imports to only load the file when the polyfill is require
 ## To Do... <!-- omit in toc -->
 
 - [ ] Unit testing (WIP)
-- [ ] `scrollBy` method
+- [ ] Support window scrolling
 
 ## Contributors ✨ <!-- omit in toc -->
 
