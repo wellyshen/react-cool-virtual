@@ -1,6 +1,6 @@
 /* eslint-disable compat/compat */
 
-import now from "./now";
+import { now } from "../utils";
 
 describe("now", () => {
   it("should work correctly", () => {

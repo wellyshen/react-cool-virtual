@@ -47,7 +47,7 @@ interface OnScroll {
   }): void;
 }
 
-interface OnResize {
+export interface OnResize {
   (event: { width: number; height: number }): void;
 }
 

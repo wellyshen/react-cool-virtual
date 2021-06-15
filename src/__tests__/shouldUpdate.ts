@@ -1,4 +1,4 @@
-import shouldUpdate from "./shouldUpdate";
+import { shouldUpdate } from "../utils";
 
 describe("shouldUpdate", () => {
   it("should work correctly", () => {

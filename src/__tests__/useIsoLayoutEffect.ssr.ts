@@ -3,7 +3,7 @@
  */
 
 import { useEffect } from "react";
-import useIsoLayoutEffect from "./useIsoLayoutEffect";
+import { useIsoLayoutEffect } from "../utils";
 
 describe("useIsoLayoutEffect", () => {
   it("should work correctly", () => {

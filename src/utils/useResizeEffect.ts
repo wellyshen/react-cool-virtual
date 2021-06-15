@@ -1,15 +1,12 @@
 import { DependencyList, RefObject } from "react";
 
+import { OnResize } from "../types";
 import useIsoLayoutEffect from "./useIsoLayoutEffect";
 import useLatest from "./useLatest";
 
-export interface CB {
-  (rect: { height: number; width: number }): void;
-}
-
 export default <T extends HTMLElement>(
   ref: RefObject<T>,
-  cb: CB,
+  cb: OnResize,
   deps: DependencyList
 ): void => {
   const cbRef = useLatest(cb);

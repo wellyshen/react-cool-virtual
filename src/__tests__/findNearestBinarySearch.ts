@@ -1,4 +1,4 @@
-import findNearestBinarySearch from "./findNearestBinarySearch";
+import { findNearestBinarySearch } from "../utils";
 
 describe("findNearestBinarySearch", () => {
   it("should work correctly", () => {
