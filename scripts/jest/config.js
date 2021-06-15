@@ -8,5 +8,6 @@ module.exports = {
     "!**/index.ts",
     "!**/index.umd.ts",
     "!src/types/*",
+    "!src/utils/createRo.ts",
   ],
 };
