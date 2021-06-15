@@ -47,8 +47,13 @@ interface OnScroll {
   }): void;
 }
 
+export interface OnResizeEvent {
+  width: number;
+  height: number;
+}
+
 export interface OnResize {
-  (event: { width: number; height: number }): void;
+  (event: OnResizeEvent): void;
 }
 
 export interface Item {
@@ -104,7 +109,7 @@ export interface Options {
   onResize?: OnResize;
 }
 
-export interface Return<O, I> {
+export interface Return<O = any, I = any> {
   outerRef: MutableRefObject<O | null>;
   innerRef: MutableRefObject<I | null>;
   items: Item[];
