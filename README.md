@@ -1342,6 +1342,12 @@ You could use dynamic imports to only load the file when the polyfill is require
 - [ ] Unit testing (WIP)
 - [ ] Support window scrolling
 
+## Articles / Blog Posts
+
+> 💡 If you have written any blog post or article about React Cool Virtual, please open a PR to add it here.
+
+- Featured on [React Status #243](https://react.statuscode.com/issues/243).
+
 ## Contributors ✨ <!-- omit in toc -->
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
