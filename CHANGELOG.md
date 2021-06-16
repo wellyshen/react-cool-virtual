@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.3.1
+
+### Patch Changes
+
+- [`c8e3a42`](https://github.com/wellyshen/react-cool-virtual/commit/c8e3a42fc4fc17ada3224b465b8cb4920a6c23a1) Thanks [@wellyshen](https://github.com/wellyshen)! - docs(readme): add note for smooth scrolling example
+
 ## 0.3.0
 
 ### Minor Changes
