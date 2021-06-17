@@ -114,7 +114,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(100);
+const mockData = getMockData(10);
 
 export default (): JSX.Element => {
   const [sz, setSz] = useState(50);
@@ -123,23 +123,30 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount: mockData.length,
+    onScroll: (e) => console.log(e),
   });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
-        <div ref={innerRef}>
-          {items.map(({ index, size, measureRef }) => (
-            <div
-              key={index}
-              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              // style={{ height: `${mockData[index].size}px` }}
-              style={{ height: `${index === 10 ? sz : size}px` }}
-              ref={measureRef}
-            >
-              {index}
-            </div>
-          ))}
+        <div className={styles.inner} ref={innerRef}>
+          {items.map(({ index, size, start }) => {
+            console.log("LOG ===> ", index, start);
+            return (
+              <div
+                key={index}
+                className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+                style={{
+                  position: "absolute",
+                  top: start,
+                  height: `${size}px`,
+                  width: "100%",
+                }}
+              >
+                {index}
+              </div>
+            );
+          })}
         </div>
       </div>
       <button
