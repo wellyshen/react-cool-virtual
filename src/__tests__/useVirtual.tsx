@@ -26,7 +26,8 @@ const Compo = ({ children, itemCount = 100, ...options }: Props) => {
   );
 };
 
-const mockResizeObserver = createRo({ width: 300, height: 300 });
+const rect = { width: 300, height: 300 };
+const mockResizeObserver = createRo(rect);
 
 const render = () => {
   let obj: Obj;
@@ -51,9 +52,24 @@ describe("useVirtual", () => {
     window.ResizeObserver = mockResizeObserver;
   });
 
-  it("should return `items` correctly", () => {
-    const { items } = render();
-    expect(items).toHaveLength(7);
-    // TODO: more testing cases
+  describe("items", () => {
+    it("should return `items` correctly", () => {
+      const { items } = render();
+
+      const len = 7;
+      expect(items).toHaveLength(7);
+
+      const item = {
+        index: 0,
+        start: 0,
+        size: 50,
+        isScrolling: undefined,
+        isSticky: undefined,
+        width: rect.width,
+        measureRef: expect.any(Function),
+      };
+      expect(items[0]).toEqual(item);
+      expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
+    });
   });
 });
