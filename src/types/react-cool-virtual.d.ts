@@ -100,6 +100,7 @@ declare module "react-cool-virtual" {
     ssrItemCount?: number | [number, number];
     itemSize?: ItemSize;
     horizontal?: boolean;
+    resetScroll?: boolean;
     overscanCount?: number;
     useIsScrolling?: UseIsScrolling;
     stickyIndices?: number[];

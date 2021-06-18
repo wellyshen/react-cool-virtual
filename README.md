@@ -933,6 +933,12 @@ The size of an item (default = 50). When working with **dynamic size**, it will 
 
 The layout/orientation of the list (default = false). When `true` means left/right scrolling, so the hook will use `width` as the [item size](#itemsize) and use the `left` as the [start](#items) position.
 
+#### resetScroll
+
+`boolean`
+
+It's used to tell the hook to reset the scroll position when the [itemCount](#itemcount-required) is changed (default = false). It's useful for filtering/sorting.
+
 #### overscanCount
 
 `number`

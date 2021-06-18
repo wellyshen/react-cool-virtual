@@ -114,46 +114,45 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(10);
+const mockData = getMockData(50);
 
 export default (): JSX.Element => {
-  const [sz, setSz] = useState(50);
+  const [itemCount, setItemCount] = useState(mockData.length);
   const { outerRef, innerRef, items } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
-    itemCount: mockData.length,
-    onScroll: (e) => console.log(e),
+    itemCount,
+    // resetScroll: true,
   });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div className={styles.inner} ref={innerRef}>
-          {items.map(({ index, size, start }) => {
-            console.log("LOG ===> ", index, start);
-            return (
-              <div
-                key={index}
-                className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-                style={{
-                  position: "absolute",
-                  top: start,
-                  height: `${size}px`,
-                  width: "100%",
-                }}
-              >
-                {index}
-              </div>
-            );
-          })}
+          {items.map(({ index, size, start }) => (
+            <div
+              key={index}
+              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+              style={{
+                position: "absolute",
+                top: start,
+                height: `${size}px`,
+                width: "100%",
+              }}
+            >
+              {index}
+            </div>
+          ))}
         </div>
       </div>
       <button
         type="button"
-        onClick={() => setSz((prevSz) => (prevSz === 50 ? 200 : 50))}
+        onClick={() =>
+          setItemCount((prevCount) => (prevCount === 50 ? 25 : 50))
+        }
       >
-        Resize
+        Change
       </button>
     </div>
   );

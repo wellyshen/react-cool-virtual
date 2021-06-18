@@ -97,6 +97,7 @@ export interface Options {
   ssrItemCount?: SsrItemCount;
   itemSize?: ItemSize;
   horizontal?: boolean;
+  resetScroll?: boolean;
   overscanCount?: number;
   useIsScrolling?: UseIsScrolling;
   stickyIndices?: number[];

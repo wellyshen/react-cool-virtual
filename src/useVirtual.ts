@@ -52,6 +52,7 @@ export default <
   ssrItemCount,
   itemSize = 50,
   horizontal,
+  resetScroll,
   overscanCount = 1,
   useIsScrolling,
   stickyIndices,
@@ -472,12 +473,14 @@ export default <
       const { width, height } = outerRectRef.current;
       const isSameWidth = width === rect.width;
       const isSameSize = isSameWidth && height === rect.height;
-      const prevTotalSize =
-        msDataRef.current[msDataRef.current.length - 1]?.end;
+      const prevItemCount = msDataRef.current.length;
+      const prevTotalSize = msDataRef.current[prevItemCount - 1]?.end;
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
+
+      if (resetScroll && itemCount !== prevItemCount) scrollTo(0);
 
       if (!hasDynamicSizeRef.current && !isSameWidth) {
         const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
@@ -491,7 +494,7 @@ export default <
 
       isMountedRef.current = true;
     },
-    [itemCount, handleScroll, measureItems, onResizeRef, scrollTo]
+    [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
   );
 
   useIsoLayoutEffect(() => {
