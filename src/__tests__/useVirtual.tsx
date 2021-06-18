@@ -40,7 +40,7 @@ const render = () => {
   );
 
   // @ts-expect-error
-  return { ...obj, getItems: () => obj.items };
+  return { ...obj, getLatestItems: () => obj.items };
 };
 
 describe("useVirtual", () => {
@@ -70,25 +70,25 @@ describe("useVirtual", () => {
     });
 
     it("should return correctly while scrolling", () => {
-      const { outerRef, getItems } = render();
+      const { outerRef, getLatestItems } = render();
 
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
       let len = 8;
-      let items = getItems();
+      let items = getLatestItems();
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual(item);
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
 
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 75 } });
       len = 9;
-      items = getItems();
+      items = getLatestItems();
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual(item);
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 400 });
 
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 200 } });
       len = 7;
-      items = getItems();
+      items = getLatestItems();
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual({ ...item, index: 3 });
       expect(items[len - 1]).toEqual({ ...item, index: 9, start: 300 });
