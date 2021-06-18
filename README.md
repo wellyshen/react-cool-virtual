@@ -13,7 +13,7 @@
 
 </div>
 
-## Features
+## Features <!-- omit in toc -->
 
 - ♻️ Renders millions of items with highly performant way, using [DOM recycling](https://developers.google.com/web/updates/2016/07/infinite-scroller).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
@@ -31,13 +31,13 @@
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
 - 🦔 Tiny size ([~ 3kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
 
-## Why?
+## Why? <!-- omit in toc -->
 
 When rendering a large set of data (e.g. list, table, etc.) in React, we all face performance/memory troubles. There're [some great libraries](https://www.npmjs.com/search?q=react%20virtualized) already available but most of them are component-based solutions that provide well-defineded way of using but increase a lot of bundle size. However [a library](https://github.com/tannerlinsley/react-virtual) comes out as a hook-based solution that is flexible and `headless` but applying styles for using it can be verbose. Furthermore, it lacks many of the [useful features](#features).
 
 React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virtual) React hook that gives you a **better DX** and **modern way** for virtualizing a large amount of data without struggle 🤯.
 
-## Docs
+## Docs <!-- omit in toc -->
 
 - [Getting Started](#getting-started)
   - [Requirement](#requirement)
@@ -1337,18 +1337,18 @@ You could use dynamic imports to only load the file when the polyfill is require
 })();
 ```
 
-## To Do...
+## To Do... <!-- omit in toc -->
 
 - [ ] Unit testing (WIP)
 - [ ] Support window scrolling
 
-## Articles / Blog Posts
+## Articles / Blog Posts <!-- omit in toc -->
 
 > 💡 If you have written any blog post or article about React Cool Virtual, please open a PR to add it here.
 
 - Featured on [React Status #243](https://react.statuscode.com/issues/243).
 
-## Contributors ✨
+## Contributors ✨ <!-- omit in toc -->
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
