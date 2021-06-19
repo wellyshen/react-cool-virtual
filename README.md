@@ -55,6 +55,7 @@ React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virt
   - [Smooth Scrolling](#smooth-scrolling)
   - [Infinite Scroll](#infinite-scroll)
   - [Pre-pending Items](#pre-pending-items)
+  - [Filtering Items](#filtering-items)
   - [Sticking to Bottom](#sticking-to-bottom)
   - [Working with Input Elements](#working-with-input-elements)
   - [Dealing with Dynamic Items](#dealing-with-dynamic-items)
@@ -649,6 +650,41 @@ const List = () => {
 };
 ```
 
+### Filtering Items
+
+When working with filter items, we can reset the scroll position when the `itemCount` changed by enabling the [resetScroll](#resetscroll) option.
+
+[![Edit RCV - Filter Items](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-filter-items-clno9?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+import { useState } from "react";
+import useVirtual from "react-cool-virtual";
+
+const List = () => {
+  const [itemCount, setItemCount] = useState(100);
+  const { outerRef, innerRef, items } = useVirtual({
+    itemCount,
+    // Resets the scroll position when the `itemCount` is changed (default = false)
+    resetScroll: true,
+  });
+
+  return (
+    <div
+      style={{ width: "300px", height: "300px", overflow: "auto" }}
+      ref={outerRef}
+    >
+      <div ref={innerRef}>
+        {items.map(({ index, size }) => (
+          <div key={index} style={{ height: `${size}px` }}>
+            ⭐️ {index}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
 ### Sticking to Bottom
 
 This example demonstrates the scenario of sticking/unsticking the scroll position to the bottom for a chatroom.
@@ -937,7 +973,7 @@ The layout/orientation of the list (default = false). When `true` means left/rig
 
 `boolean`
 
-It's used to tell the hook to reset the scroll position when the [itemCount](#itemcount-required) is changed (default = false). It's useful for filtering/sorting.
+It's used to tell the hook to reset the scroll position when the [itemCount](#itemcount-required) is changed (default = false). It's useful for [filtering items](#filtering-items).
 
 #### overscanCount
 
