@@ -1,0 +1,27 @@
+body {
+  font-family: sans-serif;
+  background: #fff;
+}
+
+.app {
+  padding: 0 1rem;
+}
+
+p {
+  color: #333;
+}
+
+.outer {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.dark {
+    background: #e5e5e5;
+  }
+}
