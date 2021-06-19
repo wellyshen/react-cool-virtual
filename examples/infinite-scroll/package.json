@@ -1,12 +1,11 @@
 {
   "name": "rcv-infinite-scroll",
-  "version": "0.0.0",
   "description": "The infinite scroll example of RCV.",
   "main": "index.js",
   "dependencies": {
     "axios": "^0.21.1",
     "react": "^17.0.2",
-    "react-cool-virtual": "^0.3.0",
+    "react-cool-virtual": "latest",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3"
   },

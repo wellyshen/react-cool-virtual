@@ -1,11 +1,10 @@
 {
   "name": "rcv-variable-size",
-  "version": "0.0.0",
   "description": "The variable size example of RCV.",
   "main": "index.js",
   "dependencies": {
     "react": "^17.0.2",
-    "react-cool-virtual": "^0.3.0",
+    "react-cool-virtual": "latest",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3"
   },
