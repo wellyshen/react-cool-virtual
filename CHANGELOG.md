@@ -1,5 +1,13 @@
 # react-cool-virtual
 
+## 0.4.1
+
+### Patch Changes
+
+- [#155](https://github.com/wellyshen/react-cool-virtual/pull/155) [`72f2a6c`](https://github.com/wellyshen/react-cool-virtual/commit/72f2a6cc64e6cbe585d37e9e104f9179b4d55c27) Thanks [@wellyshen](https://github.com/wellyshen)! - perf(useVirtual): remove unnecessary internal `useDebounce` for reducing bundle size
+
+* [#154](https://github.com/wellyshen/react-cool-virtual/pull/154) [`abc5880`](https://github.com/wellyshen/react-cool-virtual/commit/abc5880d83cb0b3e83b0a56b2ed688abf950f00a) Thanks [@wellyshen](https://github.com/wellyshen)! - fix(useVirtual): do not trigger `onScroll` and `loadMore` by internally scroll-to method
+
 ## 0.4.0
 
 ### Minor Changes
