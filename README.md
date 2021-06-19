@@ -652,7 +652,7 @@ const List = () => {
 
 ### Filtering Items
 
-When working with filter items, we can reset the scroll position when the `itemCount` changed by enabling the [resetScroll](#resetscroll) option.
+When working with filtering items, we can reset the scroll position when the `itemCount` is changed by enabling the [resetScroll](#resetscroll) option.
 
 [![Edit RCV - Filter Items](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-filter-items-clno9?fontsize=14&hidenavigation=1&theme=dark)
 
