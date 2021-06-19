@@ -1,7 +1,6 @@
 import { render as tlRender, fireEvent } from "@testing-library/react";
 
 import { Options, Return } from "../types";
-import { createRo } from "../utils";
 import useVirtual from "../useVirtual";
 
 type Props = Partial<Options> & { children: (obj: Return) => null };
@@ -25,7 +24,10 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
 };
 
 const rect = { width: 300, height: 300 };
-const mockResizeObserver = createRo(rect);
+const mockResizeObserver = jest.fn((cb) => ({
+  observe: () => cb([{ contentRect: rect }]),
+  disconnect: () => null,
+}));
 
 const render = () => {
   let obj: Return;

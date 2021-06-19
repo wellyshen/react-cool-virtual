@@ -4,7 +4,7 @@ import { RefObject, useState } from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 
 import { OnResize } from "../types";
-import { createRo, useResizeEffect } from "../utils";
+import { useResizeEffect } from "../utils";
 
 interface Props {
   el?: RefObject<HTMLDivElement>;
@@ -28,10 +28,13 @@ const Compo = ({
 const contentRect = { width: 100, height: 100 };
 const observe = jest.fn();
 const disconnect = jest.fn();
-const mockResizeObserver = createRo(contentRect, {
-  observe,
+const mockResizeObserver = jest.fn((cb) => ({
+  observe: () => {
+    cb([{ contentRect }]);
+    observe();
+  },
   disconnect,
-});
+}));
 
 describe("useResizeEffect", () => {
   beforeEach(() => jest.clearAllMocks());
