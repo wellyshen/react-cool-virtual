@@ -51,7 +51,7 @@ React Cool Virtual is a [tiny](https://bundlephobia.com/result?p=react-cool-virt
   - [Real-time Resize](#real-time-resize)
   - [Responsive Web Design (RWD)](#responsive-web-design-rwd)
   - [Sticky Headers](#sticky-headers)
-  - [Scroll to Offset/Items](#scroll-to-offsetitems)
+  - [Scroll to Offset / Items](#scroll-to-offset--items)
   - [Smooth Scrolling](#smooth-scrolling)
   - [Infinite Scroll](#infinite-scroll)
   - [Pre-pending Items](#pre-pending-items)
@@ -363,7 +363,7 @@ const List = () => {
 
 > 💡 The scrollbar disappears when using Chrome in Mac? If you encounter [this issue](https://bugs.chromium.org/p/chromium/issues/detail?id=1033712), you can add `will-change:transform` to the outer element to workaround this problem.
 
-### Scroll to Offset/Items
+### Scroll to Offset / Items
 
 You can imperatively scroll to offset or items as follows:
 
