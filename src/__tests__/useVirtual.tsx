@@ -1,3 +1,5 @@
+/* eslint-disable compat/compat */
+
 import { render as tlRender, fireEvent } from "@testing-library/react";
 
 import { Options, Return } from "../types";
@@ -12,10 +14,12 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
   >({ itemCount, ...options });
 
   return (
-    <div ref={outerRef}>
+    <div id="outer" ref={outerRef}>
       <div ref={innerRef}>
-        {items.map(({ index }) => (
-          <div key={index}>{index}</div>
+        {items.map(({ index, measureRef }) => (
+          <div key={index} ref={measureRef}>
+            {index}
+          </div>
         ))}
         {children({ outerRef, innerRef, items, ...rest })}
       </div>
@@ -24,10 +28,19 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
 };
 
 const rect = { width: 300, height: 300 };
-const mockResizeObserver = jest.fn((cb) => ({
-  observe: () => cb([{ contentRect: rect }]),
-  disconnect: () => null,
-}));
+const createResizeObserver = (size = 50) =>
+  jest.fn((cb) => ({
+    observe: (el: HTMLDivElement) => {
+      if (el.id === "outer") {
+        cb([{ contentRect: rect }]);
+      } else {
+        cb([{ target: { getBoundingClientRect: () => ({ height: size }) } }], {
+          disconnect: () => null,
+        });
+      }
+    },
+    disconnect: () => null,
+  }));
 
 const render = () => {
   let obj: Return;
@@ -48,8 +61,7 @@ const render = () => {
 describe("useVirtual", () => {
   beforeAll(() => {
     // @ts-expect-error
-    // eslint-disable-next-line compat/compat
-    window.ResizeObserver = mockResizeObserver;
+    window.ResizeObserver = createResizeObserver();
   });
 
   describe("items", () => {
@@ -94,6 +106,22 @@ describe("useVirtual", () => {
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual({ ...item, index: 3 });
       expect(items[len - 1]).toEqual({ ...item, index: 9, start: 300 });
+    });
+
+    it("should return correctly with dynamic size", () => {
+      // @ts-expect-error
+      window.ResizeObserver = createResizeObserver(100);
+
+      const { items } = render();
+      const len = 4;
+      expect(items).toHaveLength(4);
+      expect(items[0]).toEqual({ ...item, size: 100 });
+      expect(items[len - 1]).toEqual({
+        ...item,
+        index: len - 1,
+        size: 100,
+        start: 300,
+      });
     });
   });
 });
