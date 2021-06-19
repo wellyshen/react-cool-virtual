@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.4.0
+
+### Minor Changes
+
+- [#150](https://github.com/wellyshen/react-cool-virtual/pull/150) [`05ea7ff`](https://github.com/wellyshen/react-cool-virtual/commit/05ea7ffbe2240ea1e79ed40e97389968a6063d89) Thanks [@wellyshen](https://github.com/wellyshen)! - feat(useVirtual): add `resetScroll` option for filtering/sorting
+
 ## 0.3.1
 
 ### Patch Changes
