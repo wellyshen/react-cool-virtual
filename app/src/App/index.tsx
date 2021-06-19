@@ -114,16 +114,17 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(50);
+const mockData = getMockData(100);
 
 export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(mockData.length);
-  const { outerRef, innerRef, items } = useVirtual<
+  const { outerRef, innerRef, items, scrollTo } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({
     itemCount,
-    // resetScroll: true,
+    resetScroll: true,
+    onScroll: (e) => console.log("LOG ===> ", e),
   });
 
   return (
@@ -134,25 +135,23 @@ export default (): JSX.Element => {
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{
-                position: "absolute",
-                top: start,
-                height: `${size}px`,
-                width: "100%",
-              }}
+              style={{ height: `${size}px` }}
             >
               {index}
             </div>
           ))}
         </div>
       </div>
+      <button type="button" onClick={() => scrollTo(100)}>
+        Scroll To...
+      </button>
       <button
         type="button"
         onClick={() =>
-          setItemCount((prevCount) => (prevCount === 50 ? 25 : 50))
+          setItemCount((prevCount) => (prevCount === 50 ? 100 : 50))
         }
       >
-        Change
+        Change Item Count
       </button>
     </div>
   );
