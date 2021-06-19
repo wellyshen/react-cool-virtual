@@ -298,11 +298,6 @@ export default <
     150
   );
 
-  const [resetScrollTo, cancelResetScrollTo] = useDebounce(() => {
-    userScrollRef.current = true;
-    isScrollToItemRef.current = false;
-  }, 150);
-
   const handleScroll = useCallback(
     (scrollOffset: number, isScrolling?: boolean, uxScrolling?: boolean) => {
       if (!innerRef.current) return;
@@ -422,8 +417,6 @@ export default <
 
       if (!isScrolling) return;
 
-      const { current: userScroll } = userScrollRef;
-
       if (onScrollRef.current)
         onScrollRef.current({
           overscanStartIndex: oStart,
@@ -432,7 +425,7 @@ export default <
           visibleStopIndex: vStop,
           scrollOffset,
           scrollForward: scrollOffset > scrollOffsetRef.current,
-          userScroll,
+          userScroll: userScrollRef.current,
         });
 
       const loadIndex = Math.floor((vStop + 1) / loadMoreCount);
@@ -448,13 +441,12 @@ export default <
           stopIndex: startIndex + loadMoreCount - 1,
           loadIndex,
           scrollOffset,
-          userScroll,
+          userScroll: userScrollRef.current,
         });
 
-      prevVStopRef.current = vStop;
-
       if (uxScrolling) resetIsScrolling();
-      if (!userScroll) resetScrollTo();
+
+      prevVStopRef.current = vStop;
     },
     [
       getCalcData,
@@ -465,7 +457,6 @@ export default <
       marginKey,
       onScrollRef,
       resetIsScrolling,
-      resetScrollTo,
       scrollTo,
       sizeKey,
     ]
@@ -520,7 +511,10 @@ export default <
           : uxScrolling;
 
       handleScroll(scrollOffset, isScrollingRef.current, uxScrolling);
+
+      userScrollRef.current = true;
       isScrollingRef.current = true;
+      isScrollToItemRef.current = false;
       scrollOffsetRef.current = scrollOffset;
     };
 
@@ -530,7 +524,6 @@ export default <
 
     return () => {
       cancelResetIsScrolling();
-      cancelResetScrollTo();
       if (scrollToRafRef.current) {
         cancelAnimationFrame(scrollToRafRef.current);
         scrollToRafRef.current = undefined;
@@ -541,13 +534,7 @@ export default <
       ros.forEach((ro) => ro.disconnect());
       ros.clear();
     };
-  }, [
-    cancelResetIsScrolling,
-    cancelResetScrollTo,
-    handleScroll,
-    scrollKey,
-    useIsScrollingRef,
-  ]);
+  }, [cancelResetIsScrolling, handleScroll, scrollKey, useIsScrollingRef]);
 
   return { outerRef, innerRef, items, scrollTo: scrollToOffset, scrollToItem };
 };
