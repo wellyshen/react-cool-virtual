@@ -10,7 +10,7 @@ const App = () => {
   const [itemCount, setItemCount] = useState(100);
   const { outerRef, innerRef, items } = useVirtual({
     itemCount,
-    // Resets the scroll position when the `itemCount` changed (default = false)
+    // Resets the scroll position when the `itemCount` is changed (default = false)
     resetScroll: true
   });
 
