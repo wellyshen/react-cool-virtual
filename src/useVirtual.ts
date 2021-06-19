@@ -69,6 +69,7 @@ export default <
     getInitItems(itemSize, ssrItemCount)
   );
   const isMountedRef = useRef(false);
+  const isScrollingRef = useRef(true);
   const isScrollToItemRef = useRef(false);
   const hasDynamicSizeRef = useRef(false);
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
@@ -176,8 +177,11 @@ export default <
   );
 
   const scrollTo = useCallback(
-    (offset: number) => {
-      if (outerRef.current) outerRef.current[scrollKey] = offset;
+    (offset: number, isScrolling = true) => {
+      if (outerRef.current) {
+        isScrollingRef.current = isScrolling;
+        outerRef.current[scrollKey] = offset;
+      }
     },
     [scrollKey]
   );
@@ -363,7 +367,7 @@ export default <
               if (measuredSize !== size || start !== prevEnd) {
                 // To prevent dynamic size from jumping during backward scrolling
                 if (i < prevItemIdxRef.current && start < scrollOffset)
-                  scrollTo(scrollOffset + measuredSize - size);
+                  scrollTo(scrollOffset + measuredSize - size, false);
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 if (!isScrollToItemRef.current)
@@ -480,19 +484,21 @@ export default <
       measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
 
-      if (resetScroll && itemCount !== prevItemCount) scrollTo(0);
+      if (resetScroll && itemCount !== prevItemCount) scrollTo(0, false);
+
+      if (!isMountedRef.current) {
+        isMountedRef.current = true;
+        return;
+      }
 
       if (!hasDynamicSizeRef.current && !isSameWidth) {
         const totalSize = msDataRef.current[msDataRef.current.length - 1]?.end;
         const ratio = totalSize / prevTotalSize || 1;
 
-        scrollTo(scrollOffsetRef.current * ratio);
+        scrollTo(scrollOffsetRef.current * ratio, false);
       }
 
-      if (isMountedRef.current && !isSameSize && onResizeRef.current)
-        onResizeRef.current(rect);
-
-      isMountedRef.current = true;
+      if (!isSameSize && onResizeRef.current) onResizeRef.current(rect);
     },
     [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
   );
@@ -513,7 +519,8 @@ export default <
           ? uxScrolling(Math.abs(scrollOffset - scrollOffsetRef.current))
           : uxScrolling;
 
-      handleScroll(scrollOffset, true, uxScrolling);
+      handleScroll(scrollOffset, isScrollingRef.current, uxScrolling);
+      isScrollingRef.current = true;
       scrollOffsetRef.current = scrollOffset;
     };
 
