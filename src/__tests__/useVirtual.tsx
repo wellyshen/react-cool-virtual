@@ -1,6 +1,6 @@
 /* eslint-disable compat/compat */
 
-import { render as tlRender, fireEvent } from "@testing-library/react";
+import { render as tlRender, fireEvent, act } from "@testing-library/react";
 
 import { Options, Return } from "../types";
 import useVirtual from "../useVirtual";
@@ -17,7 +17,7 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
     <div id="outer" ref={outerRef}>
       <div ref={innerRef}>
         {items.map(({ index, measureRef }) => (
-          <div key={index} ref={measureRef}>
+          <div id={`${index}`} key={index} ref={measureRef}>
             {index}
           </div>
         ))}
@@ -27,16 +27,35 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
   );
 };
 
+interface Callback {
+  size?: number;
+  cb: (size: number) => null;
+}
+
+type Args = Partial<{
+  size: number;
+  callbacks: Callback[];
+}>;
+
 const rect = { width: 300, height: 300 };
-const createResizeObserver = (size = 50) =>
+
+const createResizeObserver = ({ size = 50, callbacks }: Args = {}) =>
   jest.fn((cb) => ({
     observe: (el: HTMLDivElement) => {
       if (el.id === "outer") {
         cb([{ contentRect: rect }]);
       } else {
-        cb([{ target: { getBoundingClientRect: () => ({ height: size }) } }], {
-          disconnect: () => null,
-        });
+        const callback = (height: number) =>
+          cb([{ target: { getBoundingClientRect: () => ({ height }) } }], {
+            disconnect: () => null,
+          });
+
+        if (callbacks) {
+          callback(callbacks[el.id as any]?.size || size);
+          callbacks.push({ cb: callback });
+        } else {
+          callback(size);
+        }
       }
     },
     disconnect: () => null,
@@ -59,7 +78,7 @@ const render = () => {
 };
 
 describe("useVirtual", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     // @ts-expect-error
     window.ResizeObserver = createResizeObserver();
   });
@@ -110,11 +129,11 @@ describe("useVirtual", () => {
 
     it("should return correctly with dynamic size", () => {
       // @ts-expect-error
-      window.ResizeObserver = createResizeObserver(100);
+      window.ResizeObserver = createResizeObserver({ size: 100 });
 
       const { items } = render();
       const len = 4;
-      expect(items).toHaveLength(4);
+      expect(items).toHaveLength(len);
       expect(items[0]).toEqual({ ...item, size: 100 });
       expect(items[len - 1]).toEqual({
         ...item,
@@ -122,6 +141,36 @@ describe("useVirtual", () => {
         size: 100,
         start: 300,
       });
+    });
+
+    it("should return correctly with real-time resize", () => {
+      const callbacks: Callback[] = [];
+      // @ts-expect-error
+      window.ResizeObserver = createResizeObserver({ callbacks });
+
+      const { getLatestItems } = render();
+
+      let size = 100;
+      act(() => {
+        callbacks[0].size = size;
+        callbacks[0].cb(size);
+      });
+      let items = getLatestItems();
+      let len = 6;
+      expect(items).toHaveLength(len);
+      expect(items[0]).toEqual({ ...item, size });
+      expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
+
+      size = 200;
+      act(() => {
+        callbacks[0].size = size;
+        callbacks[0].cb(size);
+      });
+      items = getLatestItems();
+      len = 4;
+      expect(items).toHaveLength(len);
+      expect(items[0]).toEqual({ ...item, size });
+      expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
     });
   });
 });
