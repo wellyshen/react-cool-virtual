@@ -56,8 +56,9 @@ export default <
   overscanCount = 1,
   useIsScrolling,
   stickyIndices,
+  // Default = 100ms <= distance * 0.75 <= 500ms
   scrollDuration = (d) => Math.min(Math.max(d * 0.075, 100), 500),
-  // Using easeInOutSine by default
+  // Default = easeInOutSine
   scrollEasingFunction = (t) => -(Math.cos(Math.PI * t) - 1) / 2,
   loadMoreCount = 15,
   isItemLoaded,
