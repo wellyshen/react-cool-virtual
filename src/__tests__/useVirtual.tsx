@@ -27,6 +27,22 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
   );
 };
 
+const render = () => {
+  let obj: Return;
+
+  tlRender(
+    <Compo>
+      {(o) => {
+        obj = o;
+        return null;
+      }}
+    </Compo>
+  );
+
+  // @ts-expect-error
+  return { ...obj, getLatestItems: () => obj.items };
+};
+
 interface Callback {
   size?: number;
   cb: (size: number) => null;
@@ -60,22 +76,6 @@ const createResizeObserver = ({ size = 50, callbacks }: Args = {}) =>
     },
     disconnect: () => null,
   }));
-
-const render = () => {
-  let obj: Return;
-
-  tlRender(
-    <Compo>
-      {(o) => {
-        obj = o;
-        return null;
-      }}
-    </Compo>
-  );
-
-  // @ts-expect-error
-  return { ...obj, getLatestItems: () => obj.items };
-};
 
 describe("useVirtual", () => {
   beforeEach(() => {
@@ -130,7 +130,6 @@ describe("useVirtual", () => {
     it("should return correctly with dynamic size", () => {
       // @ts-expect-error
       window.ResizeObserver = createResizeObserver({ size: 100 });
-
       const { items } = render();
       const len = 4;
       expect(items).toHaveLength(len);
@@ -147,7 +146,6 @@ describe("useVirtual", () => {
       const callbacks: Callback[] = [];
       // @ts-expect-error
       window.ResizeObserver = createResizeObserver({ callbacks });
-
       const { getLatestItems } = render();
 
       let size = 100;
