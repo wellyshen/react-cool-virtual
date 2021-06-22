@@ -235,7 +235,7 @@ const List = () => {
 };
 ```
 
-> 💡 The scrollbar is jumping? It's because the total size of the items is gradually corrected along with an item has been measured. You can tweak the `itemSize` to reduce the phenomenon.
+> 💡 The scrollbar is jumping? It's because the total size of the items is gradually corrected along with an item that has been measured. You can tweak the `itemSize` to reduce the phenomenon.
 
 ### Real-time Resize
 
