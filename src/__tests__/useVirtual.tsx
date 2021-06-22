@@ -5,13 +5,19 @@ import { render as tlRender, fireEvent, act } from "@testing-library/react";
 import { Options, Return } from "../types";
 import useVirtual from "../useVirtual";
 
-type Props = Partial<Options> & { children: (obj: Return) => null };
+type Props = Partial<Options> & {
+  children: (obj: Return) => null;
+  // eslint-disable-next-line react/require-default-props
+  onRender?: () => null;
+};
 
-const Compo = ({ children, itemCount = 10, ...options }: Props) => {
+const Compo = ({ children, itemCount = 10, onRender, ...options }: Props) => {
   const { outerRef, innerRef, items, ...rest } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
   >({ itemCount, ...options });
+
+  if (onRender) onRender();
 
   return (
     <div id="outer" ref={outerRef}>
@@ -27,11 +33,11 @@ const Compo = ({ children, itemCount = 10, ...options }: Props) => {
   );
 };
 
-const render = () => {
+const render = (props?: Omit<Props, "children">) => {
   let obj: Return;
 
   tlRender(
-    <Compo>
+    <Compo {...props}>
       {(o) => {
         obj = o;
         return null;
@@ -78,6 +84,8 @@ const createResizeObserver = ({ size = 50, callbacks }: Args = {}) =>
   }));
 
 describe("useVirtual", () => {
+  jest.useFakeTimers();
+
   beforeEach(() => {
     // @ts-expect-error
     window.ResizeObserver = createResizeObserver();
@@ -169,6 +177,46 @@ describe("useVirtual", () => {
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual({ ...item, size });
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
+    });
+
+    describe("scrollTo", () => {
+      it("should work correctly", () => {
+        const { scrollTo, outerRef } = render();
+
+        const cb = jest.fn();
+        scrollTo(50, cb);
+        expect(outerRef.current.scrollTop).toBe(50);
+        expect(cb).toHaveBeenCalledTimes(1);
+
+        scrollTo({ offset: 100 }, cb);
+        expect(outerRef.current.scrollTop).toBe(100);
+        expect(cb).toHaveBeenCalledTimes(2);
+      });
+
+      it("should work with smooth scrolling correctly", () => {
+        const { scrollTo, outerRef } = render();
+        const cb = jest.fn();
+        scrollTo({ offset: 50, smooth: true }, cb);
+        jest.runAllTimers();
+        expect(outerRef.current.scrollTop).toBe(50);
+        expect(cb).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it("should trigger re-rendering correctly", () => {
+      const onRender = jest.fn();
+      const { outerRef } = render({ onRender });
+      expect(onRender).toHaveBeenCalledTimes(2);
+
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 25 } });
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 30 } });
+      expect(onRender).toHaveBeenCalledTimes(4);
+
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 25 } });
+      expect(onRender).toHaveBeenCalledTimes(4);
+
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 75 } });
+      expect(onRender).toHaveBeenCalledTimes(5);
     });
   });
 });
