@@ -124,14 +124,16 @@ export default (): JSX.Element => {
   >({
     itemCount,
     resetScroll: true,
-    onScroll: (e) => console.log("LOG ===> ", e),
+    // onScroll: (e) => console.log("LOG ===> ", e),
   });
+
+  console.log("LOG ===> Re-render!");
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div className={styles.inner} ref={innerRef}>
-          {items.map(({ index, size, start }) => (
+          {items.map(({ index, size }) => (
             <div
               key={index}
               className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
