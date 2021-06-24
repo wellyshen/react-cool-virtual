@@ -2,7 +2,7 @@
 
 import { render as tlRender, fireEvent, act } from "@testing-library/react";
 
-import { Options, Return } from "../types";
+import { Align, Options, Return } from "../types";
 import useVirtual from "../useVirtual";
 
 type Props = Partial<Options> & {
@@ -178,45 +178,131 @@ describe("useVirtual", () => {
       expect(items[0]).toEqual({ ...item, size });
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
     });
+  });
 
-    describe("scrollTo", () => {
-      it("should work correctly", () => {
-        const { scrollTo, outerRef } = render();
+  describe("scrollTo", () => {
+    it("should work correctly", () => {
+      const { scrollTo, outerRef } = render();
 
-        const cb = jest.fn();
-        scrollTo(50, cb);
-        expect(outerRef.current.scrollTop).toBe(50);
-        expect(cb).toHaveBeenCalledTimes(1);
+      const cb = jest.fn();
+      scrollTo(50, cb);
+      expect(outerRef.current.scrollTop).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
 
-        scrollTo({ offset: 100 }, cb);
-        expect(outerRef.current.scrollTop).toBe(100);
-        expect(cb).toHaveBeenCalledTimes(2);
-      });
-
-      it("should work with smooth scrolling correctly", () => {
-        const { scrollTo, outerRef } = render();
-        const cb = jest.fn();
-        scrollTo({ offset: 50, smooth: true }, cb);
-        jest.runAllTimers();
-        expect(outerRef.current.scrollTop).toBe(50);
-        expect(cb).toHaveBeenCalledTimes(1);
-      });
+      scrollTo({ offset: 100 }, cb);
+      expect(outerRef.current.scrollTop).toBe(100);
+      expect(cb).toHaveBeenCalledTimes(2);
     });
 
-    it("should trigger re-rendering correctly", () => {
-      const onRender = jest.fn();
-      const { outerRef } = render({ onRender });
-      expect(onRender).toHaveBeenCalledTimes(2);
-
-      fireEvent.scroll(outerRef.current, { target: { scrollTop: 25 } });
-      fireEvent.scroll(outerRef.current, { target: { scrollTop: 30 } });
-      expect(onRender).toHaveBeenCalledTimes(4);
-
-      fireEvent.scroll(outerRef.current, { target: { scrollTop: 25 } });
-      expect(onRender).toHaveBeenCalledTimes(4);
-
-      fireEvent.scroll(outerRef.current, { target: { scrollTop: 75 } });
-      expect(onRender).toHaveBeenCalledTimes(5);
+    it("should work with smooth scrolling correctly", () => {
+      const { scrollTo, outerRef } = render();
+      const cb = jest.fn();
+      scrollTo({ offset: 50, smooth: true }, cb);
+      jest.runAllTimers();
+      expect(outerRef.current.scrollTop).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
     });
+  });
+
+  describe("scrollToItem", () => {
+    it("should work correctly", () => {
+      const { scrollToItem, outerRef } = render();
+
+      const cb = jest.fn();
+      scrollToItem(6, cb);
+      expect(outerRef.current.scrollTop).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
+
+      scrollToItem({ index: 7 }, cb);
+      expect(outerRef.current.scrollTop).toBe(100);
+      expect(cb).toHaveBeenCalledTimes(2);
+    });
+
+    it("should work with smooth scrolling correctly", () => {
+      const { scrollToItem, outerRef } = render();
+      const cb = jest.fn();
+      scrollToItem({ index: 6, smooth: true }, cb);
+      jest.runAllTimers();
+      expect(outerRef.current.scrollTop).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
+    });
+
+    it("should work with alignment correctly", () => {
+      const { scrollToItem, outerRef } = render({ itemCount: 18 });
+      const { current: outer } = outerRef;
+
+      scrollToItem(5);
+      expect(outer.scrollTop).toBe(0);
+      scrollToItem(11);
+      expect(outer.scrollTop).toBe(300);
+      scrollToItem(17);
+      expect(outer.scrollTop).toBe(600);
+      fireEvent.scroll(outer, { target: { scrollTop: 600 } });
+      scrollToItem(15);
+      expect(outer.scrollTop).toBe(600);
+      scrollToItem(11);
+      expect(outer.scrollTop).toBe(550);
+
+      fireEvent.scroll(outer, { target: { scrollTop: 0 } });
+      scrollToItem({ index: 1, align: Align.start });
+      expect(outer.scrollTop).toBe(50);
+      scrollToItem({ index: 11, align: Align.start });
+      expect(outer.scrollTop).toBe(550);
+      scrollToItem({ index: 17, align: Align.start });
+      expect(outer.scrollTop).toBe(600);
+      fireEvent.scroll(outer, { target: { scrollTop: 600 } });
+      scrollToItem({ index: 15, align: Align.start });
+      expect(outer.scrollTop).toBe(600);
+      scrollToItem({ index: 11, align: Align.start });
+      expect(outer.scrollTop).toBe(550);
+
+      fireEvent.scroll(outer, { target: { scrollTop: 0 } });
+      scrollToItem({ index: 5, align: Align.end });
+      expect(outer.scrollTop).toBe(0);
+      scrollToItem({ index: 6, align: Align.end });
+      expect(outer.scrollTop).toBe(50);
+      scrollToItem({ index: 11, align: Align.end });
+      expect(outer.scrollTop).toBe(300);
+      scrollToItem({ index: 17, align: Align.end });
+      expect(outer.scrollTop).toBe(600);
+      fireEvent.scroll(outer, { target: { scrollTop: 600 } });
+      scrollToItem({ index: 15, align: Align.end });
+      expect(outer.scrollTop).toBe(500);
+      scrollToItem({ index: 11, align: Align.end });
+      expect(outer.scrollTop).toBe(300);
+
+      fireEvent.scroll(outer, { target: { scrollTop: 0 } });
+      scrollToItem({ index: 2, align: Align.center });
+      expect(outer.scrollTop).toBe(0);
+      scrollToItem({ index: 3, align: Align.center });
+      expect(outer.scrollTop).toBe(25);
+      scrollToItem({ index: 11, align: Align.center });
+      expect(outer.scrollTop).toBe(425);
+      scrollToItem({ index: 14, align: Align.center });
+      expect(outer.scrollTop).toBe(575);
+      scrollToItem({ index: 15, align: Align.center });
+      expect(outer.scrollTop).toBe(600);
+      fireEvent.scroll(outer, { target: { scrollTop: 600 } });
+      scrollToItem({ index: 11, align: Align.center });
+      expect(outer.scrollTop).toBe(425);
+    });
+
+    it.todo("should work with dynamic size");
+  });
+
+  it("should trigger re-rendering correctly", () => {
+    const onRender = jest.fn();
+    const { current: outer } = render({ onRender }).outerRef;
+    expect(onRender).toHaveBeenCalledTimes(2);
+
+    fireEvent.scroll(outer, { target: { scrollTop: 25 } });
+    fireEvent.scroll(outer, { target: { scrollTop: 30 } });
+    expect(onRender).toHaveBeenCalledTimes(4);
+
+    fireEvent.scroll(outer, { target: { scrollTop: 25 } });
+    expect(onRender).toHaveBeenCalledTimes(4);
+
+    fireEvent.scroll(outer, { target: { scrollTop: 75 } });
+    expect(onRender).toHaveBeenCalledTimes(5);
   });
 });
