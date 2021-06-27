@@ -86,22 +86,20 @@ const createResizeObserver = ({ size = 50, callbacks }: Args = {}) =>
 describe("useVirtual", () => {
   jest.useFakeTimers();
 
+  const item = {
+    index: 0,
+    start: 0,
+    size: 50,
+    width: rect.width,
+    measureRef: expect.any(Function),
+  };
+
   beforeEach(() => {
     // @ts-expect-error
     window.ResizeObserver = createResizeObserver();
   });
 
   describe("items", () => {
-    const item = {
-      index: 0,
-      start: 0,
-      size: 50,
-      isScrolling: undefined,
-      isSticky: undefined,
-      width: rect.width,
-      measureRef: expect.any(Function),
-    };
-
     it("should return correctly", () => {
       const { items } = render();
       const len = 7;
@@ -326,5 +324,19 @@ describe("useVirtual", () => {
 
     fireEvent.scroll(outer, { target: { scrollTop: 75 } });
     expect(onRender).toHaveBeenCalledTimes(5);
+  });
+
+  it("should return `items` correctly with specified `overscanCount`", () => {
+    let { items } = render({ overscanCount: 0 });
+    let len = 6;
+    expect(items).toHaveLength(len);
+    expect(items[0]).toEqual(item);
+    expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 250 });
+
+    items = render({ overscanCount: 2 }).items;
+    len = 8;
+    expect(items).toHaveLength(len);
+    expect(items[0]).toEqual(item);
+    expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
   });
 });
