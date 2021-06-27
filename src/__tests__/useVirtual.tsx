@@ -287,7 +287,29 @@ describe("useVirtual", () => {
       expect(outer.scrollTop).toBe(425);
     });
 
-    it.todo("should work with dynamic size");
+    it("should work with dynamic size correctly", () => {
+      // @ts-expect-error
+      window.ResizeObserver = createResizeObserver({ size: 100 });
+      const { scrollToItem, outerRef } = render();
+      const { current: outer } = outerRef;
+
+      const cb = jest.fn();
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(500);
+      expect(cb).not.toHaveBeenCalled();
+      fireEvent.scroll(outer, { target: { scrollTop: 350 } });
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(550);
+      expect(cb).not.toHaveBeenCalled();
+      fireEvent.scroll(outer, { target: { scrollTop: 550 } });
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(600);
+      expect(cb).not.toHaveBeenCalled();
+      fireEvent.scroll(outer, { target: { scrollTop: 600 } });
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(600);
+      expect(cb).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("should trigger re-rendering correctly", () => {
