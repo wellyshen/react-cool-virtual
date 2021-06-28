@@ -189,7 +189,6 @@ export default <
 
   const scrollToOffset = useCallback<ScrollTo>(
     (val, cb) => {
-      const { current: prevOffset } = scrollOffsetRef;
       const { offset, smooth }: ScrollToOptions = isNumber(val)
         ? { offset: val }
         : val;
@@ -205,7 +204,9 @@ export default <
         return;
       }
 
+      const { current: prevOffset } = scrollOffsetRef;
       const start = now();
+
       const scroll = () => {
         let { current: duration } = durationRef;
         duration = isNumber(duration)
