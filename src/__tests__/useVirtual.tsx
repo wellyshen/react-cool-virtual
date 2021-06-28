@@ -310,6 +310,51 @@ describe("useVirtual", () => {
     });
   });
 
+  describe("horizontal", () => {
+    it("should return `items` correctly", () => {
+      const { getLatestItems, outerRef } = render({ horizontal: true });
+
+      let len = 7;
+      let items = getLatestItems();
+      expect(items).toHaveLength(len);
+      expect(items[0]).toEqual(item);
+      expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
+
+      fireEvent.scroll(outerRef.current, { target: { scrollLeft: 50 } });
+      len = 8;
+      items = getLatestItems();
+      expect(items).toHaveLength(len);
+      expect(items[0]).toEqual(item);
+      expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
+    });
+
+    it("should scroll to offset correctly", () => {
+      const { scrollTo, outerRef } = render({ horizontal: true });
+
+      const cb = jest.fn();
+      scrollTo(50, cb);
+      expect(outerRef.current.scrollLeft).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
+
+      scrollTo({ offset: 100 }, cb);
+      expect(outerRef.current.scrollLeft).toBe(100);
+      expect(cb).toHaveBeenCalledTimes(2);
+    });
+
+    it("should scroll to item correctly", () => {
+      const { scrollToItem, outerRef } = render({ horizontal: true });
+
+      const cb = jest.fn();
+      scrollToItem(6, cb);
+      expect(outerRef.current.scrollLeft).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
+
+      scrollToItem({ index: 7 }, cb);
+      expect(outerRef.current.scrollLeft).toBe(100);
+      expect(cb).toHaveBeenCalledTimes(2);
+    });
+  });
+
   it("should trigger re-rendering correctly", () => {
     const onRender = jest.fn();
     const { current: outer } = render({ onRender }).outerRef;
@@ -339,4 +384,16 @@ describe("useVirtual", () => {
     expect(items[0]).toEqual(item);
     expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
   });
+
+  it.each([500, (t: number) => t * 10])(
+    "should scroll correctly with specified duration",
+    (scrollDuration) => {
+      const { scrollTo, outerRef } = render({ scrollDuration });
+      const cb = jest.fn();
+      scrollTo({ offset: 50, smooth: true }, cb);
+      jest.advanceTimersByTime(512);
+      expect(outerRef.current.scrollTop).toBe(50);
+      expect(cb).toHaveBeenCalledTimes(1);
+    }
+  );
 });
