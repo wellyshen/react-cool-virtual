@@ -38,7 +38,7 @@ const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
       start: 0,
       width: 0,
       size: isNumber(itemSize) ? itemSize : itemSize(i, 0),
-      measureRef: () => null,
+      measureRef: /* istanbul ignore next */ () => null,
     };
 
   return ssrItems;
