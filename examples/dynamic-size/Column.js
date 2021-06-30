@@ -22,7 +22,7 @@ const Column = ({ colWidths }) => {
           <div
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ minWidth: `${colWidths[index]}px`, height: "75px" }}
+            style={{ flexBasis: `${colWidths[index]}px`, height: "75px" }}
             ref={measureRef} // It will measure the item size for us
           >
             📏 {size}
