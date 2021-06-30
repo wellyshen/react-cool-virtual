@@ -11,7 +11,7 @@ const AccordionItem = forwardRef(({ children, width, ...rest }, ref) => {
   return (
     <div
       {...rest}
-      style={{ minWidth: `${w}px`, minHeight: "75px" }}
+      style={{ flexBasis: `${w}px`, height: "75px" }}
       ref={ref}
       onClick={() => setW((prevH) => (prevH === 100 ? 150 : 100))}
     >
