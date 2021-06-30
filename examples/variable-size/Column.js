@@ -22,7 +22,7 @@ const Column = ({ colWidths }) => {
           <div
             key={index}
             className={`item ${index % 2 ? "dark" : ""}`}
-            style={{ minWidth: `${size}px`, height: "75px" }}
+            style={{ flexBasis: `${size}px`, height: "75px" }}
           >
             ♻️ {index}
           </div>
