@@ -1,4 +1,4 @@
-/* eslint-disable compat/compat */
+/* eslint-disable compat/compat, react/require-default-props */
 
 import { render as tlRender, fireEvent, act } from "@testing-library/react";
 
@@ -7,11 +7,19 @@ import useVirtual from "../useVirtual";
 
 type Props = Partial<Options> & {
   children: (obj: Return) => null;
-  // eslint-disable-next-line react/require-default-props
   onRender?: () => null;
+  isDynamic?: boolean;
 };
 
-const Compo = ({ children, itemCount = 10, onRender, ...options }: Props) => {
+let isScrolling = false;
+
+const Compo = ({
+  children,
+  isDynamic,
+  itemCount = 10,
+  onRender,
+  ...options
+}: Props) => {
   const { outerRef, innerRef, items, ...rest } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
@@ -19,11 +27,17 @@ const Compo = ({ children, itemCount = 10, onRender, ...options }: Props) => {
 
   if (onRender) onRender();
 
+  if (items[0]?.isScrolling) isScrolling = true;
+
   return (
     <div id="outer" ref={outerRef}>
       <div ref={innerRef}>
         {items.map(({ index, measureRef }) => (
-          <div id={`${index}`} key={index} ref={measureRef}>
+          <div
+            id={`${index}`}
+            key={index}
+            ref={isDynamic ? measureRef : undefined}
+          >
             {index}
           </div>
         ))}
@@ -136,7 +150,7 @@ describe("useVirtual", () => {
     it("should return correctly with dynamic size", () => {
       // @ts-expect-error
       window.ResizeObserver = createResizeObserver({ size: 100 });
-      const { items } = render();
+      const { items } = render({ isDynamic: true });
       const len = 4;
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual({ ...item, size: 100 });
@@ -152,7 +166,7 @@ describe("useVirtual", () => {
       const callbacks: Callback[] = [];
       // @ts-expect-error
       window.ResizeObserver = createResizeObserver({ callbacks });
-      const { getLatestItems } = render();
+      const { getLatestItems } = render({ isDynamic: true });
 
       let size = 100;
       act(() => {
@@ -288,7 +302,7 @@ describe("useVirtual", () => {
     it("should work with dynamic size correctly", () => {
       // @ts-expect-error
       window.ResizeObserver = createResizeObserver({ size: 100 });
-      const { scrollToItem, outerRef } = render();
+      const { scrollToItem, outerRef } = render({ isDynamic: true });
       const { current: outer } = outerRef;
 
       const cb = jest.fn();
@@ -355,21 +369,16 @@ describe("useVirtual", () => {
     });
   });
 
-  it("should trigger re-rendering correctly", () => {
-    const onRender = jest.fn();
-    const { current: outer } = render({ onRender }).outerRef;
-    expect(onRender).toHaveBeenCalledTimes(2);
-
-    fireEvent.scroll(outer, { target: { scrollTop: 25 } });
-    fireEvent.scroll(outer, { target: { scrollTop: 30 } });
-    expect(onRender).toHaveBeenCalledTimes(4);
-
-    fireEvent.scroll(outer, { target: { scrollTop: 25 } });
-    expect(onRender).toHaveBeenCalledTimes(4);
-
-    fireEvent.scroll(outer, { target: { scrollTop: 75 } });
-    expect(onRender).toHaveBeenCalledTimes(5);
-  });
+  it.each([100, (i: number) => 100 - i + i, (_: number, w: number) => w - 200])(
+    "should return `items` correctly with specified `itemSize`",
+    (itemSize) => {
+      const { items } = render({ itemSize });
+      const len = 4;
+      expect(items).toHaveLength(len);
+      expect(items[0].size).toBe(100);
+      expect(items[len - 1].size).toBe(100);
+    }
+  );
 
   it("should return `items` correctly with specified `overscanCount`", () => {
     let { items } = render({ overscanCount: 0 });
@@ -385,8 +394,14 @@ describe("useVirtual", () => {
     expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
   });
 
+  it("should return `items` correctly with `useIsScrolling`", () => {
+    const { outerRef } = render({ useIsScrolling: true });
+    fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
+    expect(isScrolling).toBeTruthy();
+  });
+
   it.each([500, (t: number) => t * 10])(
-    "should scroll correctly with specified duration",
+    "should scroll to offset with specified `scrollDuration`",
     (scrollDuration) => {
       const { scrollTo, outerRef } = render({ scrollDuration });
       const cb = jest.fn();
@@ -396,4 +411,29 @@ describe("useVirtual", () => {
       expect(cb).toHaveBeenCalledTimes(1);
     }
   );
+
+  it("should scroll to offset with specified `scrollEasingFunction`", () => {
+    const { scrollTo, outerRef } = render({ scrollEasingFunction: (t) => t });
+    const cb = jest.fn();
+    scrollTo({ offset: 50, smooth: true }, cb);
+    jest.runAllTimers();
+    expect(outerRef.current.scrollTop).toBe(50);
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
+
+  it("should trigger re-rendering correctly", () => {
+    const onRender = jest.fn();
+    const { current: outer } = render({ onRender }).outerRef;
+    expect(onRender).toHaveBeenCalledTimes(2);
+
+    fireEvent.scroll(outer, { target: { scrollTop: 25 } });
+    fireEvent.scroll(outer, { target: { scrollTop: 30 } });
+    expect(onRender).toHaveBeenCalledTimes(4);
+
+    fireEvent.scroll(outer, { target: { scrollTop: 25 } });
+    expect(onRender).toHaveBeenCalledTimes(4);
+
+    fireEvent.scroll(outer, { target: { scrollTop: 75 } });
+    expect(onRender).toHaveBeenCalledTimes(5);
+  });
 });
