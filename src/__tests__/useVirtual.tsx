@@ -8,16 +8,16 @@ import useVirtual from "../useVirtual";
 type Props = Partial<Options> & {
   children: (obj: Return) => null;
   onRender?: () => null;
+  onIsScrolling?: () => null;
   isDynamic?: boolean;
 };
-
-let isScrolling = false;
 
 const Compo = ({
   children,
   isDynamic,
   itemCount = 10,
-  onRender,
+  onRender = () => null,
+  onIsScrolling = () => null,
   ...options
 }: Props) => {
   const { outerRef, innerRef, items, ...rest } = useVirtual<
@@ -25,9 +25,9 @@ const Compo = ({
     HTMLDivElement
   >({ itemCount, ...options });
 
-  if (onRender) onRender();
+  onRender();
 
-  if (items[0]?.isScrolling) isScrolling = true;
+  if (items[0]?.isScrolling) onIsScrolling();
 
   return (
     <div id="outer" ref={outerRef}>
@@ -395,9 +395,10 @@ describe("useVirtual", () => {
   });
 
   it("should return `items` correctly with `useIsScrolling`", () => {
-    const { outerRef } = render({ useIsScrolling: true });
+    const onIsScrolling = jest.fn();
+    const { outerRef } = render({ useIsScrolling: true, onIsScrolling });
     fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
-    expect(isScrolling).toBeTruthy();
+    expect(onIsScrolling).toHaveBeenCalled();
   });
 
   it.each([500, (t: number) => t * 10])(
