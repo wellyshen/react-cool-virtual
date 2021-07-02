@@ -1,6 +1,13 @@
 /* eslint-disable compat/compat, react/require-default-props */
 
-import { render as tlRender, fireEvent, act } from "@testing-library/react";
+import { useState } from "react";
+import {
+  render as tlRender,
+  fireEvent,
+  act,
+  screen,
+} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { Align, Options, Return } from "../types";
 import useVirtual from "../useVirtual";
@@ -20,10 +27,11 @@ const Compo = ({
   onIsScrolling = () => null,
   ...options
 }: Props) => {
+  const [count, setCount] = useState(itemCount);
   const { outerRef, innerRef, items, ...rest } = useVirtual<
     HTMLDivElement,
     HTMLDivElement
-  >({ itemCount, ...options });
+  >({ itemCount: count, ...options });
 
   onRender();
 
@@ -43,6 +51,14 @@ const Compo = ({
         ))}
         {children({ outerRef, innerRef, items, ...rest })}
       </div>
+      <button
+        data-testid="set-item-count"
+        type="button"
+        // eslint-disable-next-line no-return-assign
+        onClick={() => setCount((prevCount) => (prevCount -= 1))}
+      >
+        Set Count
+      </button>
     </div>
   );
 };
@@ -230,6 +246,14 @@ describe("useVirtual", () => {
       expect(cb).toHaveBeenCalledTimes(2);
     });
 
+    it("should trigger callback only", () => {
+      const { scrollToItem, outerRef } = render({ itemCount: 5 });
+      const cb = jest.fn();
+      scrollToItem(4, cb);
+      expect(outerRef.current.scrollTop).toBe(0);
+      expect(cb).toHaveBeenCalledTimes(1);
+    });
+
     it("should work with smooth scrolling correctly", () => {
       const { scrollToItem, outerRef } = render();
       const cb = jest.fn();
@@ -366,6 +390,58 @@ describe("useVirtual", () => {
       scrollToItem({ index: 7 }, cb);
       expect(outerRef.current.scrollLeft).toBe(100);
       expect(cb).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe("resetScroll", () => {
+    it("should not reset scroll position", () => {
+      const { outerRef } = render();
+      const scrollTop = 50;
+      fireEvent.scroll(outerRef.current, { target: { scrollTop } });
+      userEvent.click(screen.getByTestId("set-item-count"));
+      expect(outerRef.current.scrollTop).toBe(scrollTop);
+    });
+
+    it("should reset scroll position", () => {
+      const { outerRef } = render({ resetScroll: true });
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
+      userEvent.click(screen.getByTestId("set-item-count"));
+      expect(outerRef.current.scrollTop).toBe(0);
+    });
+  });
+
+  describe("onScroll", () => {
+    const e = {
+      overscanStartIndex: 0,
+      overscanStopIndex: 7,
+      visibleStartIndex: 1,
+      visibleStopIndex: 6,
+      scrollForward: true,
+      scrollOffset: 50,
+      userScroll: true,
+    };
+
+    it("should work with use scroll correctly", () => {
+      const onScroll = jest.fn();
+      const { outerRef } = render({ onScroll });
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
+      expect(onScroll).toHaveBeenCalledWith(e);
+    });
+
+    it("should work with imperatively scroll correctly", () => {
+      const onScroll = jest.fn();
+      const { outerRef, scrollTo } = render({ onScroll });
+      scrollTo(50);
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
+      expect(onScroll).toHaveBeenCalledWith({ ...e, userScroll: false });
+    });
+
+    it("should work with scroll backward correctly", () => {
+      const onScroll = jest.fn();
+      const { outerRef } = render({ onScroll });
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 100 } });
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
+      expect(onScroll).toHaveBeenCalledWith({ ...e, scrollForward: false });
     });
   });
 
