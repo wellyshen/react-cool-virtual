@@ -76,7 +76,7 @@ export default <
   const rosRef = useRef<Map<Element, ResizeObserver>>(new Map());
   const scrollOffsetRef = useRef(0);
   const prevItemIdxRef = useRef(-1);
-  const prevVStopRef = useRef<number>();
+  const prevVStopRef = useRef(-1);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
   const outerRectRef = useRef({ width: 0, height: 0 });
