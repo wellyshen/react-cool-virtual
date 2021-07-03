@@ -409,7 +409,7 @@ export default <
 
       setState((prevState) =>
         shouldUpdate(prevState.items, items, { measureRef: true })
-          ? { items, innerStyles: { margin, size: innerSize } }
+          ? { items, inner: { margin, size: innerSize } }
           : prevState
       );
 
@@ -492,11 +492,11 @@ export default <
   );
 
   useIsoLayoutEffect(() => {
-    if (innerRef.current && state.innerStyles) {
-      innerRef.current.style[marginKey] = `${state.innerStyles.margin}px`;
-      innerRef.current.style[sizeKey] = `${state.innerStyles.size}px`;
+    if (innerRef.current && state.inner) {
+      innerRef.current.style[marginKey] = `${state.inner.margin}px`;
+      innerRef.current.style[sizeKey] = `${state.inner.size}px`;
     }
-  }, [marginKey, sizeKey, state.innerStyles]);
+  }, [marginKey, sizeKey, state.inner]);
 
   useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
