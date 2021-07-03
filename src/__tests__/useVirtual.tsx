@@ -138,6 +138,11 @@ describe("useVirtual", () => {
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
     });
 
+    it("should return item count correctly", () => {
+      const { items } = render({ itemCount: 0, ssrItemCount: 10 });
+      expect(items).toHaveLength(0);
+    });
+
     it("should return correctly while scrolling", () => {
       const { outerRef, getLatestItems } = render();
 
