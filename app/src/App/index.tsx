@@ -114,7 +114,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(18);
+const mockData = getMockData(10);
 
 export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(mockData.length);
@@ -123,13 +123,12 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount,
-    onScroll: (e) => console.log("LOG ===> ", e),
   });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
-        <div className={styles.inner} ref={innerRef}>
+        <div ref={innerRef}>
           {items.map(({ index, size }) => (
             <div
               key={index}
