@@ -8,6 +8,7 @@
 
 [![npm version](https://img.shields.io/npm/v/react-cool-virtual?style=flat-square)](https://www.npmjs.com/package/react-cool-virtual)
 [![npm downloads](https://img.shields.io/npm/dt/react-cool-virtual?style=flat-square)](https://www.npmtrends.com/react-cool-virtual)
+[![coverage status](https://img.shields.io/coveralls/github/wellyshen/react-cool-virtual?style=flat-square)](https://coveralls.io/github/wellyshen/react-cool-virtual?branch=master)
 [![gzip size](https://badgen.net/bundlephobia/minzip/react-cool-virtual?label=gzip%20size&style=flat-square)](https://bundlephobia.com/result?p=react-cool-virtual)
 [![best of js](https://img.shields.io/endpoint?style=flat-square&url=https://bestofjs-serverless.now.sh/api/project-badge?fullName=wellyshen%2Freact-cool-virtual)](https://bestofjs.org/projects/react-cool-virtual)
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
