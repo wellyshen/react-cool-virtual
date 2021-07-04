@@ -133,11 +133,12 @@ describe("useVirtual", () => {
 
   describe("items", () => {
     it("should return correctly", () => {
-      const { items } = render();
+      const { items, innerRef } = render();
       const len = 7;
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual(item);
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
+      expect(innerRef.current).toHaveStyle({ marginTop: "0", height: "500px" });
     });
 
     it("should return item count correctly", () => {
@@ -146,7 +147,7 @@ describe("useVirtual", () => {
     });
 
     it("should return correctly while scrolling", () => {
-      const { outerRef, getLatestItems } = render();
+      const { outerRef, innerRef, getLatestItems } = render();
 
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
       let len = 8;
@@ -154,6 +155,7 @@ describe("useVirtual", () => {
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual(item);
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
+      expect(innerRef.current).toHaveStyle({ marginTop: "0", height: "500px" });
 
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 75 } });
       len = 9;
@@ -161,6 +163,18 @@ describe("useVirtual", () => {
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual(item);
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 400 });
+      expect(innerRef.current).toHaveStyle({ marginTop: "0", height: "500px" });
+
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 100 } });
+      len = 8;
+      items = getLatestItems();
+      expect(items).toHaveLength(len);
+      expect(items[0]).toEqual({ ...item, index: 1 });
+      expect(items[len - 1]).toEqual({ ...item, index: 8, start: 350 });
+      expect(innerRef.current).toHaveStyle({
+        marginTop: "50px",
+        height: "450px",
+      });
 
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 200 } });
       len = 7;
@@ -168,6 +182,10 @@ describe("useVirtual", () => {
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual({ ...item, index: 3 });
       expect(items[len - 1]).toEqual({ ...item, index: 9, start: 300 });
+      expect(innerRef.current).toHaveStyle({
+        marginTop: "150px",
+        height: "350px",
+      });
     });
 
     it("should return correctly with dynamic size", () => {
@@ -507,6 +525,42 @@ describe("useVirtual", () => {
     const { outerRef } = render({ useIsScrolling: true, onIsScrolling });
     fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
     expect(onIsScrolling).toHaveBeenCalled();
+  });
+
+  it("should return `items` correctly with `stickyIndices`", () => {
+    const { outerRef, innerRef, getLatestItems } = render({
+      stickyIndices: [0, 3],
+      overscanCount: 0,
+    });
+
+    fireEvent.scroll(outerRef.current, { target: { scrollTop: 100 } });
+    let items = getLatestItems();
+    const len = 7;
+    const itemFirst = { ...item, isSticky: true };
+    const itemSecond = { ...item, index: 2, start: 0 };
+    const itemLast = { ...item, index: 7, start: 250 };
+    const innerStyle = { marginTop: "50", height: "450px" };
+    expect(items).toHaveLength(len);
+    expect(items[0]).toEqual(itemFirst);
+    expect(items[1]).toEqual(itemSecond);
+    expect(items[len - 1]).toEqual(itemLast);
+    expect(innerRef.current).toHaveStyle(innerStyle);
+
+    fireEvent.scroll(outerRef.current, { target: { scrollTop: 200 } });
+    items = getLatestItems();
+    expect(items).toHaveLength(len);
+    expect(items[0]).toEqual({ ...itemFirst, index: 3 });
+    expect(items[1]).toEqual({ ...itemSecond, index: 4 });
+    expect(items[len - 1]).toEqual({ ...itemLast, index: 9 });
+    expect(innerRef.current).toHaveStyle({ marginTop: "150", height: "350px" });
+
+    fireEvent.scroll(outerRef.current, { target: { scrollTop: 100 } });
+    items = getLatestItems();
+    expect(items).toHaveLength(len);
+    expect(items[0]).toEqual(itemFirst);
+    expect(items[1]).toEqual(itemSecond);
+    expect(items[len - 1]).toEqual(itemLast);
+    expect(innerRef.current).toHaveStyle(innerStyle);
   });
 
   it.each([500, (t: number) => t * 10])(
