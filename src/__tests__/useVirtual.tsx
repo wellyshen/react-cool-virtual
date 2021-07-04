@@ -9,7 +9,7 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { Align, Options, Return } from "../types";
+import { Align, Options, OnResizeEvent, Return } from "../types";
 import useVirtual from "../useVirtual";
 
 type Props = Partial<Options> & {
@@ -90,12 +90,14 @@ type Args = Partial<{
 }>;
 
 const rect = { width: 300, height: 300 };
+let roCallback: (e: [{ contentRect: OnResizeEvent }]) => void;
 
 const createResizeObserver = ({ size = 50, callbacks }: Args = {}) =>
   jest.fn((cb) => ({
     observe: (el: HTMLDivElement) => {
       if (el.id === "outer") {
-        cb([{ contentRect: rect }]);
+        roCallback = cb;
+        roCallback([{ contentRect: rect }]);
       } else {
         const callback = (height: number) =>
           cb([{ target: { getBoundingClientRect: () => ({ height }) } }], {
@@ -447,6 +449,31 @@ describe("useVirtual", () => {
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 100 } });
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
       expect(onScroll).toHaveBeenCalledWith({ ...e, scrollForward: false });
+    });
+  });
+
+  describe("onResize", () => {
+    const e = { width: 500, height: 500 };
+
+    it("should trigger event handle correctly", () => {
+      const onResize = jest.fn();
+      render({ onResize });
+
+      expect(onResize).not.toHaveBeenCalled();
+
+      act(() => {
+        roCallback([{ contentRect: e }]);
+      });
+      expect(onResize).toHaveBeenCalledWith(e);
+    });
+
+    it("should trigger `itemSize` correctly", () => {
+      const itemSize = jest.fn(() => 50);
+      render({ itemSize });
+      act(() => {
+        roCallback([{ contentRect: e }]);
+      });
+      expect(itemSize).toHaveBeenLastCalledWith(expect.any(Number), e.width);
     });
   });
 
