@@ -1383,7 +1383,6 @@ You could use dynamic imports to only load the file when the polyfill is require
 
 ## To Do... <!-- omit in toc -->
 
-- [ ] Unit testing (WIP)
 - [ ] Support window scrolling
 - [ ] Leverage the power of [Offscreen API](https://github.com/reactwg/react-18/discussions/19) (maybe...)
 
