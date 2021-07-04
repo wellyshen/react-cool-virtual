@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.4.2
+
+### Patch Changes
+
+- [#173](https://github.com/wellyshen/react-cool-virtual/pull/173) [`70d04ac`](https://github.com/wellyshen/react-cool-virtual/commit/70d04ac5ebab7a686e58eca670679178b2e93a17) Thanks [@wellyshen](https://github.com/wellyshen)! - perf(useVirtual): mutate inner element styles only when items are updated
+
 ## 0.4.1
 
 ### Patch Changes
