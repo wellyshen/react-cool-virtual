@@ -1391,6 +1391,7 @@ You could use dynamic imports to only load the file when the polyfill is require
 > 💡 If you have written any blog post or article about React Cool Virtual, please open a PR to add it here.
 
 - Featured on [React Status #243](https://react.statuscode.com/issues/243).
+- Featured on [React Newsletter #270](https://reactnewsletter.com/issues/270).
 
 ## Contributors ✨ <!-- omit in toc -->
 
