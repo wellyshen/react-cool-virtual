@@ -322,12 +322,9 @@ export default <
         return;
       }
 
-      const { oStart, oStop, vStart, vStop, margin, innerSize } =
-        getCalcData(scrollOffset);
-
-      innerRef.current.style[marginKey] = `${margin}px`;
-      innerRef.current.style[sizeKey] = `${innerSize}px`;
-
+      const calcData = getCalcData(scrollOffset);
+      const { oStart, oStop, vStart, vStop } = calcData;
+      let { margin, innerSize } = calcData;
       const nextItems: Item[] = [];
       const stickies = Array.isArray(stickyIndicesRef.current)
         ? stickyIndicesRef.current
@@ -406,16 +403,20 @@ export default <
             measureRef: () => null,
           });
 
-          innerRef.current.style[marginKey] = `${margin - size}px`;
-          innerRef.current.style[sizeKey] = `${innerSize + size}px`;
+          margin -= size;
+          innerSize += size;
         }
       }
 
-      setItems((prevItems) =>
-        shouldUpdate(prevItems, nextItems, { measureRef: true })
-          ? nextItems
-          : prevItems
-      );
+      setItems((prevItems) => {
+        if (shouldUpdate(prevItems, nextItems, { measureRef: true })) {
+          innerRef.current!.style[marginKey] = `${margin}px`;
+          innerRef.current!.style[sizeKey] = `${innerSize}px`;
+          return nextItems;
+        }
+
+        return prevItems;
+      });
 
       if (!isScrolling) return;
 
