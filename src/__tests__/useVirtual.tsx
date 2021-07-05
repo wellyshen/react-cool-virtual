@@ -503,6 +503,8 @@ describe("useVirtual", () => {
       });
       expect(itemSize).toHaveBeenLastCalledWith(expect.any(Number), e.width);
     });
+
+    it.todo("should test RWD");
   });
 
   it.each([100, (i: number) => 100 - i + i, (_: number, w: number) => w - 200])(
