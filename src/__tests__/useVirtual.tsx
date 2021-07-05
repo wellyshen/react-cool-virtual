@@ -513,7 +513,16 @@ describe("useVirtual", () => {
       expect(itemSize).toHaveBeenLastCalledWith(expect.any(Number), e.width);
     });
 
-    it.todo("should test RWD");
+    it("should scroll to item correctly", () => {
+      const { outerRef } = render({
+        itemSize: (_, w) => (w === rect.width ? 50 : 100),
+      });
+      fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
+      act(() => {
+        roCallback([{ contentRect: e }]);
+      });
+      expect(outerRef.current.scrollTop).toBe(100);
+    });
   });
 
   it.each([100, (i: number) => 100 - i + i, (_: number, w: number) => w - 200])(
