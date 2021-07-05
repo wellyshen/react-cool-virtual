@@ -160,7 +160,7 @@ export default <
 
       const oStart = Math.max(vStart - overscanCount, 0);
       const oStop = Math.min(vStop + overscanCount, msData.length) - 1;
-      const margin = msData[oStart].start;
+      const innerMargin = msData[oStart].start;
       const totalSize = Math[oStop < msData.length - 1 ? "max" : "min"](
         msData[oStop].end + msData[oStop].size,
         msData[msData.length - 1].end
@@ -171,8 +171,8 @@ export default <
         oStop,
         vStart,
         vStop: vStop - 1,
-        margin,
-        innerSize: totalSize - margin,
+        innerMargin,
+        innerSize: totalSize - innerMargin,
       };
     },
     [overscanCount, sizeKey]
@@ -323,7 +323,7 @@ export default <
 
       const calcData = getCalcData(scrollOffset);
       const { oStart, oStop, vStart, vStop } = calcData;
-      let { margin, innerSize } = calcData;
+      let { innerMargin, innerSize } = calcData;
       const items: Item[] = [];
       const stickies = Array.isArray(stickyIndicesRef.current)
         ? stickyIndicesRef.current
@@ -335,7 +335,7 @@ export default <
 
         items.push({
           index: i,
-          start: start - margin,
+          start: start - innerMargin,
           size,
           width: outerRectRef.current.width,
           isScrolling: uxScrolling || undefined,
@@ -402,14 +402,14 @@ export default <
             measureRef: () => null,
           });
 
-          margin -= size;
+          innerMargin -= size;
           innerSize += size;
         }
       }
 
       setState((prevState) =>
         shouldUpdate(prevState.items, items, { measureRef: true })
-          ? { items, inner: { margin, size: innerSize } }
+          ? { items, inner: { margin: innerMargin, size: innerSize } }
           : prevState
       );
 
