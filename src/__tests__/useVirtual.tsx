@@ -375,20 +375,30 @@ describe("useVirtual", () => {
 
   describe("horizontal", () => {
     it("should return `items` correctly", () => {
-      const { getLatestItems, outerRef } = render({ horizontal: true });
+      const { outerRef, innerRef, getLatestItems } = render({
+        horizontal: true,
+      });
 
       let len = 7;
       let items = getLatestItems();
       expect(items).toHaveLength(len);
       expect(items[0]).toEqual(item);
       expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 300 });
+      expect(innerRef.current).toHaveStyle({
+        marginLeft: "0",
+        width: "500px",
+      });
 
-      fireEvent.scroll(outerRef.current, { target: { scrollLeft: 50 } });
+      fireEvent.scroll(outerRef.current, { target: { scrollLeft: 100 } });
       len = 8;
       items = getLatestItems();
       expect(items).toHaveLength(len);
-      expect(items[0]).toEqual(item);
-      expect(items[len - 1]).toEqual({ ...item, index: len - 1, start: 350 });
+      expect(items[0]).toEqual({ ...item, index: 1 });
+      expect(items[len - 1]).toEqual({ ...item, index: 8, start: 350 });
+      expect(innerRef.current).toHaveStyle({
+        marginLeft: "50px",
+        width: "450px",
+      });
     });
 
     it("should scroll to offset correctly", () => {
