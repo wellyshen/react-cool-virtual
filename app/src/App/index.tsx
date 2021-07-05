@@ -114,7 +114,7 @@ const getMockData = (count: number, min = 25) =>
     size: min + Math.round(Math.random() * 150),
   }));
 
-const mockData = getMockData(10);
+const mockData = getMockData(15);
 
 export default (): JSX.Element => {
   const [itemCount, setItemCount] = useState(mockData.length);
@@ -123,21 +123,31 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount,
+    stickyIndices: [0, 5],
+    overscanCount: 0,
   });
 
   return (
     <div className={styles.app}>
       <div className={styles.outer} ref={outerRef}>
         <div ref={innerRef}>
-          {items.map(({ index, size }) => (
-            <div
-              key={index}
-              className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
-              style={{ height: `${size}px` }}
-            >
-              {index}
-            </div>
-          ))}
+          {items.map(({ index, size, isSticky }) => {
+            let style: any = { height: `${size}px` };
+            // Use the `isSticky` property to style the sticky item, that's it ✨
+            style = isSticky
+              ? { ...style, position: "sticky", top: "0" }
+              : style;
+
+            return (
+              <div
+                key={index}
+                className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+                style={style}
+              >
+                {index}
+              </div>
+            );
+          })}
         </div>
       </div>
       <button type="button" onClick={() => scrollToItem(11)}>
