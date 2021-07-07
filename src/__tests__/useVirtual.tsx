@@ -357,7 +357,7 @@ describe("useVirtual", () => {
       expect(outer.scrollTop).toBe(425);
     });
 
-    it("should work with dynamic size correctly", () => {
+    it("should work with dynamic size correctly (item size < outer size)", () => {
       // @ts-expect-error
       window.ResizeObserver = createResizeObserver({ size: 100 });
       const { scrollToItem, outerRef } = render({ isDynamic: true });
@@ -378,6 +378,26 @@ describe("useVirtual", () => {
       fireEvent.scroll(outer, { target: { scrollTop: 600 } });
       scrollToItem(8, cb);
       expect(outer.scrollTop).toBe(600);
+      expect(cb).toHaveBeenCalledTimes(1);
+    });
+
+    it("should work with dynamic size correctly (item size > outer size)", () => {
+      // @ts-expect-error
+      window.ResizeObserver = createResizeObserver({ size: rect.height + 100 });
+      const { scrollToItem, outerRef } = render({ isDynamic: true });
+      const { current: outer } = outerRef;
+
+      const cb = jest.fn();
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(2600);
+      expect(cb).not.toHaveBeenCalled();
+      fireEvent.scroll(outer, { target: { scrollTop: 2600 } });
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(3300);
+      expect(cb).not.toHaveBeenCalled();
+      fireEvent.scroll(outer, { target: { scrollTop: 3300 } });
+      scrollToItem(8, cb);
+      expect(outer.scrollTop).toBe(3300);
       expect(cb).toHaveBeenCalledTimes(1);
     });
   });

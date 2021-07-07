@@ -261,13 +261,17 @@ export default <
 
       if (
         align === Align.start ||
-        (align === Align.auto && scrollOffset > start)
+        (align === Align.auto &&
+          scrollOffset + outerSize > end &&
+          scrollOffset > start)
       ) {
         scrollOffset =
           totalSize - start <= outerSize ? totalSize - outerSize : start;
       } else if (
         align === Align.end ||
-        (align === Align.auto && scrollOffset + outerSize < end)
+        (align === Align.auto &&
+          scrollOffset + outerSize < end &&
+          scrollOffset < start)
       ) {
         scrollOffset = start + size <= outerSize ? 0 : start - outerSize + size;
       } else if (align === Align.center && start + size / 2 > outerSize / 2) {
