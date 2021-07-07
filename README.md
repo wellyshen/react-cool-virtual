@@ -1333,12 +1333,29 @@ const Grid = () => {
 
 ### Working in TypeScript
 
-React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows:
+React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows.
+
+If the outer element and inner element are different types:
 
 ```tsx
 const App = () => {
   // 1st is the `outerRef`, 2nd is the `innerRef`
-  const { outerRef, innerRef } = useVirtual<HTMLDivElement, HTMLDivElement>();
+  const { outerRef, innerRef } = useVirtual<HTMLDivElement, HTMLUListElement>();
+
+  return (
+    <div ref={outerRef}>
+      <ul ref={innerRef}>{/* Rendering items... */}</ul>
+    </div>
+  );
+};
+```
+
+If the outer element and inner element are same types:
+
+```tsx
+const App = () => {
+  // By default, the `innerRef` will refer to the type of the `outerRef`
+  const { outerRef, innerRef } = useVirtual<HTMLDivElement>();
 
   return (
     <div ref={outerRef}>
