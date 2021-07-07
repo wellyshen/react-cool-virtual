@@ -115,7 +115,7 @@ declare module "react-cool-virtual" {
 
   export interface Return<
     O extends HTMLElement = HTMLElement,
-    I extends HTMLElement = HTMLElement
+    I extends HTMLElement = O
   > {
     outerRef: MutableRefObject<O | null>;
     innerRef: MutableRefObject<I | null>;
@@ -126,6 +126,6 @@ declare module "react-cool-virtual" {
 
   export default function useVirtual<
     O extends HTMLElement = HTMLElement,
-    I extends HTMLElement = HTMLElement
+    I extends HTMLElement = O
   >(config: Options): Return<O, I>;
 }
