@@ -1,5 +1,13 @@
 # react-cool-virtual
 
+## 0.4.3
+
+### Patch Changes
+
+- [#181](https://github.com/wellyshen/react-cool-virtual/pull/181) [`44769e5`](https://github.com/wellyshen/react-cool-virtual/commit/44769e575acda5fcbdbe4c82cd0f5348d14434eb) Thanks [@wellyshen](https://github.com/wellyshen)! - refactor: simplify generic type setup
+
+* [#179](https://github.com/wellyshen/react-cool-virtual/pull/179) [`41ab2a7`](https://github.com/wellyshen/react-cool-virtual/commit/41ab2a7253cb33762dc389f5661c52ebde6ca62c) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: `scrollToItem` width dynamic size causes infinitely loop
+
 ## 0.4.2
 
 ### Patch Changes
