@@ -46,7 +46,7 @@ const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
 
 export default <
   O extends HTMLElement = HTMLElement,
-  I extends HTMLElement = HTMLElement
+  I extends HTMLElement = O
 >({
   itemCount,
   ssrItemCount,
