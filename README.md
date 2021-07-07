@@ -1335,7 +1335,7 @@ const Grid = () => {
 
 React Cool Virtual is built with [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of your **outer** and **inner** elements are as follows.
 
-If the outer element and inner element are different types:
+If the outer element and inner element are the different types:
 
 ```tsx
 const App = () => {
@@ -1350,7 +1350,7 @@ const App = () => {
 };
 ```
 
-If the outer element and inner element are same types:
+If the outer element and inner element are the same types:
 
 ```tsx
 const App = () => {
