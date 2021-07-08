@@ -1032,7 +1032,7 @@ A callback for us to fetch (more) data, it's used for [infinite scroll](#infinit
 
 ```js
 const props = useVirtual({
-  onScroll: ({
+  loadMore: ({
     startIndex, // (number) The index of the first batch item
     stopIndex, // (number) The index of the last batch item
     loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
