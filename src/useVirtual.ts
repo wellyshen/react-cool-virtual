@@ -318,7 +318,7 @@ export default <
           stopIndex: loadMoreCount - 1,
           loadIndex: 0,
           scrollOffset,
-          userScroll: userScrollRef.current,
+          userScroll: false,
         });
 
       if (!itemCount) {
@@ -404,7 +404,7 @@ export default <
             width: outerRectRef.current.width,
             isScrolling: uxScrolling || undefined,
             isSticky: true,
-            measureRef: () => null,
+            measureRef: /* istanbul ignore next */ () => null,
           });
 
           innerMargin -= size;
