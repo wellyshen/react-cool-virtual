@@ -1031,17 +1031,17 @@ A callback for us to provide the loaded state of a batch items, it's used for [i
 A callback for us to fetch (more) data, it's used for [infinite scroll](#infinite-scroll). It's invoked when more items need to be loaded, which based on the mechanism of [loadMoreCount](#loadmorecount) and [isItemLoaded](#isitemloaded).
 
 ```js
-const props = useVirtual({
-  loadMore: ({
-    startIndex, // (number) The index of the first batch item
-    stopIndex, // (number) The index of the last batch item
-    loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
-    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
-    userScroll, // (boolean) Tells you the scrolling is through the user or not
-  }) => {
-    // Fetch data...
-  },
-});
+const loadMore = ({
+  startIndex, // (number) The index of the first batch item
+  stopIndex, // (number) The index of the last batch item
+  loadIndex, // (number) The index of the current batch items (e.g. 1 - 15 as `0`, 16 - 30 as `1`, and so on)
+  scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
+  userScroll, // (boolean) Tells you the scrolling is through the user or not
+}) => {
+  // Fetch data...
+};
+
+const props = useVirtual({ loadMore });
 ```
 
 #### onScroll
@@ -1051,19 +1051,19 @@ const props = useVirtual({
 This event will be triggered when scroll position is being changed by the user scrolls or [scrollTo](#scrollto)/[scrollToItem](#scrolltoitem) methods.
 
 ```js
-const props = useVirtual({
-  onScroll: ({
-    overscanStartIndex, // (number) The index of the first overscan item
-    overscanStopIndex, // (number) The index of the last overscan item
-    visibleStartIndex, // (number) The index of the first visible item
-    visibleStopIndex, // (number) The index of the last visible item
-    scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
-    scrollForward, // (boolean) The scroll direction of up/down or left/right, depending on the `horizontal` option
-    userScroll, // (boolean) Tells you the scrolling is through the user or not
-  }) => {
-    // Do something...
-  },
-});
+const onScroll = ({
+  overscanStartIndex, // (number) The index of the first overscan item
+  overscanStopIndex, // (number) The index of the last overscan item
+  visibleStartIndex, // (number) The index of the first visible item
+  visibleStopIndex, // (number) The index of the last visible item
+  scrollOffset, // (number) The scroll offset from top/left, depending on the `horizontal` option
+  scrollForward, // (boolean) The scroll direction of up/down or left/right, depending on the `horizontal` option
+  userScroll, // (boolean) Tells you the scrolling is through the user or not
+}) => {
+  // Do something...
+};
+
+const props = useVirtual({ onScroll });
 ```
 
 #### onResize
@@ -1073,14 +1073,14 @@ const props = useVirtual({
 This event will be triggered when the size of the outer element changes.
 
 ```js
-const props = useVirtual({
-  onResize: ({
-    width, // (number) The content width of the outer element
-    height, // (number) The content height of the outer element
-  }) => {
-    // Do something...
-  },
-});
+const onResize = ({
+  width, // (number) The content width of the outer element
+  height, // (number) The content height of the outer element
+}) => {
+  // Do something...
+};
+
+const props = useVirtual({ onResize });
 ```
 
 ### Return Values
