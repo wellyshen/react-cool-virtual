@@ -1,6 +1,6 @@
 {
   "name": "react-cool-virtual",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A tiny React hook for rendering large datasets like a breeze.",
   "license": "MIT",
   "homepage": "https://github.com/wellyshen/react-cool-virtual#readme",
