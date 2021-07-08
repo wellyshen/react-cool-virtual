@@ -545,6 +545,76 @@ describe("useVirtual", () => {
     });
   });
 
+  it("should trigger `loadMore` callback correctly", () => {
+    let loadMore = jest.fn();
+    const itemCount = 24;
+    const loadMoreCount = 6;
+    render({
+      itemCount,
+      loadMoreCount,
+      isItemLoaded: () => false,
+      loadMore,
+    });
+
+    expect(loadMore).toHaveBeenCalledTimes(1);
+    expect(loadMore).toHaveBeenCalledWith({
+      loadIndex: 0,
+      startIndex: 0,
+      stopIndex: 5,
+      scrollOffset: 0,
+      userScroll: false,
+    });
+
+    loadMore = jest.fn();
+    // eslint-disable-next-line testing-library/render-result-naming-convention
+    let result = render({
+      itemCount,
+      loadMoreCount,
+      isItemLoaded: (i) => [true, false][i],
+      loadMore,
+    });
+    let scrollTop = 50;
+    fireEvent.scroll(result.outerRef.current, { target: { scrollTop } });
+    expect(loadMore).toHaveBeenCalledTimes(1);
+    expect(loadMore).toHaveBeenCalledWith({
+      loadIndex: 1,
+      startIndex: 6,
+      stopIndex: 11,
+      scrollOffset: scrollTop,
+      userScroll: true,
+    });
+
+    loadMore = jest.fn();
+    result = render({
+      itemCount,
+      loadMoreCount,
+      isItemLoaded: (i) => [true, true, false][i],
+      loadMore,
+    });
+    scrollTop = 300;
+    result.scrollTo(scrollTop);
+    fireEvent.scroll(result.outerRef.current, { target: { scrollTop } });
+    expect(loadMore).toHaveBeenCalledTimes(1);
+    expect(loadMore).toHaveBeenCalledWith({
+      loadIndex: 2,
+      startIndex: 12,
+      stopIndex: 17,
+      scrollOffset: scrollTop,
+      userScroll: false,
+    });
+
+    loadMore = jest.fn();
+    result = render({
+      itemCount,
+      loadMoreCount,
+      isItemLoaded: () => true,
+      loadMore,
+    });
+    scrollTop = 600;
+    fireEvent.scroll(result.outerRef.current, { target: { scrollTop } });
+    expect(loadMore).not.toHaveBeenCalled();
+  });
+
   it.each([100, (i: number) => 100 - i + i, (_: number, w: number) => w - 200])(
     "should return `items` correctly with specified `itemSize`",
     (itemSize) => {
