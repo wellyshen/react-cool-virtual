@@ -3,22 +3,22 @@ body {
 }
 
 .app {
-  margin-top: 15rem;
+  margin-top: 5rem;
   text-align: center;
-  height: 90vh;
+  height: 3000px;
 }
 
 .outer {
   margin: 0 auto;
   width: 300px;
-  height: 300px;
   border: 1px solid #000;
   margin-bottom: 1rem;
   overflow: auto;
 }
 
 .inner {
-  position: relative;
+  display: inline-block;
+  width: inherit;
 }
 
 .item {
