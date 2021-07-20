@@ -100,6 +100,7 @@ export interface Options {
   resetScroll?: boolean;
   overscanCount?: number;
   useIsScrolling?: UseIsScrolling;
+  useWindowScroll?: boolean;
   stickyIndices?: number[];
   scrollDuration?: ScrollDuration;
   scrollEasingFunction?: ScrollEasingFunction;

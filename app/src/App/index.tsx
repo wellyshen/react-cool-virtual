@@ -123,6 +123,7 @@ export default (): JSX.Element => {
     HTMLDivElement
   >({
     itemCount,
+    useWindowScroll: true,
     overscanCount: 0,
   });
 

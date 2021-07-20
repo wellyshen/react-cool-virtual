@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 
 import {
   Align,
@@ -55,6 +55,7 @@ export default <
   resetScroll,
   overscanCount = 1,
   useIsScrolling,
+  useWindowScroll,
   stickyIndices,
   // Default = 100ms <= distance * 0.75 <= 500ms
   scrollDuration = (d) => Math.min(Math.max(d * 0.075, 100), 500),
@@ -148,11 +149,14 @@ export default <
 
       let vStop = vStart;
       let currStart = msData[vStop].start;
+      let outerSize = outerRectRef.current[sizeKey];
 
-      while (
-        vStop < msData.length &&
-        currStart < scrollOffset + outerRectRef.current[sizeKey]
-      ) {
+      if (useWindowScroll && scrollOffset > 0) {
+        const { top, left } = outerRef.current!.getBoundingClientRect();
+        outerSize -= horizontal ? left : top;
+      }
+
+      while (vStop < msData.length && currStart < scrollOffset + outerSize) {
         currStart += msData[vStop].size;
         vStop += 1;
       }
@@ -471,14 +475,26 @@ export default <
 
   useResizeEffect<O>(
     outerRef,
-    (rect) => {
+    ({
+      outerWidth,
+      outerHeight,
+      outerRight,
+      outerBottom,
+      windowWidth,
+      windowHeight,
+    }) => {
       const { width, height } = outerRectRef.current;
-      const isSameWidth = width === rect.width;
-      const isSameSize = isSameWidth && height === rect.height;
+      const isSameWidth = width === outerWidth;
+      const isSameSize = isSameWidth && height === outerHeight;
       const prevItemCount = msDataRef.current.length;
       const prevTotalSize = msDataRef.current[prevItemCount - 1]?.end;
 
-      outerRectRef.current = rect;
+      outerRectRef.current = useWindowScroll
+        ? {
+            width: Math.min(outerRight, windowWidth),
+            height: Math.min(outerBottom, windowHeight),
+          }
+        : { width: outerWidth, height: outerHeight };
       measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
 
@@ -496,7 +512,8 @@ export default <
         scrollTo(scrollOffsetRef.current * ratio, false);
       }
 
-      if (!isSameSize && onResizeRef.current) onResizeRef.current(rect);
+      if (!isSameSize && onResizeRef.current)
+        onResizeRef.current({ width: outerWidth, height: outerHeight });
     },
     [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
   );
@@ -507,7 +524,9 @@ export default <
     if (!outer) return () => null;
 
     const scrollHandler = ({ target }: Event) => {
-      const scrollOffset = (target as O)[scrollKey];
+      const scrollOffset = useWindowScroll
+        ? -outer.getBoundingClientRect().top
+        : (target as O)[scrollKey];
 
       if (scrollOffset === scrollOffsetRef.current) return;
 
@@ -525,7 +544,9 @@ export default <
       scrollOffsetRef.current = scrollOffset;
     };
 
-    outer.addEventListener("scroll", scrollHandler, { passive: true });
+    const target = useWindowScroll ? window : outer;
+
+    target.addEventListener("scroll", scrollHandler, { passive: true });
 
     const ros = rosRef.current;
 
@@ -536,7 +557,7 @@ export default <
         scrollToRafRef.current = undefined;
       }
 
-      outer.removeEventListener("scroll", scrollHandler);
+      target.removeEventListener("scroll", scrollHandler);
 
       ros.forEach((ro) => ro.disconnect());
       ros.clear();
