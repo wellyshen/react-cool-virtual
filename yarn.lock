@@ -2784,10 +2784,10 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-bundlesize2@^0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/bundlesize2/-/bundlesize2-0.0.27.tgz#1929974e6b6a58b18f52ac8c5af7de371b05e762"
-  integrity sha512-m9TMbvCEKKefUiVxkWuT/etWjCjlkpgk6iIBShBW+Z82O4yat1MUDhsnKwniibJOOIpO9YYRpggAiRy6J1teqA==
+bundlesize2@^0.0.28:
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/bundlesize2/-/bundlesize2-0.0.28.tgz#a9b4015ee95325e78d06c5952078ed272aa3466e"
+  integrity sha512-8m7IDOy1J55sXNWwzvqKaGVXNPtpJIFP5Xgs7LKdbI8ELN7Pi95D5SiNc65auJPdjjlmWqEYoo4yyDgWYtqWtw==
   dependencies:
     bytes "^3.1.0"
     chalk "^4.0.0"
