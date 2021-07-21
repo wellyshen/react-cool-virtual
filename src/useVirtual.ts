@@ -1,10 +1,11 @@
-import { useCallback, useRef, useState, useEffect } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import {
   Align,
   Item,
   ItemSize,
   Measure,
+  OnResizeEvent,
   Options,
   Return,
   ScrollTo,
@@ -80,7 +81,14 @@ export default <
   const prevVStopRef = useRef(-1);
   const outerRef = useRef<O>(null);
   const innerRef = useRef<I>(null);
-  const outerRectRef = useRef({ width: 0, height: 0 });
+  const outerRectRef = useRef({
+    width: 0,
+    height: 0,
+    right: 0,
+    bottom: 0,
+    windowWidth: 0,
+    windowHeight: 0,
+  });
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
@@ -95,7 +103,11 @@ export default <
   const onResizeRef = useLatest(onResize);
   const sizeKey = !horizontal ? "height" : "width";
   const marginKey = !horizontal ? "marginTop" : "marginLeft";
-  const scrollKey = !horizontal ? "scrollTop" : "scrollLeft";
+  const outerTL = !horizontal ? "top" : "left";
+  const outerBR = !horizontal ? "bottom" : "right";
+  const outerScrollKey = !horizontal ? "scrollTop" : "scrollLeft";
+  const winScrollKey = !horizontal ? "scrollY" : "scrollX";
+  const winSizeKey = !horizontal ? "windowHeight" : "windowWidth";
 
   const getItemSize = useCallback(
     (idx: number) => {
@@ -127,6 +139,11 @@ export default <
 
   const getCalcData = useCallback(
     (scrollOffset: number) => {
+      if (useWindowScroll) {
+        const rect = outerRef.current!.getBoundingClientRect();
+        scrollOffset = Math.min(Math.max(-rect[outerTL], 0), rect[sizeKey]);
+      }
+
       const { current: msData } = msDataRef;
       let vStart = 0;
 
@@ -150,11 +167,12 @@ export default <
       let vStop = vStart;
       let currStart = msData[vStop].start;
       let outerSize = outerRectRef.current[sizeKey];
-
-      if (useWindowScroll && scrollOffset > 0) {
-        const { top, left } = outerRef.current!.getBoundingClientRect();
-        outerSize -= horizontal ? left : top;
-      }
+      outerSize = useWindowScroll
+        ? Math.min(
+            Math.max(outerRectRef.current[outerBR], 0),
+            outerRectRef.current[winSizeKey]
+          )
+        : outerSize;
 
       while (vStop < msData.length && currStart < scrollOffset + outerSize) {
         currStart += msData[vStop].size;
@@ -178,17 +196,17 @@ export default <
         innerSize: totalSize - innerMargin,
       };
     },
-    [overscanCount, sizeKey]
+    [outerBR, outerTL, overscanCount, sizeKey, useWindowScroll, winSizeKey]
   );
 
   const scrollTo = useCallback(
     (offset: number, isScrolling = true) => {
       if (outerRef.current) {
         isScrollingRef.current = isScrolling;
-        outerRef.current[scrollKey] = offset;
+        outerRef.current[outerScrollKey] = offset;
       }
     },
-    [scrollKey]
+    [outerScrollKey]
   );
 
   const scrollToOffset = useCallback<ScrollTo>(
@@ -475,26 +493,14 @@ export default <
 
   useResizeEffect<O>(
     outerRef,
-    ({
-      outerWidth,
-      outerHeight,
-      outerRight,
-      outerBottom,
-      windowWidth,
-      windowHeight,
-    }) => {
+    (rect) => {
       const { width, height } = outerRectRef.current;
-      const isSameWidth = width === outerWidth;
-      const isSameSize = isSameWidth && height === outerHeight;
+      const isSameWidth = width === rect.width;
+      const isSameSize = isSameWidth && height === rect.height;
       const prevItemCount = msDataRef.current.length;
       const prevTotalSize = msDataRef.current[prevItemCount - 1]?.end;
 
-      outerRectRef.current = useWindowScroll
-        ? {
-            width: Math.min(outerRight, windowWidth),
-            height: Math.min(outerBottom, windowHeight),
-          }
-        : { width: outerWidth, height: outerHeight };
+      outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
       handleScroll(scrollOffsetRef.current);
 
@@ -512,10 +518,28 @@ export default <
         scrollTo(scrollOffsetRef.current * ratio, false);
       }
 
-      if (!isSameSize && onResizeRef.current)
-        onResizeRef.current({ width: outerWidth, height: outerHeight });
+      if (!isSameSize && onResizeRef.current) {
+        let e: OnResizeEvent = { width: rect.width, height: rect.height };
+        e = useWindowScroll
+          ? {
+              ...e,
+              windowWidth: rect.windowWidth,
+              windowHeight: rect.windowHeight,
+            }
+          : e;
+
+        onResizeRef.current(e);
+      }
     },
-    [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
+    [
+      handleScroll,
+      itemCount,
+      measureItems,
+      onResizeRef,
+      resetScroll,
+      scrollTo,
+      useWindowScroll,
+    ]
   );
 
   useIsoLayoutEffect(() => {
@@ -524,9 +548,12 @@ export default <
     if (!outer) return () => null;
 
     const scrollHandler = ({ target }: Event) => {
-      const scrollOffset = useWindowScroll
-        ? -outer.getBoundingClientRect().top
-        : (target as O)[scrollKey];
+      let scrollOffset = (target as O)[outerScrollKey];
+
+      if (useWindowScroll) {
+        if (!msDataRef.current.length) return;
+        scrollOffset = window[winScrollKey];
+      }
 
       if (scrollOffset === scrollOffsetRef.current) return;
 
@@ -562,7 +589,14 @@ export default <
       ros.forEach((ro) => ro.disconnect());
       ros.clear();
     };
-  }, [cancelResetIsScrolling, handleScroll, scrollKey, useIsScrollingRef]);
+  }, [
+    cancelResetIsScrolling,
+    handleScroll,
+    outerScrollKey,
+    useIsScrollingRef,
+    useWindowScroll,
+    winScrollKey,
+  ]);
 
   return { outerRef, innerRef, items, scrollTo: scrollToOffset, scrollToItem };
 };

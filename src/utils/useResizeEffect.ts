@@ -1,17 +1,17 @@
 import { DependencyList, RefObject, useRef } from "react";
 
-import { OnResize } from "../types";
+import { Rect, ResizeEffectCallback } from "../types";
 import useIsoLayoutEffect from "./useIsoLayoutEffect";
 import useLatest from "./useLatest";
 
 export default <T extends HTMLElement>(
   ref: RefObject<T>,
-  cb: OnResize,
+  cb: ResizeEffectCallback,
   deps: DependencyList,
   useWindowScroll?: boolean
 ): void => {
+  const rectRef = useRef({} as Rect);
   const cbRef = useLatest(cb);
-  const rectRef = useRef({});
 
   useIsoLayoutEffect(() => {
     if (!ref?.current) return () => null;
@@ -22,10 +22,10 @@ export default <T extends HTMLElement>(
       const { width, height } = contentRect;
 
       rectRef.current = {
-        outerWidth: width,
-        outerHeight: height,
-        outerRight: right,
-        outerBottom: bottom,
+        width,
+        height,
+        right,
+        bottom,
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
       };

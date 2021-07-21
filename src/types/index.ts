@@ -8,6 +8,19 @@ export interface Measure {
   size: number;
 }
 
+export interface Rect {
+  width: number;
+  height: number;
+  right: number;
+  bottom: number;
+  windowWidth: number;
+  windowHeight: number;
+}
+
+export interface ResizeEffectCallback {
+  (rect: Rect): void;
+}
+
 // External
 export type SsrItemCount = number | [number, number];
 
@@ -50,9 +63,11 @@ interface OnScroll {
 export interface OnResizeEvent {
   width: number;
   height: number;
+  windowWidth?: number;
+  windowHeight?: number;
 }
 
-export interface OnResize {
+interface OnResize {
   (event: OnResizeEvent): void;
 }
 
