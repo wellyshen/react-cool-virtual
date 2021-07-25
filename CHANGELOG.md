@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.4.4
+
+### Patch Changes
+
+- [#183](https://github.com/wellyshen/react-cool-virtual/pull/183) [`737996f`](https://github.com/wellyshen/react-cool-virtual/commit/737996ff65ba8f58c7380931b6b350c0c0b6c044) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: correct the initial `e.userScroll` of `loadMore` callback from `true` to `false`
+
 ## 0.4.3
 
 ### Patch Changes
