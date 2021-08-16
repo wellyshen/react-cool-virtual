@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.4.6
+
+### Patch Changes
+
+- [#225](https://github.com/wellyshen/react-cool-virtual/pull/225) [`60d4e78`](https://github.com/wellyshen/react-cool-virtual/commit/60d4e786788d3b9c590abdf89a76166e92e84dc2) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: app crashes when scrolling with drag bar
+
 ## 0.4.4
 
 ### Patch Changes
