@@ -454,6 +454,7 @@ export default <
       prevVStopRef.current = vStop;
     },
     [
+      stickyIndicesRef,
       getCalcData,
       getMeasure,
       itemCount,
