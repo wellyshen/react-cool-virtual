@@ -17,6 +17,15 @@
         "infra",
         "maintenance"
       ]
+    },
+    {
+      "login": "nikitapilgrim",
+      "name": "Nikita Pilgrim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49089372?v=4",
+      "profile": "http://postalchemy.now.sh",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -11,7 +11,7 @@
 [![coverage status](https://img.shields.io/coveralls/github/wellyshen/react-cool-virtual?style=flat-square)](https://coveralls.io/github/wellyshen/react-cool-virtual?branch=master)
 [![gzip size](https://badgen.net/bundlephobia/minzip/react-cool-virtual?label=gzip%20size&style=flat-square)](https://bundlephobia.com/result?p=react-cool-virtual)
 [![best of js](https://img.shields.io/endpoint?style=flat-square&url=https://bestofjs-serverless.now.sh/api/project-badge?fullName=wellyshen%2Freact-cool-virtual)](https://bestofjs.org/projects/react-cool-virtual)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 
 </div>
 
@@ -1420,6 +1420,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="http://wellyshen.com"><img src="https://avatars.githubusercontent.com/u/21308003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Welly</b></sub></a><br /><a href="#ideas-wellyshen" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Code">💻</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Documentation">📖</a> <a href="#infra-wellyshen" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-wellyshen" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="http://postalchemy.now.sh"><img src="https://avatars.githubusercontent.com/u/49089372?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nikita Pilgrim</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=nikitapilgrim" title="Code">💻</a></td>
   </tr>
 </table>
 

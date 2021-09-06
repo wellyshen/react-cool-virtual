@@ -84,7 +84,7 @@ export default <
   const msDataRef = useRef<Measure[]>([]);
   const userScrollRef = useRef(true);
   const scrollToRafRef = useRef<number>();
-  const stickyIndicesRef = useRef(stickyIndices);
+  const stickyIndicesRef = useLatest(stickyIndices);
   const durationRef = useLatest(scrollDuration);
   const easingFnRef = useLatest(scrollEasingFunction);
   const isItemLoadedRef = useRef(isItemLoaded);
@@ -449,6 +449,7 @@ export default <
       prevVStopRef.current = vStop;
     },
     [
+      stickyIndicesRef,
       getCalcData,
       getMeasure,
       itemCount,
