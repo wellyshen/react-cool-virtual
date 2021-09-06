@@ -131,7 +131,7 @@ export default <
 
       if (hasDynamicSizeRef.current) {
         while (
-          vStart < msData.length &&
+          vStart < msData.length - 1 &&
           msData[vStart].start + msData[vStart].size < scrollOffset
         )
           vStart += 1;
