@@ -91,7 +91,7 @@
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.27.0",
-    "@babel/core": "^7.15.4",
+    "@babel/core": "^7.15.5",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.4",
     "@babel/preset-react": "^7.14.5",
@@ -107,7 +107,7 @@
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^13.2.1",
     "@types/jest": "^27.0.1",
-    "@types/react": "^17.0.19",
+    "@types/react": "^17.0.20",
     "bundlesize2": "^0.0.30",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.2.0",
