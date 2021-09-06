@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.1
+
+### Patch Changes
+
+- [#231](https://github.com/wellyshen/react-cool-virtual/pull/231) [`b705ab3`](https://github.com/wellyshen/react-cool-virtual/commit/b705ab30a11cecebe9ed7bd8f2579d12f6fd9381) Thanks [@nikitapilgrim](https://github.com/nikitapilgrim)! - fix: `stickyIndices` can be dynamic
+
 ## 0.4.6
 
 ### Patch Changes
