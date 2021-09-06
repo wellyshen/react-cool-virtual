@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.2
+
+### Patch Changes
+
+- [#245](https://github.com/wellyshen/react-cool-virtual/pull/245) [`f31007e`](https://github.com/wellyshen/react-cool-virtual/commit/f31007e71f0228f3c82ec35ea7de9a60d0a51850) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: app crash due to filtering (from more to less)
+
 ## 0.5.1
 
 ### Patch Changes
