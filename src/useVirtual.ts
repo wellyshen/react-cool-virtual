@@ -111,7 +111,7 @@ export default <
 
   const measureItems = useCallback(
     (useCache = true) => {
-      msDataRef.current.length = itemCount;
+      msDataRef.current = msDataRef.current.slice(0, itemCount);
 
       for (let i = 0; i < itemCount; i += 1)
         msDataRef.current[i] = getMeasure(
@@ -127,18 +127,19 @@ export default <
   const getCalcData = useCallback(
     (scrollOffset: number) => {
       const { current: msData } = msDataRef;
+      const lastIdx = msData.length - 1;
       let vStart = 0;
 
       if (hasDynamicSizeRef.current) {
         while (
-          vStart < msData.length - 1 &&
+          vStart < lastIdx &&
           msData[vStart].start + msData[vStart].size < scrollOffset
         )
           vStart += 1;
       } else {
         vStart = findNearestBinarySearch(
           0,
-          msData.length - 1,
+          lastIdx,
           scrollOffset,
           (idx) => msData[idx].start
         );
@@ -148,26 +149,27 @@ export default <
       let currStart = msData[vStop].start;
 
       while (
-        vStop < msData.length &&
+        vStop < lastIdx &&
         currStart < scrollOffset + outerRectRef.current[sizeKey]
       ) {
         currStart += msData[vStop].size;
         vStop += 1;
       }
 
+      vStop = vStop === lastIdx ? vStop : vStop - 1;
       const oStart = Math.max(vStart - overscanCount, 0);
-      const oStop = Math.min(vStop + overscanCount, msData.length) - 1;
+      const oStop = Math.min(vStop + overscanCount, lastIdx);
       const innerMargin = msData[oStart].start;
-      const totalSize = Math[oStop < msData.length - 1 ? "max" : "min"](
+      const totalSize = Math[oStop < lastIdx ? "max" : "min"](
         msData[oStop].end + msData[oStop].size,
-        msData[msData.length - 1].end
+        msData[lastIdx].end
       );
 
       return {
         oStart,
         oStop,
         vStart,
-        vStop: vStop - 1,
+        vStop,
         innerMargin,
         innerSize: totalSize - innerMargin,
       };
