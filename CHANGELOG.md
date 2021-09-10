@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.2
+
+### Patch Changes
+
+- [#252](https://github.com/wellyshen/react-cool-virtual/pull/252) [`9467444`](https://github.com/wellyshen/react-cool-virtual/commit/9467444b2eb558d3e23d74a5b61cedd471b06232) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: filter data with dynamic size causes empty row/column
+
 ## 0.5.1
 
 ### Patch Changes
