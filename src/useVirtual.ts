@@ -367,7 +367,11 @@ export default <
 
                 msDataRef.current[i] = getMeasure(i, measuredSize);
                 if (!isScrollToItemRef.current)
-                  handleScroll(scrollOffset, isScrolling, uxScrolling);
+                  handleScroll(
+                    scrollOffsetRef.current,
+                    isScrolling,
+                    uxScrolling
+                  );
 
                 hasDynamicSizeRef.current = true;
               }
@@ -474,14 +478,14 @@ export default <
       const { width, height } = outerRectRef.current;
       const isSameWidth = width === rect.width;
       const isSameSize = isSameWidth && height === rect.height;
-      const prevItemCount = msDataRef.current.length;
-      const prevTotalSize = msDataRef.current[prevItemCount - 1]?.end;
+      const msDataLen = msDataRef.current.length;
+      const prevTotalSize = msDataRef.current[msDataLen - 1]?.end;
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
-      handleScroll(scrollOffsetRef.current);
+      if (!resetScroll || !msDataLen) handleScroll(scrollOffsetRef.current);
 
-      if (resetScroll && itemCount !== prevItemCount) scrollTo(0, false);
+      if (resetScroll && itemCount !== msDataLen) scrollTo(0, false);
 
       if (!isMountedRef.current) {
         isMountedRef.current = true;
