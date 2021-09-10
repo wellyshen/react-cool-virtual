@@ -477,9 +477,12 @@ export default <
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
-      if (!resetScroll || !msDataLen) handleScroll(scrollOffsetRef.current);
 
-      if (resetScroll && itemCount !== msDataLen) scrollTo(0, false);
+      if (resetScroll && msDataLen && msDataLen !== itemCount) {
+        scrollTo(0, false);
+      } else {
+        handleScroll(scrollOffsetRef.current);
+      }
 
       if (!isMountedRef.current) {
         isMountedRef.current = true;
