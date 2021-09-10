@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.3
+
+### Patch Changes
+
+- [#254](https://github.com/wellyshen/react-cool-virtual/pull/254) [`c453cad`](https://github.com/wellyshen/react-cool-virtual/commit/c453cad0c82e7e40baf741dd8f0676360e378041) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: app crash when dynamic change data (from short to long)
+
 ## 0.5.2
 
 ### Patch Changes
