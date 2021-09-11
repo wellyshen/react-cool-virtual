@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 
 import {
   Align,
@@ -112,7 +112,7 @@ export default <
 
   const measureItems = useCallback(
     (useCache = true) => {
-      msDataRef.current = msDataRef.current.slice(0, itemCount);
+      msDataRef.current.length = itemCount;
 
       for (let i = 0; i < itemCount; i += 1)
         msDataRef.current[i] = getMeasure(
@@ -479,12 +479,10 @@ export default <
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
+      handleScroll(scrollOffsetRef.current);
 
-      if (resetScroll && msDataLen && msDataLen !== itemCount) {
-        scrollTo(0, false);
-      } else {
-        handleScroll(scrollOffsetRef.current);
-      }
+      if (resetScroll && itemCount !== msDataLen)
+        setTimeout(() => scrollTo(0, false));
 
       if (!isMountedRef.current) {
         isMountedRef.current = true;
@@ -503,12 +501,14 @@ export default <
     [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
   );
 
-  useIsoLayoutEffect(() => {
-    if (innerRef.current && state.inner) {
-      innerRef.current.style[marginKey] = `${state.inner.margin}px`;
-      innerRef.current.style[sizeKey] = `${state.inner.size}px`;
+  useEffect(() => {
+    const { inner, items } = state;
+
+    if (innerRef.current && inner) {
+      innerRef.current.style[marginKey] = items ? `${inner.margin}px` : "";
+      innerRef.current.style[sizeKey] = items ? `${inner.size}px` : "";
     }
-  }, [marginKey, sizeKey, state.inner]);
+  }, [marginKey, sizeKey, state]);
 
   useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
