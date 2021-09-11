@@ -111,7 +111,7 @@ export default <
 
   const measureItems = useCallback(
     (useCache = true) => {
-      msDataRef.current = msDataRef.current.slice(0, itemCount);
+      msDataRef.current.length = itemCount;
 
       for (let i = 0; i < itemCount; i += 1)
         msDataRef.current[i] = getMeasure(
@@ -323,6 +323,9 @@ export default <
 
       if (!itemCount) {
         setItems([]);
+        innerRef.current.style[marginKey] = "";
+        innerRef.current.style[sizeKey] = "";
+
         return;
       }
 
@@ -485,12 +488,10 @@ export default <
 
       outerRectRef.current = rect;
       measureItems(hasDynamicSizeRef.current);
+      handleScroll(scrollOffsetRef.current);
 
-      if (resetScroll && msDataLen && msDataLen !== itemCount) {
-        scrollTo(0, false);
-      } else {
-        handleScroll(scrollOffsetRef.current);
-      }
+      if (resetScroll && itemCount !== msDataLen)
+        setTimeout(() => scrollTo(0, false));
 
       if (!isMountedRef.current) {
         isMountedRef.current = true;
