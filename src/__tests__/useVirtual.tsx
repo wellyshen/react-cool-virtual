@@ -463,6 +463,7 @@ describe("useVirtual", () => {
       const scrollTop = 50;
       fireEvent.scroll(outerRef.current, { target: { scrollTop } });
       userEvent.click(screen.getByTestId("set-item-count"));
+      jest.runAllTimers();
       expect(outerRef.current.scrollTop).toBe(scrollTop);
     });
 
@@ -470,6 +471,7 @@ describe("useVirtual", () => {
       const { outerRef } = render({ resetScroll: true });
       fireEvent.scroll(outerRef.current, { target: { scrollTop: 50 } });
       userEvent.click(screen.getByTestId("set-item-count"));
+      jest.runAllTimers();
       expect(outerRef.current.scrollTop).toBe(0);
     });
   });
