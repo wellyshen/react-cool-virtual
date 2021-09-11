@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.4
+
+### Patch Changes
+
+- [#256](https://github.com/wellyshen/react-cool-virtual/pull/256) [`281a31e`](https://github.com/wellyshen/react-cool-virtual/commit/281a31ef500360c41829098db892f873633fbedd) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: filter items not updated correctly
+
 ## 0.5.3
 
 ### Patch Changes
