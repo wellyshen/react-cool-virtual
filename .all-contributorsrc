@@ -26,6 +26,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "neighborhood999",
+      "name": "Jie Peng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10325111?v=4",
+      "profile": "http://jiepeng.me",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
