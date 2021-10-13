@@ -11,7 +11,7 @@
 [![coverage status](https://img.shields.io/coveralls/github/wellyshen/react-cool-virtual?style=flat-square)](https://coveralls.io/github/wellyshen/react-cool-virtual?branch=master)
 [![gzip size](https://badgen.net/bundlephobia/minzip/react-cool-virtual?label=gzip%20size&style=flat-square)](https://bundlephobia.com/result?p=react-cool-virtual)
 [![best of js](https://img.shields.io/endpoint?style=flat-square&url=https://bestofjs-serverless.now.sh/api/project-badge?fullName=wellyshen%2Freact-cool-virtual)](https://bestofjs.org/projects/react-cool-virtual)
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 
 </div>
 
@@ -92,7 +92,7 @@ $ npm install --save react-cool-virtual
 
 ### CDN
 
-If you're not using a module bundler or package manager. We also provide a [UMD](https://github.com/umdjs/umd) build which is available over the [unpkg.com](https://unpkg.com) CDN. Simply use a `<script>` tag to add it after [React CND links](https://reactjs.org/docs/cdn-links.html) as below:
+If you're not using a module bundler or package manager. We also provide a [UMD](https://github.com/umdjs/umd) build which is available over the [unpkg.com](https://unpkg.com) CDN. Simply use a `<script>` tag to add it after [React CDN links](https://reactjs.org/docs/cdn-links.html) as below:
 
 <!-- prettier-ignore-start -->
 ```html
@@ -237,7 +237,7 @@ const List = () => {
 };
 ```
 
-> 💡 The scrollbar is jumping? It's because the total size of the items is gradually corrected along with an item that has been measured. You can tweak the `itemSize` to reduce the phenomenon.
+> 💡 The scrollbar is jumping (or unexpected position)? It's because the total size of the items is gradually corrected along with an item that has been measured. You can tweak the `itemSize` to reduce the phenomenon.
 
 ### Real-time Resize
 
@@ -462,7 +462,15 @@ const loadData = async ({ loadIndex }, setComments) => {
   try {
     const { data: comments } = await axios(`/comments?postId=${loadIndex + 1}`);
 
-    setComments((prevComments) => [...prevComments, ...comments]);
+    setComments((prevComments) => {
+      const nextComments = [...prevComments];
+
+      comments.forEach((comment) => {
+        nextComments[comment.id - 1] = comment;
+      });
+
+      return nextComments;
+    });
   } catch (err) {
     // If there's an error set the state back to `false`
     isItemLoadedArr[loadIndex] = false;
@@ -1421,6 +1429,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="http://wellyshen.com"><img src="https://avatars.githubusercontent.com/u/21308003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Welly</b></sub></a><br /><a href="#ideas-wellyshen" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Code">💻</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Documentation">📖</a> <a href="#infra-wellyshen" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-wellyshen" title="Maintenance">🚧</a></td>
     <td align="center"><a href="http://postalchemy.now.sh"><img src="https://avatars.githubusercontent.com/u/49089372?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nikita Pilgrim</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=nikitapilgrim" title="Code">💻</a></td>
+    <td align="center"><a href="http://jiepeng.me"><img src="https://avatars.githubusercontent.com/u/10325111?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jie Peng</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=neighborhood999" title="Documentation">📖</a></td>
   </tr>
 </table>
 

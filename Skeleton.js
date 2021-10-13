@@ -1,19 +1,18 @@
-/* eslint-disable compat/compat */
+/* eslint-disable jsx-a11y/accessible-emoji */
 
 import { useState } from "react";
 import useVirtual from "react-cool-virtual";
 import axios from "axios";
 
-import styles from "./styles.module.scss";
+import "./styles.scss";
 
 const TOTAL_COMMENTS = 500;
 const BATCH_COMMENTS = 5;
-const isItemLoadedArr: any[] = [];
+const isItemLoadedArr = [];
 
-// eslint-disable-next-line promise/param-names
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const loadData = async ({ loadIndex }: any, setComments: any) => {
+const loadData = async ({ loadIndex }, setComments) => {
   // Set the state of a batch items as `true`
   // to avoid the callback from being invoked repeatedly
   isItemLoadedArr[loadIndex] = true;
@@ -26,10 +25,10 @@ const loadData = async ({ loadIndex }: any, setComments: any) => {
       `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
     );
 
-    setComments((prevComments: any) => {
+    setComments((prevComments) => {
       const nextComments = [...prevComments];
 
-      (comments as any).forEach((comment: any) => {
+      comments.forEach((comment) => {
         nextComments[comment.id - 1] = comment;
       });
 
@@ -43,9 +42,9 @@ const loadData = async ({ loadIndex }: any, setComments: any) => {
   }
 };
 
-export default () => {
-  const [comments, setComments] = useState<any[]>([]);
-  const { outerRef, innerRef, items } = useVirtual<HTMLDivElement>({
+const Skeleton = () => {
+  const [comments, setComments] = useState([]);
+  const { outerRef, innerRef, items } = useVirtual({
     itemCount: TOTAL_COMMENTS,
     // Estimated item size (with padding)
     itemSize: 122,
@@ -56,16 +55,12 @@ export default () => {
     // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     // We can fetch the data through the callback, it's invoked when more items need to be loaded
-    loadMore: (e) => {
-      console.log("loadIndex: ", e.loadIndex);
-      console.log("Indexes: ", e.startIndex, e.stopIndex);
-      loadData(e, setComments);
-    },
+    loadMore: (e) => loadData(e, setComments)
   });
 
   return (
     <div
-      className={styles.outer}
+      className="outer"
       style={{ width: "300px", height: "500px", overflow: "auto" }}
       ref={outerRef}
     >
@@ -73,12 +68,12 @@ export default () => {
         {items.map(({ index, measureRef }) => (
           <div
             key={comments[index]?.id || `fb-${index}`}
-            className={`${styles.item} ${index % 2 ? styles.dark : ""}`}
+            className={`item ${index % 2 ? "dark" : ""}`}
             style={{ padding: "16px", minHeight: "122px" }}
             ref={measureRef} // Used to measure the unknown item size
           >
             {comments[index]
-              ? `${comments[index].id - 1}. ${comments[index].body}`
+              ? `${comments[index].id}. ${comments[index].body}`
               : "⏳ Loading..."}
           </div>
         ))}
@@ -86,3 +81,5 @@ export default () => {
     </div>
   );
 };
+
+export default Skeleton;

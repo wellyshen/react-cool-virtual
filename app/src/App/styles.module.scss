@@ -1,32 +1,28 @@
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: sans-serif;
+  background: #fff;
 }
 
 .app {
-  margin-top: 5rem;
-  text-align: center;
+  padding: 0 1rem;
+}
+
+p {
+  color: #333;
 }
 
 .outer {
-  margin: 0 auto;
-  width: 500px;
-  height: 500px;
-  border: 1px solid #000;
-  margin-bottom: 1rem;
-  overflow: auto;
-}
-
-.inner {
-  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .item {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff;
+  min-height: 50px;
 
   &.dark {
-    background: #ddd;
+    background: #e5e5e5;
   }
 }
