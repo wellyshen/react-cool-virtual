@@ -431,6 +431,8 @@ export default <
 
       if (!isScrolling) return;
 
+      const scrollForward = scrollOffset > scrollOffsetRef.current;
+
       if (onScrollRef.current)
         onScrollRef.current({
           overscanStartIndex: oStart,
@@ -438,11 +440,14 @@ export default <
           visibleStartIndex: vStart,
           visibleStopIndex: vStop,
           scrollOffset,
-          scrollForward: scrollOffset > scrollOffsetRef.current,
+          scrollForward,
           userScroll: userScrollRef.current,
         });
 
-      const loadIndex = Math.floor((vStop + 1) / loadMoreCount);
+      const loadIndex = Math.max(
+        Math.floor((vStop + 1) / loadMoreCount) - (scrollForward ? 0 : 1),
+        0
+      );
       const startIndex = loadIndex * loadMoreCount;
 
       if (
