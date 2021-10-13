@@ -462,7 +462,15 @@ const loadData = async ({ loadIndex }, setComments) => {
   try {
     const { data: comments } = await axios(`/comments?postId=${loadIndex + 1}`);
 
-    setComments((prevComments) => [...prevComments, ...comments]);
+    setComments((prevComments) => {
+      const nextComments = [...prevComments];
+
+      comments.forEach((comment) => {
+        nextComments[comment.id - 1] = comment;
+      });
+
+      return nextComments;
+    });
   } catch (err) {
     // If there's an error set the state back to `false`
     isItemLoadedArr[loadIndex] = false;

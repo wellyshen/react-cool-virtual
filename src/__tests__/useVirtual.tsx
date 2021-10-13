@@ -609,6 +609,28 @@ describe("useVirtual", () => {
     result = render({
       itemCount,
       loadMoreCount,
+      isItemLoaded: (i) => [true, false, true][i],
+      loadMore,
+    });
+    scrollTop = 500;
+    result.scrollTo(scrollTop);
+    fireEvent.scroll(result.outerRef.current, { target: { scrollTop } });
+    scrollTop = 450;
+    result.scrollTo(scrollTop);
+    fireEvent.scroll(result.outerRef.current, { target: { scrollTop } });
+    expect(loadMore).toHaveBeenCalledTimes(1);
+    expect(loadMore).toHaveBeenCalledWith({
+      loadIndex: 1,
+      startIndex: 6,
+      stopIndex: 11,
+      scrollOffset: scrollTop,
+      userScroll: false,
+    });
+
+    loadMore = jest.fn();
+    result = render({
+      itemCount,
+      loadMoreCount,
       isItemLoaded: () => true,
       loadMore,
     });
