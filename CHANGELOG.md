@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.5
+
+### Patch Changes
+
+- [#285](https://github.com/wellyshen/react-cool-virtual/pull/285) [`41878e3`](https://github.com/wellyshen/react-cool-virtual/commit/41878e3e18a87ccd26d6ea91e99a462ddcfff486) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: correct the event properties of `loadMore` when scrolling backward
+
 ## 0.5.4
 
 ### Patch Changes
