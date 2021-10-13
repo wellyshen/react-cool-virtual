@@ -25,7 +25,15 @@ const loadData = async ({ loadIndex }, setComments) => {
       `https://jsonplaceholder.typicode.com/comments?postId=${loadIndex + 1}`
     );
 
-    setComments((prevComments) => [...prevComments, ...comments]);
+    setComments((prevComments) => {
+      const nextComments = [...prevComments];
+
+      comments.forEach((comment) => {
+        nextComments[comment.id - 1] = comment;
+      });
+
+      return nextComments;
+    });
   } catch (err) {
     // If there's an error set the state back to `false`
     isItemLoadedArr[loadIndex] = false;
@@ -47,7 +55,7 @@ const Skeleton = () => {
     // whether the `loadMore` should be triggered or not
     isItemLoaded: (loadIndex) => isItemLoadedArr[loadIndex],
     // We can fetch the data through the callback, it's invoked when more items need to be loaded
-    loadMore: (e) => loadData(e, setComments)
+    loadMore: (e) => loadData(e, setComments),
   });
 
   return (
