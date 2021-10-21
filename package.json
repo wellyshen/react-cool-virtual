@@ -108,7 +108,7 @@
     "@testing-library/user-event": "^13.3.0",
     "@types/jest": "^27.0.2",
     "@types/react": "^17.0.29",
-    "bundlesize2": "^0.0.30",
+    "bundlesize2": "^0.0.31",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.2.0",
     "eslint-config-welly": "^1.11.7",
