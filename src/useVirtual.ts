@@ -25,22 +25,20 @@ import {
   useResizeEffect,
 } from "./utils";
 
-const getInitState = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
-  if (!ssrItemCount) return { items: [] };
-
+const getInitState = (itemSize: ItemSize, ssrItemCount: SsrItemCount = 0) => {
   const [idx, len] = isNumber(ssrItemCount)
     ? [0, ssrItemCount - 1]
     : ssrItemCount;
   const items = [];
 
   for (let i = idx; i <= len; i += 1)
-    items[i] = {
+    items.push({
       index: i,
       start: 0,
       width: 0,
       size: isNumber(itemSize) ? itemSize : itemSize(i, 0),
       measureRef: /* istanbul ignore next */ () => null,
-    };
+    });
 
   return { items };
 };
