@@ -12,6 +12,7 @@ import {
   ScrollToItem,
   ScrollToItemOptions,
   SsrItemCount,
+  State,
 } from "./types";
 import {
   findNearestBinarySearch,
@@ -24,16 +25,16 @@ import {
   useResizeEffect,
 } from "./utils";
 
-const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
-  if (!ssrItemCount) return [];
+const getInitState = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
+  if (!ssrItemCount) return { items: [] };
 
   const [idx, len] = isNumber(ssrItemCount)
     ? [0, ssrItemCount - 1]
     : ssrItemCount;
-  const ssrItems = [];
+  const items = [];
 
   for (let i = idx; i <= len; i += 1)
-    ssrItems[i] = {
+    items[i] = {
       index: i,
       start: 0,
       width: 0,
@@ -41,7 +42,7 @@ const getInitItems = (itemSize: ItemSize, ssrItemCount?: SsrItemCount) => {
       measureRef: /* istanbul ignore next */ () => null,
     };
 
-  return ssrItems;
+  return { items };
 };
 
 export default <
@@ -66,8 +67,8 @@ export default <
   onScroll,
   onResize,
 }: Options): Return<O, I> => {
-  const [items, setItems] = useState<Item[]>(() =>
-    getInitItems(itemSize, ssrItemCount)
+  const [state, setState] = useState<State>(() =>
+    getInitState(itemSize, ssrItemCount)
   );
   const isMountedRef = useRef(false);
   const isScrollingRef = useRef(true);
@@ -306,8 +307,6 @@ export default <
 
   const handleScroll = useCallback(
     (scrollOffset: number, isScrolling?: boolean, uxScrolling?: boolean) => {
-      if (!innerRef.current) return;
-
       if (
         loadMoreRef.current &&
         !isMountedRef.current &&
@@ -322,17 +321,14 @@ export default <
         });
 
       if (!itemCount) {
-        setItems([]);
-        innerRef.current.style[marginKey] = "";
-        innerRef.current.style[sizeKey] = "";
-
+        setState({ items: [] });
         return;
       }
 
       const calcData = getCalcData(scrollOffset);
       const { oStart, oStop, vStart, vStop } = calcData;
       let { innerMargin, innerSize } = calcData;
-      const nextItems: Item[] = [];
+      const items: Item[] = [];
       const stickies = Array.isArray(stickyIndicesRef.current)
         ? stickyIndicesRef.current
         : [];
@@ -341,7 +337,7 @@ export default <
         const { current: msData } = msDataRef;
         const { start, size } = msData[i];
 
-        nextItems.push({
+        items.push({
           index: i,
           start: start - innerMargin,
           size,
@@ -404,7 +400,7 @@ export default <
         if (oStart > stickyIdx) {
           const { size } = msDataRef.current[stickyIdx];
 
-          nextItems.unshift({
+          items.unshift({
             index: stickyIdx,
             start: 0,
             size,
@@ -419,15 +415,11 @@ export default <
         }
       }
 
-      setItems((prevItems) => {
-        if (shouldUpdate(prevItems, nextItems, { measureRef: true })) {
-          innerRef.current!.style[marginKey] = `${innerMargin}px`;
-          innerRef.current!.style[sizeKey] = `${innerSize}px`;
-          return nextItems;
-        }
-
-        return prevItems;
-      });
+      setState((prevState) =>
+        shouldUpdate(prevState.items, items, { measureRef: true })
+          ? { items, innerMargin, innerSize }
+          : prevState
+      );
 
       if (!isScrolling) return;
 
@@ -474,7 +466,6 @@ export default <
       itemCount,
       loadMoreCount,
       loadMoreRef,
-      marginKey,
       onScrollRef,
       resetIsScrolling,
       scrollTo,
@@ -514,6 +505,15 @@ export default <
     },
     [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
   );
+
+  useIsoLayoutEffect(() => {
+    if (!innerRef.current) return;
+
+    if (isNumber(state.innerMargin))
+      innerRef.current.style[marginKey] = `${state.innerMargin}px`;
+    if (isNumber(state.innerSize))
+      innerRef.current.style[sizeKey] = `${state.innerSize}px`;
+  }, [marginKey, sizeKey, state.innerMargin, state.innerSize]);
 
   useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
@@ -557,5 +557,11 @@ export default <
     };
   }, [cancelResetIsScrolling, handleScroll, scrollKey, useIsScrollingRef]);
 
-  return { outerRef, innerRef, items, scrollTo: scrollToOffset, scrollToItem };
+  return {
+    outerRef,
+    innerRef,
+    items: state.items,
+    scrollTo: scrollToOffset,
+    scrollToItem,
+  };
 };

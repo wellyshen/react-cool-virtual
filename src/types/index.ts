@@ -1,6 +1,12 @@
 import { MutableRefObject, RefCallback } from "react";
 
 // Internal
+export interface State {
+  items: Item[];
+  innerMargin?: number;
+  innerSize?: number;
+}
+
 export interface Measure {
   idx: number;
   start: number;
