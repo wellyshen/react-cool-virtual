@@ -417,7 +417,7 @@ export default <
 
       setState((prevState) =>
         shouldUpdate(prevState.items, items, { measureRef: true })
-          ? { items, inner: { margin: innerMargin, size: innerSize } }
+          ? { items, innerMargin, innerSize }
           : prevState
       );
 
@@ -507,13 +507,13 @@ export default <
   );
 
   useEffect(() => {
-    const { inner, items } = state;
+    if (!innerRef.current) return;
 
-    if (innerRef.current && inner) {
-      innerRef.current.style[marginKey] = items ? `${inner.margin}px` : "";
-      innerRef.current.style[sizeKey] = items ? `${inner.size}px` : "";
-    }
-  }, [marginKey, sizeKey, state]);
+    if (isNumber(state.innerMargin))
+      innerRef.current.style[marginKey] = `${state.innerMargin}px`;
+    if (isNumber(state.innerSize))
+      innerRef.current.style[sizeKey] = `${state.innerSize}px`;
+  }, [marginKey, sizeKey, state.innerMargin, state.innerSize]);
 
   useIsoLayoutEffect(() => {
     const { current: outer } = outerRef;
