@@ -3,7 +3,8 @@ import { MutableRefObject, RefCallback } from "react";
 // Internal
 export interface State {
   items: Item[];
-  inner?: { margin: number; size: number };
+  innerMargin?: number;
+  innerSize?: number;
 }
 
 export interface Measure {
