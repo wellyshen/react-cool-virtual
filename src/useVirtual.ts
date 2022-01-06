@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useEffect } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import {
   Align,
@@ -506,7 +506,7 @@ export default <
     [itemCount, resetScroll, handleScroll, measureItems, onResizeRef, scrollTo]
   );
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     if (!innerRef.current) return;
 
     if (isNumber(state.innerMargin))
