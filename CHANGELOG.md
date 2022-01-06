@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.6
+
+### Patch Changes
+
+- [#172](https://github.com/wellyshen/react-cool-virtual/pull/172) [`1970c62`](https://github.com/wellyshen/react-cool-virtual/commit/1970c625dc28412c21a27ab98745210e825a61f6) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: scrolling flicking in React v18
+
 ## 0.5.5
 
 ### Patch Changes
