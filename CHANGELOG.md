@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.5.7
+
+### Patch Changes
+
+- [#353](https://github.com/wellyshen/react-cool-virtual/pull/353) [`70e0581`](https://github.com/wellyshen/react-cool-virtual/commit/70e0581940b763302c1d6bb630e2993d04391e1c) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: wrong item length when using `ssrItemCount` with an array type value
+
 ## 0.5.6
 
 ### Patch Changes
