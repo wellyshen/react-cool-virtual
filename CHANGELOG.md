@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- [`9ee5ae5`](https://github.com/wellyshen/react-cool-virtual/commit/9ee5ae528244cfdd4c7903274680a6a62f18e0b4) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: the `e.userScroll` of `onScroll` and `loadMore` will be `true` when using `scrollTo` or `scrollToItem` with smooth mode
+- [`9ee5ae5`](https://github.com/wellyshen/react-cool-virtual/commit/9ee5ae528244cfdd4c7903274680a6a62f18e0b4) Thanks [@wellyshen](https://github.com/wellyshen)! - fix: the `e.userScroll` of `onScroll` and `loadMore` should be `false` when using `scrollTo` or `scrollToItem` with smooth mode
 
 ## 0.5.7
 
