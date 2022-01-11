@@ -179,6 +179,7 @@ export default <
   const scrollTo = useCallback(
     (offset: number, isScrolling = true) => {
       if (outerRef.current) {
+        userScrollRef.current = false;
         isScrollingRef.current = isScrolling;
         outerRef.current[scrollKey] = offset;
       }
@@ -193,8 +194,6 @@ export default <
         : val;
 
       if (!isNumber(offset)) return;
-
-      userScrollRef.current = false;
 
       if (!smooth) {
         scrollTo(offset);
