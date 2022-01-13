@@ -615,6 +615,9 @@ const List = () => {
   const { outerRef, innerRef, items, scrollToItem } = useVirtual({
     // Provide the number of comments
     itemCount: comments.length,
+    // When working with dynamic size, we can reduce scroll jumping
+    // by providing an estimated item size
+    itemSize: 180,
     onScroll: ({ scrollOffset }) => {
       // Tweak the threshold of data fetching that you want
       if (scrollOffset < 50 && shouldFetchData) {
@@ -627,14 +630,10 @@ const List = () => {
   useEffect(() => fetchData(postId, setComments), []);
 
   useEffect(() => {
-    // When working with dynamic size, we can use rAF to wait for
-    // the items are measured to reduce scroll jumping
-    requestAnimationFrame(() => {
-      // After the list updated, maintain the previous scroll position for the user
-      scrollToItem({ index: BATCH_COMMENTS, align: "start" }, () => {
-        // After the scroll position updated, re-allow data fetching
-        if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
-      });
+    // After the list updated, maintain the previous scroll position for the user
+    scrollToItem({ index: BATCH_COMMENTS, align: "start" }, () => {
+      // After the scroll position updated, re-allow data fetching
+      if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
     });
   }, [comments.length, scrollToItem]);
 
