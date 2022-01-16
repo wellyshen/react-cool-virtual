@@ -85,7 +85,7 @@ export default <
   const stickyIndicesRef = useLatest(stickyIndices);
   const durationRef = useLatest(scrollDuration);
   const easingFnRef = useLatest(scrollEasingFunction);
-  const isItemLoadedRef = useRef(isItemLoaded);
+  const isItemLoadedRef = useLatest(isItemLoaded);
   const loadMoreRef = useLatest(loadMore);
   const itemSizeRef = useLatest(itemSize);
   const useIsScrollingRef = useLatest(useIsScrolling);
@@ -467,6 +467,7 @@ export default <
       resetIsScrolling,
       scrollTo,
       sizeKey,
+      isItemLoadedRef,
     ]
   );
 
