@@ -588,7 +588,7 @@ This example demonstrates how to pre-pend items and maintain scroll position for
 [![Edit RCV - Prepend Items](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/rcv-prepend-items-ui06h?fontsize=14&hidenavigation=1&theme=dark)
 
 ```js
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import useVirtual from "react-cool-virtual";
 import axios from "axios";
@@ -626,7 +626,8 @@ const List = () => {
 
   useEffect(() => fetchData(postId, setComments), []);
 
-  useEffect(() => {
+  // Execute the `startItemIndex` through `useLayoutEffect` before the browser has a chance to paint
+  useLayoutEffect(() => {
     // After the list updated, maintain the previous scroll position for the user
     startItemIndex(BATCH_COMMENTS + 1, () => {
       // After the scroll position updated, re-allow data fetching
