@@ -402,6 +402,14 @@ describe("useVirtual", () => {
     });
   });
 
+  it("should `startItemIndex` work correctly", () => {
+    const { startItemIndex, outerRef } = render();
+    const cb = jest.fn();
+    startItemIndex(6, cb);
+    expect(outerRef.current.scrollTop).toBe(200);
+    expect(cb).toHaveBeenCalled();
+  });
+
   describe("horizontal", () => {
     it("should return `items` correctly", () => {
       const { outerRef, innerRef, getLatestItems } = render({

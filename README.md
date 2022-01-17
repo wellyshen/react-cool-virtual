@@ -31,7 +31,7 @@
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
-- 🦔 Tiny size ([~ 3kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
+- 🦔 Tiny size ([~ 3.1kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
 
 ## Why? <!-- omit in toc -->
 
@@ -612,12 +612,9 @@ const fetchData = async (postId, setComments) => {
 
 const List = () => {
   const [comments, setComments] = useState([]);
-  const { outerRef, innerRef, items, scrollToItem } = useVirtual({
+  const { outerRef, innerRef, items, startItemIndex } = useVirtual({
     // Provide the number of comments
     itemCount: comments.length,
-    // When working with dynamic size, we can reduce scroll jumping
-    // by providing an estimated item size
-    itemSize: 180,
     onScroll: ({ scrollOffset }) => {
       // Tweak the threshold of data fetching that you want
       if (scrollOffset < 50 && shouldFetchData) {
@@ -631,11 +628,11 @@ const List = () => {
 
   useEffect(() => {
     // After the list updated, maintain the previous scroll position for the user
-    scrollToItem({ index: BATCH_COMMENTS, align: "start" }, () => {
+    startItemIndex(BATCH_COMMENTS + 1, () => {
       // After the scroll position updated, re-allow data fetching
       if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
     });
-  }, [comments.length, scrollToItem]);
+  }, [comments.length, startItemIndex]);
 
   return (
     <div
@@ -1163,6 +1160,12 @@ scrollTo({
 ```
 
 > 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
+
+#### startItemIndex
+
+`(index: number, callback?: () => void) => void`
+
+This method is used to work with [pre-pending items](#pre-pending-items). It allows us to main the previous scroll position for the user.
 
 ## Others
 

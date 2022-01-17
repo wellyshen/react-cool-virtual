@@ -95,6 +95,10 @@ declare module "react-cool-virtual" {
     (options: ScrollToItemOptions, callback?: Callback): void;
   }
 
+  export interface StartItemIndex {
+    (index: number, callback?: () => void): void;
+  }
+
   export interface Options {
     itemCount: number;
     ssrItemCount?: number | [number, number];
@@ -122,6 +126,7 @@ declare module "react-cool-virtual" {
     items: Item[];
     scrollTo: ScrollTo;
     scrollToItem: ScrollToItem;
+    startItemIndex: StartItemIndex;
   }
 
   export default function useVirtual<
