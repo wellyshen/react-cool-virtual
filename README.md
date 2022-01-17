@@ -626,7 +626,8 @@ const List = () => {
 
   useEffect(() => fetchData(postId, setComments), []);
 
-  // Execute the `startItemIndex` through `useLayoutEffect` before the browser has a chance to paint
+  // Execute the `startItemIndex` through `useLayoutEffect` before the browser to paint
+  // See https://reactjs.org/docs/hooks-reference.html#uselayouteffect to learn more
   useLayoutEffect(() => {
     // After the list updated, maintain the previous scroll position for the user
     startItemIndex(BATCH_COMMENTS + 1, () => {
