@@ -3,11 +3,11 @@
   "description": "The stick to bottom example of RCV.",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "react": "^17.0.2",
     "react-cool-virtual": "latest",
     "react-dom": "^17.0.2",
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
