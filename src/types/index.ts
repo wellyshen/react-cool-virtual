@@ -98,6 +98,10 @@ export interface ScrollToItem {
   (index: number | ScrollToItemOptions, callback?: () => void): void;
 }
 
+export interface StartItemIndex {
+  (index: number, callback?: () => void): void;
+}
+
 export interface Options {
   itemCount: number;
   ssrItemCount?: SsrItemCount;
@@ -122,4 +126,5 @@ export interface Return<O = any, I = any> {
   items: Item[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
+  startItemIndex: StartItemIndex;
 }

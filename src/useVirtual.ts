@@ -12,6 +12,7 @@ import {
   ScrollToItem,
   ScrollToItemOptions,
   SsrItemCount,
+  StartItemIndex,
   State,
 } from "./types";
 import {
@@ -109,7 +110,7 @@ export default <
   }, []);
 
   const measureItems = useCallback(
-    (useCache = true) => {
+    (useCache) => {
       msDataRef.current.length = itemCount;
 
       for (let i = 0; i < itemCount; i += 1)
@@ -227,8 +228,12 @@ export default <
     [durationRef, easingFnRef, scrollTo]
   );
 
-  const scrollToItem = useCallback<ScrollToItem>(
-    (val, cb) => {
+  const scrollToIndex = useCallback(
+    (
+      val: Parameters<ScrollToItem>[0],
+      cb: Parameters<ScrollToItem>[1],
+      isReplace?: boolean
+    ) => {
       const {
         index,
         align = Align.auto,
@@ -240,7 +245,7 @@ export default <
       isScrollToItemRef.current = true;
 
       // For dynamic size, we must measure it for getting the correct scroll position
-      if (hasDynamicSizeRef.current) measureItems();
+      if (hasDynamicSizeRef.current) measureItems(!isReplace);
 
       const { current: msData } = msDataRef;
       const ms = msData[Math.max(0, Math.min(index, msData.length - 1))];
@@ -258,6 +263,7 @@ export default <
       }
 
       if (
+        isReplace ||
         align === Align.start ||
         (align === Align.auto &&
           scrollOffset + outerSize > end &&
@@ -286,14 +292,24 @@ export default <
       }
 
       scrollToOffset({ offset: scrollOffset, smooth }, () => {
-        if (!hasDynamicSizeRef.current) {
+        if (isReplace || !hasDynamicSizeRef.current) {
           if (cb) cb();
         } else {
-          setTimeout(() => scrollToItem(val, cb));
+          setTimeout(() => scrollToIndex(val, cb));
         }
       });
     },
     [measureItems, scrollToOffset, sizeKey]
+  );
+
+  const scrollToItem = useCallback<ScrollToItem>(
+    (val, cb) => scrollToIndex(val, cb),
+    [scrollToIndex]
+  );
+
+  const startItemIndex = useCallback<StartItemIndex>(
+    (idx, cb) => scrollToIndex(idx, cb, true),
+    [scrollToIndex]
   );
 
   const [resetIsScrolling, cancelResetIsScrolling] = useDebounce(
@@ -561,5 +577,6 @@ export default <
     items: state.items,
     scrollTo: scrollToOffset,
     scrollToItem,
+    startItemIndex,
   };
 };
