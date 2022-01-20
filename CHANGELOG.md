@@ -1,5 +1,11 @@
 # react-cool-virtual
 
+## 0.7.0
+
+### Minor Changes
+
+- [#376](https://github.com/wellyshen/react-cool-virtual/pull/376) [`744953b`](https://github.com/wellyshen/react-cool-virtual/commit/744953bcafd376c78c8621ebd6421b87b62a3aef) Thanks [@wellyshen](https://github.com/wellyshen)! - feat: use `startItem` instead `startItemIndex` for pre-pending items
+
 ## 0.6.0
 
 ### Minor Changes
