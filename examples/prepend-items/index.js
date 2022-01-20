@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { render } from "react-dom";
-
 import useVirtual from "react-cool-virtual";
 import axios from "axios";
+
 import "./styles.scss";
 
 const TOTAL_COMMENTS = 500;
@@ -33,15 +33,12 @@ const fetchData = async (postId, setComments) => {
 
 const App = () => {
   const [comments, setComments] = useState([]);
-  const { outerRef, innerRef, items, scrollToItem } = useVirtual({
+  const { outerRef, innerRef, items, startItem } = useVirtual({
     // Provide the number of comments
     itemCount: comments.length,
-    // When working with dynamic size, we can reduce scroll jumping
-    // by providing an estimated item size
-    itemSize: 180,
-    onScroll: ({ scrollOffset }) => {
+    onScroll: ({ scrollForward, scrollOffset }) => {
       // Tweak the threshold of data fetching that you want
-      if (scrollOffset < 50 && shouldFetchData) {
+      if (!scrollForward && scrollOffset < 50 && shouldFetchData) {
         fetchData(--postId, setComments);
         shouldFetchData = false;
       }
@@ -57,12 +54,14 @@ const App = () => {
     fetchInitData();
   }, []);
 
-  useEffect(() => {
-    scrollToItem({ index: BATCH_COMMENTS, align: "start" }, () => {
+  // Execute the `startItemIndex` through `useLayoutEffect` before the browser to paint
+  // See https://reactjs.org/docs/hooks-reference.html#uselayouteffect to learn more
+  useLayoutEffect(() => {
+    startItem(BATCH_COMMENTS, () => {
       // After the scroll position updated, re-allow data fetching
       if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
     });
-  }, [comments.length, scrollToItem]);
+  }, [comments.length, startItem]);
 
   return (
     <div className="app">
