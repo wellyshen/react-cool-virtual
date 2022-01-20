@@ -98,7 +98,7 @@ export interface ScrollToItem {
   (index: number | ScrollToItemOptions, callback?: () => void): void;
 }
 
-export interface StartItemIndex {
+export interface StartItem {
   (index: number, callback?: () => void): void;
 }
 
@@ -126,5 +126,5 @@ export interface Return<O = any, I = any> {
   items: Item[];
   scrollTo: ScrollTo;
   scrollToItem: ScrollToItem;
-  startItemIndex: StartItemIndex;
+  startItem: StartItem;
 }
