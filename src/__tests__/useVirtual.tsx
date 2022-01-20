@@ -402,10 +402,10 @@ describe("useVirtual", () => {
     });
   });
 
-  it("should `startItemIndex` work correctly", () => {
-    const { startItemIndex, outerRef } = render();
+  it("should `startItem` work correctly", () => {
+    const { startItem, outerRef } = render();
     const cb = jest.fn();
-    startItemIndex(6, cb);
+    startItem(6, cb);
     expect(outerRef.current.scrollTop).toBe(200);
     expect(cb).toHaveBeenCalled();
   });

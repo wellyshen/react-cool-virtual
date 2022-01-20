@@ -12,7 +12,7 @@ import {
   ScrollToItem,
   ScrollToItemOptions,
   SsrItemCount,
-  StartItemIndex,
+  StartItem,
   State,
 } from "./types";
 import {
@@ -110,7 +110,7 @@ export default <
   }, []);
 
   const measureItems = useCallback(
-    (useCache) => {
+    (useCache = true) => {
       msDataRef.current.length = itemCount;
 
       for (let i = 0; i < itemCount; i += 1)
@@ -232,7 +232,7 @@ export default <
     (
       val: Parameters<ScrollToItem>[0],
       cb: Parameters<ScrollToItem>[1],
-      isReplace?: boolean
+      isSync?: boolean
     ) => {
       const {
         index,
@@ -245,7 +245,7 @@ export default <
       isScrollToItemRef.current = true;
 
       // For dynamic size, we must measure it for getting the correct scroll position
-      if (hasDynamicSizeRef.current) measureItems(!isReplace);
+      if (hasDynamicSizeRef.current) measureItems();
 
       const { current: msData } = msDataRef;
       const ms = msData[Math.max(0, Math.min(index, msData.length - 1))];
@@ -263,7 +263,7 @@ export default <
       }
 
       if (
-        isReplace ||
+        isSync ||
         align === Align.start ||
         (align === Align.auto &&
           scrollOffset + outerSize > end &&
@@ -292,8 +292,10 @@ export default <
       }
 
       scrollToOffset({ offset: scrollOffset, smooth }, () => {
-        if (isReplace || !hasDynamicSizeRef.current) {
+        if (!hasDynamicSizeRef.current) {
           if (cb) cb();
+        } else if (isSync) {
+          requestAnimationFrame(() => scrollToIndex(val, cb, isSync));
         } else {
           setTimeout(() => scrollToIndex(val, cb));
         }
@@ -307,7 +309,7 @@ export default <
     [scrollToIndex]
   );
 
-  const startItemIndex = useCallback<StartItemIndex>(
+  const startItem = useCallback<StartItem>(
     (idx, cb) => scrollToIndex(idx, cb, true),
     [scrollToIndex]
   );
@@ -577,6 +579,6 @@ export default <
     items: state.items,
     scrollTo: scrollToOffset,
     scrollToItem,
-    startItemIndex,
+    startItem,
   };
 };

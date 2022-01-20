@@ -612,12 +612,12 @@ const fetchData = async (postId, setComments) => {
 
 const List = () => {
   const [comments, setComments] = useState([]);
-  const { outerRef, innerRef, items, startItemIndex } = useVirtual({
+  const { outerRef, innerRef, items, startItem } = useVirtual({
     // Provide the number of comments
     itemCount: comments.length,
-    onScroll: ({ scrollOffset }) => {
+    onScroll: ({ scrollForward, scrollOffset }) => {
       // Tweak the threshold of data fetching that you want
-      if (scrollOffset < 50 && shouldFetchData) {
+      if (!scrollForward && scrollOffset < 50 && shouldFetchData) {
         fetchData(--postId, setComments);
         shouldFetchData = false;
       }
@@ -626,15 +626,15 @@ const List = () => {
 
   useEffect(() => fetchData(postId, setComments), []);
 
-  // Execute the `startItemIndex` through `useLayoutEffect` before the browser to paint
+  // Execute the `startItem` through `useLayoutEffect` before the browser to paint
   // See https://reactjs.org/docs/hooks-reference.html#uselayouteffect to learn more
   useLayoutEffect(() => {
     // After the list updated, maintain the previous scroll position for the user
-    startItemIndex(BATCH_COMMENTS + 1, () => {
+    startItem(BATCH_COMMENTS, () => {
       // After the scroll position updated, re-allow data fetching
       if (comments.length < TOTAL_COMMENTS) shouldFetchData = true;
     });
-  }, [comments.length, startItemIndex]);
+  }, [comments.length, startItem]);
 
   return (
     <div
@@ -1163,7 +1163,7 @@ scrollTo({
 
 > 💡 It's possible to customize the easing effect of the smoothly scrolling, see the [example](#smooth-scrolling) to learn more.
 
-#### startItemIndex
+#### startItem
 
 `(index: number, callback?: () => void) => void`
 
