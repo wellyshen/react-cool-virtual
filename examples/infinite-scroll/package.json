@@ -3,7 +3,7 @@
   "description": "The infinite scroll example of RCV.",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^0.25.0",
     "react": "^17.0.2",
     "react-cool-virtual": "latest",
     "react-dom": "^17.0.2",
