@@ -1652,9 +1652,9 @@
     pretty-format "^27.0.2"
 
 "@testing-library/jest-dom@^5.16.1":
-  version "5.16.1"
-  resolved "https://registry.npmjs.org/@testing-library/jest-dom/-/jest-dom-5.16.1.tgz"
-  integrity sha512-ajUJdfDIuTCadB79ukO+0l8O+QwN0LiSxDaYUTI4LndbbUsGi6rWU1SCexXzBA2NSjlVB9/vbkasQIL3tmPBjw==
+  version "5.16.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.16.3.tgz#b76851a909586113c20486f1679ffb4d8ec27bfa"
+  integrity sha512-u5DfKj4wfSt6akfndfu1eG06jsdyA/IUrlX2n3pyq5UXgXMhXY+NJb8eNK/7pqPWAhCKsCGWDdDO0zKMKAYkEA==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@types/testing-library__jest-dom" "^5.9.1"
