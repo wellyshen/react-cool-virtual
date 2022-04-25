@@ -107,7 +107,7 @@
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.0",
-    "@types/react": "^17.0.38",
+    "@types/react": "^18.0.7",
     "bundlesize2": "^0.0.31",
     "cpy-cli": "^3.1.1",
     "eslint": "^8.2.0",
