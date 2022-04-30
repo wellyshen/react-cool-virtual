@@ -364,6 +364,8 @@ const List = () => {
 };
 ```
 
+> 💡 For [better performance & accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/position#performance_accessibility). We encourage you to add `will-change:transform` to the positioned elements to render the element in its own layer, improving repaint speed and therefore improving performance and accessibility.
+
 > 💡 The scrollbar disappears when using Chrome in Mac? If you encounter [this issue](https://bugs.chromium.org/p/chromium/issues/detail?id=1033712), you can add `will-change:transform` to the outer element to workaround this problem.
 
 ### Scroll to Offset / Items
