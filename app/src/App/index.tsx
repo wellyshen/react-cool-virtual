@@ -1,7 +1,6 @@
 /* eslint-disable compat/compat */
 
 import useVirtual from "react-cool-virtual";
-import normalize from "normalize.css";
 
 import styles from "./styles.module.scss";
 
