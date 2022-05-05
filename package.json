@@ -61,9 +61,10 @@
     "dist"
   ],
   "scripts": {
-    "link-pkg": "npm link app/node_modules/react && yarn link",
-    "start": "yarn clean:build && yarn copy:type && rollup -c scripts/rollup/config.js -w",
-    "build": "yarn clean:build && yarn clean:size && yarn copy && rollup -c scripts/rollup/config.js --environment BUILD:production",
+    "link-pkg": "yarn build:dev && npm link app/node_modules/react && yarn link",
+    "start": "yarn build:dev -w",
+    "build:dev": "yarn clean:build && yarn copy:type && rollup -c scripts/rollup/config.js",
+    "build:prod": "yarn clean:build && yarn clean:size && yarn copy && rollup -c scripts/rollup/config.js --environment BUILD:production",
     "lint": "run-s lint:*",
     "lint:code": "eslint --fix . --ext .js,.ts,.tsx",
     "lint:type": "tsc",
@@ -71,7 +72,7 @@
     "test": "jest --config scripts/jest/config.js",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn clean:cov && yarn test --coverage",
-    "size": "yarn build && bundlesize",
+    "size": "yarn build:prod && bundlesize",
     "clean": "run-p clean:*",
     "clean:build": "rimraf dist",
     "clean:size": "rimraf .size-snapshot.json",
@@ -79,7 +80,7 @@
     "copy": "run-p copy:*",
     "copy:cjs": "cpy scripts/rollup/cjsEntryFile.js dist --rename=index.js",
     "copy:type": "cpy src/types/react-cool-virtual.d.ts dist --rename=index.d.ts",
-    "release": "yarn build && changeset publish",
+    "release": "yarn build:prod && changeset publish",
     "prepare": "husky install"
   },
   "lint-staged": {

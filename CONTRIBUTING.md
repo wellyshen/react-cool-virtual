@@ -32,8 +32,9 @@ You can test new features or debug an issue by the way that I'm using.
 There're several useful commands that you can use during the development:
 
 - `yarn link-pkg` links the package into the [app directory](app). You can develop or debug it via the [playground](app/src/App).
-- `yarn start` creates a `dist` folder with an `ESM` build and type definition file by `rollup` watch mode. You can test the package locally via `yarn link-pkg` or [yarn link](https://yarnpkg.com/lang/en/docs/cli/link).
-- `yarn build` creates a `dist` folder with package builds (`CJS`, `ESM`, and `UMD`) and type definition file. You can test the package locally via `yarn link-pkg` or [yarn link](https://yarnpkg.com/lang/en/docs/cli/link).
+- `yarn start` creates a `dist` folder with an `ESM` build and type definition file by `rollup` watch mode.
+- `yarn build:dev` creates a `dist` folder with an `ESM` build and type definition file for development.
+- `yarn build:prod` creates a `dist` folder with package builds (`CJS`, `ESM`, and `UMD`) and type definition file. You can test the package locally via `yarn link-pkg` or [yarn link](https://yarnpkg.com/lang/en/docs/cli/link).
 - `yarn changeset` [adds a changeset](https://github.com/atlassian/changesets/blob/master/docs/adding-a-changeset.md).
 - `yarn lint:code` lints all `.js` and `.tsx?` files.
 - `yarn lint:type` runs the [TypeScript](https://www.typescriptlang.org) type-checks.
