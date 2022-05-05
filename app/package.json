@@ -12,9 +12,7 @@
     "lint:type": "tsc",
     "lint:style": "stylelint --fix \"**/*.{css,scss}\"",
     "lint:format": "prettier -w . -u --loglevel silent",
-    "clean": "run-p clean:*",
-    "clean:build": "rimraf build",
-    "clean:cov": "rimraf coverage",
+    "clean": "rimraf build",
     "eject": "react-scripts eject"
   },
   "browserslist": {
