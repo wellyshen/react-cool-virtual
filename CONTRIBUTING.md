@@ -27,9 +27,9 @@ You can test new features or debug an issue by the way that I'm using.
 4. In the **app directory**, run `yarn link-pkg` to link with the package then run `yarn start:dev` to start development.
 5. Try something cool via the [playground](app/src/App).
 
-## Useful Commands
+## Scripts
 
-There're several useful commands that you can use during the development:
+There're several useful scripts that you can use during the development:
 
 - `yarn link-pkg` links the package into the [app directory](app). You can develop or debug it via the [playground](app/src/App).
 - `yarn start` creates a `dist` folder with an `ESM` build and type definition file by `rollup` watch mode.
