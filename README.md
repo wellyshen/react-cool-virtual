@@ -1432,12 +1432,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="http://wellyshen.com"><img src="https://avatars.githubusercontent.com/u/21308003?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Welly</b></sub></a><br /><a href="#ideas-wellyshen" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Code">💻</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Documentation">📖</a> <a href="#infra-wellyshen" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-wellyshen" title="Maintenance">🚧</a></td>
-    <td align="center"><a href="http://postalchemy.now.sh"><img src="https://avatars.githubusercontent.com/u/49089372?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nikita Pilgrim</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=nikitapilgrim" title="Code">💻</a></td>
-    <td align="center"><a href="http://jiepeng.me"><img src="https://avatars.githubusercontent.com/u/10325111?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jie Peng</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=neighborhood999" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/qister"><img src="https://avatars.githubusercontent.com/u/62909771?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alex Lyakhnitskiy</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=qister" title="Code">💻</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://wellyshen.com"><img src="https://avatars.githubusercontent.com/u/21308003?v=4?s=100" width="100px;" alt="Welly"/><br /><sub><b>Welly</b></sub></a><br /><a href="#ideas-wellyshen" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Code">💻</a> <a href="https://github.com/wellyshen/react-cool-virtual/commits?author=wellyshen" title="Documentation">📖</a> <a href="#infra-wellyshen" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-wellyshen" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://postalchemy.now.sh"><img src="https://avatars.githubusercontent.com/u/49089372?v=4?s=100" width="100px;" alt="Nikita Pilgrim"/><br /><sub><b>Nikita Pilgrim</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=nikitapilgrim" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://jiepeng.me"><img src="https://avatars.githubusercontent.com/u/10325111?v=4?s=100" width="100px;" alt="Jie Peng"/><br /><sub><b>Jie Peng</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=neighborhood999" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qister"><img src="https://avatars.githubusercontent.com/u/62909771?v=4?s=100" width="100px;" alt="Alex Lyakhnitskiy"/><br /><sub><b>Alex Lyakhnitskiy</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=qister" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://adampash.com"><img src="https://avatars.githubusercontent.com/u/64131?v=4?s=100" width="100px;" alt="Adam Pash"/><br /><sub><b>Adam Pash</b></sub></a><br /><a href="https://github.com/wellyshen/react-cool-virtual/commits?author=adampash" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
