@@ -1153,7 +1153,7 @@ This method allows us to scroll to the specified item.
 scrollToItem(10);
 
 // Using options
-scrollTo({
+scrollToItem({
   index: 10,
   // Control the alignment of the item, acceptable values are: "auto" (default) | "start" | "center" | "end"
   // Using "auto" will scroll the item into the view at the start or end, depending on which is closer
