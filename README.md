@@ -11,7 +11,7 @@
 [![coverage status](https://img.shields.io/coveralls/github/wellyshen/react-cool-virtual?style=flat-square)](https://coveralls.io/github/wellyshen/react-cool-virtual?branch=master)
 [![gzip size](https://badgen.net/bundlephobia/minzip/react-cool-virtual?label=gzip%20size&style=flat-square)](https://bundlephobia.com/result?p=react-cool-virtual)
 [![best of js](https://img.shields.io/endpoint?style=flat-square&url=https://bestofjs-serverless.now.sh/api/project-badge?fullName=wellyshen%2Freact-cool-virtual)](https://bestofjs.org/projects/react-cool-virtual)
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 
 </div>
 
@@ -31,7 +31,7 @@
 - 🗄️ Supports [server-side rendering (SSR)](#server-side-rendering-ssr) for a fast [FP + FCP](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering) and better [SEO](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-rendering).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🎛 Super flexible [API](#api) design, built with DX in mind.
-- 🦔 Tiny size ([~ 3.1kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside for the `react`.
+- 🦔 Tiny size ([~ 3.1kB gzipped](https://bundlephobia.com/result?p=react-cool-virtual)). No external dependencies, aside from the `react`.
 
 ## Why? <!-- omit in toc -->
 
