@@ -44,6 +44,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "adampash",
+      "name": "Adam Pash",
+      "avatar_url": "https://avatars.githubusercontent.com/u/64131?v=4",
+      "profile": "http://adampash.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -51,5 +60,7 @@
   "projectOwner": "wellyshen",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs",
+  "commitConvention": "angular"
 }
