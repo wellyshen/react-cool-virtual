@@ -110,7 +110,7 @@
     "@types/jest": "^27.4.0",
     "@types/react": "^17.0.38",
     "bundlesize2": "^0.0.31",
-    "cpy-cli": "^3.1.1",
+    "cpy-cli": "^4.2.0",
     "eslint": "^8.2.0",
     "eslint-config-welly": "^1.13.0",
     "husky": "^7.0.4",
